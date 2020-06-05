@@ -1,10 +1,10 @@
 /*---GUI ZOOM SETTINGS--*/
 int zoom_notelow=36;
-int zoom_notehigh=84;
+int zoom_notehigh=100;
 
 //by beat eg: <0 = display includes measure 1; 3 = measure includes measure 4>
 float zoom_starttime=0;
-float zoom_stoptime=15;
+float zoom_stoptime=31;
 
 float truemod(float input, float modulus)
 {

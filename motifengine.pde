@@ -8,6 +8,10 @@ SCScore score = new SCScore();
 
 /*-----"FREE MOTIF" OBJECTS--------*/
 freeMotif freemotif_1;
+freeMotif freemotif_2;
+freeMotif freemotif_3;
+freeMotif freemotif_4;
+
 
 /*-------------SCORE VARIABLES------------*/
 // score length in measures

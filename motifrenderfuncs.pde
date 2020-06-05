@@ -9,12 +9,12 @@ class freeMotif{
   float diatonic_offset=0;
   float motif_length=1;
   float scale_time=1;
+  float scale_dur=1;
   float scale_diatonic=1;
-  float motif_inversion=0;
+  float motif_inversion=1;
   float motif_retrograde=0;
   int frag_index=0;
   int frag_length;
-  float time_offset=0;
   int inst_index=0;
 
   freeMotif(float[][] classinputmotif){
@@ -41,9 +41,9 @@ class freeMotif{
       //timbre A,
       //timbre B} }
       for(noterenderindex=0; noterenderindex<frag_length ; noterenderindex++){
-        float output_pitch = return_diaton(notearray[noterenderindex][0]+diatonic_offset,pos_tonic);
-        float output_pos = pos_time+notearray[noterenderindex][1]+time_offset;
-        float output_dur = notearray[noterenderindex][2];
+        float output_pitch = return_diaton(notearray[noterenderindex][0]*(motif_inversion)+diatonic_offset,pos_tonic);
+        float output_pos = pos_time+notearray[noterenderindex][1]*scale_time;
+        float output_dur = notearray[noterenderindex][2]*scale_dur;
         float output_vel = notearray[noterenderindex][3];
         float output_timb1 = notearray[noterenderindex][4];
         float output_timb2 = notearray[noterenderindex][5];
