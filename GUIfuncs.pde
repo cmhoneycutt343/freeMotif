@@ -1,3 +1,29 @@
+/*---------GUI VARIABLES------------*/
+color gridline_y_minor=color(82, 82, 82);
+color gridline_y_major=color(126, 126, 126);
+color gridline_middleC=color(128, 0, 0);
+color gridline_tonic=color(82, 0, 0);
+
+color gridline_x_minor=color(12, 12, 12);
+color gridline_x_major=color(82, 82, 82);
+color gridline_4bars=color(0, 82, 0);
+
+color note_color_a=color(120, 0, 0);
+
+int gwidth = 1280;
+int gheight = 640;
+
+float stretchpixwidth;
+float ulcornx;
+float brcornx;
+
+float stretchpixheight;
+float ulcorny;
+float brcorny;
+
+float noteyheight = gheight/128;
+float quarternotexwidth = gwidth/128;
+
 void drawGUI(){
   background(0,0,0);
 

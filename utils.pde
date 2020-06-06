@@ -1,10 +1,3 @@
-/*---GUI ZOOM SETTINGS--*/
-int zoom_notelow=36;
-int zoom_notehigh=100;
-
-//by beat eg: <0 = display includes measure 1; 3 = measure includes measure 4>
-float zoom_starttime=0;
-float zoom_stoptime=31;
 
 float truemod(float input, float modulus)
 {
@@ -25,6 +18,20 @@ void setcurrentkey(int keyindex)
         {
           scalebuffer[k]=sc.MINOR[k];
         }
+        break;
+      case 2:
+        for (int k = 0; k <7; k++)
+        {
+          scalebuffer[k]=sc.HARMONIC_MINOR[k];
+        }
+        break;
+      case 3:
+        for (int k = 0; k <7; k++)
+        {
+          scalebuffer[k]=sc.HARMONIC_MINOR[k];
+        }
+        break;
+      default:
         break;
     }
 }

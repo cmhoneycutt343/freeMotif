@@ -24,7 +24,7 @@ class freeMotif{
   }
 
   void renderfreemotif(){
-      drawgrid();
+      //drawgrid();
 
       //println(notearray.length);
       //println(notearray[0][0]);
@@ -42,7 +42,7 @@ class freeMotif{
       //timbre B} }
       for(noterenderindex=0; noterenderindex<frag_length ; noterenderindex++){
         float output_pitch = return_diaton(notearray[noterenderindex][0]*(motif_inversion)+diatonic_offset,pos_tonic);
-        float output_pos = pos_time+notearray[noterenderindex][1]*scale_time;
+        float output_pos = global_time_render_offset+pos_time+notearray[noterenderindex][1]*scale_time;
         float output_dur = notearray[noterenderindex][2]*scale_dur;
         float output_vel = notearray[noterenderindex][3];
         float output_timb1 = notearray[noterenderindex][4];
@@ -58,10 +58,33 @@ class freeMotif{
                 inst_index);
 
         //add notes to MIDI score
+
+        //score.addNote(startTime,
+        //              channel,
+        //              instrument,
+        //              pitch,
+        //              dynamic,
+        //              duration,
+        //              articulation,
+        //               pan);
         score.addNote(output_pos,
+                      inst_index,
+                      inst_cata[inst_index],
                       output_pitch,
                       output_vel,
-                      1);
+                      output_dur,
+                      127,
+                      64);
+
+        //add noteOffs
+        score.addNote(output_pos+output_dur,
+                      inst_index,
+                      inst_cata[inst_index],
+                      output_pitch,
+                      0,
+                      output_dur,
+                      127,
+                      64);
 
         // end 'renderfreemotif' method
       }
