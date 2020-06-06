@@ -1,20 +1,41 @@
 
 /*---------'freeMotif Class'--------*/
 class freeMotif{
+
+  //counter variable for scanning / rendering notes
   int noterenderindex;
+  // number of notes in freemotif
   int numnotes;
+  // Multidimensional array,
+  // notearray[<# note in motif>,<attribute #>]
+  // { {pitch <diatonic reference>,
+  //    start position,
+  //    duration,
+  //    velocity,
+  //    timbre A,
+  //    timbre B} }
   float[][] notearray;
+  // motif position (for iterations relative to first iteration)
   float pos_time=0;
+  // MIDI note Tonic index (60= Middle C)
   float pos_tonic=60;
+  // Diatonic Offset to shift motif up and down within scale
   float diatonic_offset=0;
+  // ??? use for fragmentation?
   float motif_length=1;
+  // scales motif in time
   float scale_time=1;
+  // scales duration of note durations in motif
   float scale_dur=1;
+  // scales diatonic values (-1) is an inversion
   float scale_diatonic=1;
-  float motif_inversion=1;
+  // Bool; 0=normal direction, 1 motif is reversed
   float motif_retrograde=0;
+  // Fragmentation: index of first note fragment
   int frag_index=0;
+  // Fragmentation: number of notes in frag
   int frag_length;
+  // index of instrument
   int inst_index=0;
 
   freeMotif(float[][] classinputmotif){
@@ -23,6 +44,7 @@ class freeMotif{
       frag_length=numnotes;
   }
 
+  //Method is called to write motif to score / GUI
   void renderfreemotif(){
       //drawgrid();
 
@@ -35,13 +57,13 @@ class freeMotif{
       //println(notearray[0][5]);
 
       // { {pitch <diatonic reference>,
-      //start position,
-      //duration,
-      //velocity,
-      //timbre A,
-      //timbre B} }
+      //    start position,
+      //    duration,
+      //    velocity,
+      //    timbre A,
+      //    timbre B} }
       for(noterenderindex=0; noterenderindex<frag_length ; noterenderindex++){
-        float output_pitch = return_diaton(notearray[noterenderindex][0]*(motif_inversion)+diatonic_offset,pos_tonic);
+        float output_pitch = return_diaton(notearray[noterenderindex][0]*(scale_diatonic)+diatonic_offset,pos_tonic);
         float output_pos = global_time_render_offset+pos_time+notearray[noterenderindex][1]*scale_time;
         float output_dur = notearray[noterenderindex][2]*scale_dur;
         float output_vel = notearray[noterenderindex][3];
@@ -89,5 +111,4 @@ class freeMotif{
         // end 'renderfreemotif' method
       }
   }
-
 }

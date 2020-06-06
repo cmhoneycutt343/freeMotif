@@ -54,7 +54,7 @@ void ss_descending_inv_scales(){
     freemotif_4.pos_tonic=12+freemotif_3.pos_tonic;
     freemotif_4.scale_time=8;
     freemotif_4.scale_dur=16;
-    freemotif_4.motif_inversion=-1;
+    freemotif_4.scale_diatonic=-1;
 
     for(int iter=0; iter<8; iter++)
     {
@@ -70,19 +70,19 @@ void ss_descending_inv_scales(){
       if((iter%2)==1)
       {
           freemotif_1.diatonic_offset=7;
-          freemotif_1.motif_inversion=-1;
+          freemotif_1.scale_diatonic=-1;
       } else {
           freemotif_1.diatonic_offset=0;
-          freemotif_1.motif_inversion=1;
+          freemotif_1.scale_diatonic=1;
       }
       freemotif_1.diatonic_offset=freemotif_1.diatonic_offset-(iter/2);
       freemotif_1.renderfreemotif();
 
       freemotif_2.pos_time=2+iter*4;
       if(iter==(2)||iter==(4)||iter==(6)) {
-        freemotif_2.motif_inversion=1;
+        freemotif_2.scale_diatonic=1;
       } else {
-        freemotif_2.motif_inversion=-1;
+        freemotif_2.scale_diatonic=-1;
       }
       freemotif_2.diatonic_offset=-iter;
       freemotif_2.renderfreemotif();
@@ -92,10 +92,10 @@ void ss_descending_inv_scales(){
       if((iter%2)==1)
       {
           freemotif_3.diatonic_offset=7;
-          freemotif_3.motif_inversion=-1;
+          freemotif_3.scale_diatonic=-1;
       } else {
           freemotif_3.diatonic_offset=0;
-          freemotif_3.motif_inversion=1;
+          freemotif_3.scale_diatonic=1;
       }
       freemotif_3.diatonic_offset=freemotif_3.diatonic_offset-(iter/2);
       freemotif_3.renderfreemotif();
@@ -104,10 +104,10 @@ void ss_descending_inv_scales(){
       if((iter%2)==1)
       {
           freemotif_4.diatonic_offset=7;
-          freemotif_4.motif_inversion=-1;
+          freemotif_4.scale_diatonic=-1;
       } else {
           freemotif_4.diatonic_offset=0;
-          freemotif_4.motif_inversion=1;
+          freemotif_4.scale_diatonic=1;
       }
       freemotif_4.diatonic_offset=freemotif_4.diatonic_offset-(iter/2);
       freemotif_4.renderfreemotif();
@@ -133,7 +133,7 @@ void ss_descending_inv_scales_b(){
     freemotif_4.pos_tonic=12+freemotif_3.pos_tonic;
     freemotif_4.scale_time=8;
     freemotif_4.scale_dur=16;
-    freemotif_4.motif_inversion=-1;
+    freemotif_4.scale_diatonic=-1;
 
     for(int iter=0; iter<8; iter++)
     {
@@ -149,10 +149,10 @@ void ss_descending_inv_scales_b(){
       if((iter%2)==1)
       {
           freemotif_1.diatonic_offset=7;
-          freemotif_1.motif_inversion=-1;
+          freemotif_1.scale_diatonic=-1;
       } else {
           freemotif_1.diatonic_offset=0;
-          freemotif_1.motif_inversion=1;
+          freemotif_1.scale_diatonic=1;
       }
       freemotif_1.diatonic_offset=freemotif_1.diatonic_offset-(iter/2);
       freemotif_1.renderfreemotif();
@@ -171,9 +171,9 @@ void ss_descending_inv_scales_b(){
 
       freemotif_2.pos_time=2+iter*4;
       if(iter==(2)||iter==(4)||iter==(6)) {
-        freemotif_2.motif_inversion=1;
+        freemotif_2.scale_diatonic=1;
       } else {
-        freemotif_2.motif_inversion=-1;
+        freemotif_2.scale_diatonic=-1;
       }
       freemotif_2.diatonic_offset=-iter;
       freemotif_2.renderfreemotif();
@@ -183,10 +183,10 @@ void ss_descending_inv_scales_b(){
       if((iter%2)==1)
       {
           freemotif_3.diatonic_offset=7;
-          freemotif_3.motif_inversion=-1;
+          freemotif_3.scale_diatonic=-1;
       } else {
           freemotif_3.diatonic_offset=0;
-          freemotif_3.motif_inversion=1;
+          freemotif_3.scale_diatonic=1;
       }
       freemotif_3.diatonic_offset=freemotif_3.diatonic_offset-(iter/2);
       freemotif_3.renderfreemotif();
@@ -195,10 +195,10 @@ void ss_descending_inv_scales_b(){
       if((iter%2)==1)
       {
           freemotif_4.diatonic_offset=7;
-          freemotif_4.motif_inversion=-1;
+          freemotif_4.scale_diatonic=-1;
       } else {
           freemotif_4.diatonic_offset=0;
-          freemotif_4.motif_inversion=1;
+          freemotif_4.scale_diatonic=1;
       }
       freemotif_4.diatonic_offset=freemotif_4.diatonic_offset-(iter/2);
       freemotif_4.renderfreemotif();
@@ -222,7 +222,7 @@ void ss_descending_inv_scales2(){
     freemotif_4.pos_tonic=12+freemotif_3.pos_tonic;
     freemotif_4.scale_time=8;
     freemotif_4.scale_dur=16;
-    freemotif_4.motif_inversion=-1;
+    freemotif_4.scale_diatonic=-1;
 
     for(int iter=0; iter<8; iter++)
     {
@@ -231,17 +231,17 @@ void ss_descending_inv_scales2(){
       if((iter%2)==1)
       {
           freemotif_1.diatonic_offset=7;
-          freemotif_1.motif_inversion=-1;
+          freemotif_1.scale_diatonic=-1;
       } else {
           freemotif_1.diatonic_offset=0;
-          freemotif_1.motif_inversion=1;
+          freemotif_1.scale_diatonic=1;
       }
       freemotif_1.diatonic_offset=freemotif_1.diatonic_offset-(iter/2);
       freemotif_1.renderfreemotif();
 
       setcurrentkey(2);
       freemotif_2.pos_time=3+iter*4;
-      freemotif_2.motif_inversion=-1;
+      freemotif_2.scale_diatonic=-1;
       freemotif_2.diatonic_offset=-iter;
       freemotif_2.renderfreemotif();
       setcurrentkey(1);
@@ -251,10 +251,10 @@ void ss_descending_inv_scales2(){
       if((iter%2)==1)
       {
           freemotif_3.diatonic_offset=7;
-          freemotif_3.motif_inversion=-1;
+          freemotif_3.scale_diatonic=-1;
       } else {
           freemotif_3.diatonic_offset=0;
-          freemotif_3.motif_inversion=1;
+          freemotif_3.scale_diatonic=1;
       }
       freemotif_3.diatonic_offset=freemotif_3.diatonic_offset-(iter/2);
       freemotif_3.renderfreemotif();
@@ -263,10 +263,10 @@ void ss_descending_inv_scales2(){
       if((iter%2)==1)
       {
           freemotif_4.diatonic_offset=7;
-          freemotif_4.motif_inversion=-1;
+          freemotif_4.scale_diatonic=-1;
       } else {
           freemotif_4.diatonic_offset=0;
-          freemotif_4.motif_inversion=1;
+          freemotif_4.scale_diatonic=1;
       }
       freemotif_4.diatonic_offset=freemotif_4.diatonic_offset-(iter/2);
       freemotif_4.renderfreemotif();

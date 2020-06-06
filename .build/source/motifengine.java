@@ -210,17 +210,34 @@ float[][] even_ascent_mm =
 
 /*---------'freeMotif Class'--------*/
 class freeMotif{
+
+  //counter variable for scanning / rendering notes
   int noterenderindex;
+  // number of notes in freemotif
   int numnotes;
+  // Multidimensional array,
+  // notearray[<# note in motif>,<attribute #>]
+  // { {pitch <diatonic reference>,
+  //    start position,
+  //    duration,
+  //    velocity,
+  //    timbre A,
+  //    timbre B} }
   float[][] notearray;
+  // motif position (for iterations relative to first iteration)
   float pos_time=0;
+  // MIDI note Tonic index (60= Middle C)
   float pos_tonic=60;
+  // Diatonic Offset to shift motif up and down within scale
   float diatonic_offset=0;
+  // ??? use for fragmentation?
   float motif_length=1;
+  // scales motif in time
   float scale_time=1;
+  // scales duration of note durations in motif
   float scale_dur=1;
+  // scales diatonic values
   float scale_diatonic=1;
-  float motif_inversion=1;
   float motif_retrograde=0;
   int frag_index=0;
   int frag_length;
@@ -244,13 +261,13 @@ class freeMotif{
       //println(notearray[0][5]);
 
       // { {pitch <diatonic reference>,
-      //start position,
-      //duration,
-      //velocity,
-      //timbre A,
-      //timbre B} }
+      //    start position,
+      //    duration,
+      //    velocity,
+      //    timbre A,
+      //    timbre B} }
       for(noterenderindex=0; noterenderindex<frag_length ; noterenderindex++){
-        float output_pitch = return_diaton(notearray[noterenderindex][0]*(motif_inversion)+diatonic_offset,pos_tonic);
+        float output_pitch = return_diaton(notearray[noterenderindex][0]*(scale_diatonic)+diatonic_offset,pos_tonic);
         float output_pos = global_time_render_offset+pos_time+notearray[noterenderindex][1]*scale_time;
         float output_dur = notearray[noterenderindex][2]*scale_dur;
         float output_vel = notearray[noterenderindex][3];
@@ -356,7 +373,7 @@ public void ss_descending_inv_scales(){
     freemotif_4.pos_tonic=12+freemotif_3.pos_tonic;
     freemotif_4.scale_time=8;
     freemotif_4.scale_dur=16;
-    freemotif_4.motif_inversion=-1;
+    freemotif_4.scale_diatonic=-1;
 
     for(int iter=0; iter<8; iter++)
     {
@@ -372,19 +389,19 @@ public void ss_descending_inv_scales(){
       if((iter%2)==1)
       {
           freemotif_1.diatonic_offset=7;
-          freemotif_1.motif_inversion=-1;
+          freemotif_1.scale_diatonic=-1;
       } else {
           freemotif_1.diatonic_offset=0;
-          freemotif_1.motif_inversion=1;
+          freemotif_1.scale_diatonic=1;
       }
       freemotif_1.diatonic_offset=freemotif_1.diatonic_offset-(iter/2);
       freemotif_1.renderfreemotif();
 
       freemotif_2.pos_time=2+iter*4;
       if(iter==(2)||iter==(4)||iter==(6)) {
-        freemotif_2.motif_inversion=1;
+        freemotif_2.scale_diatonic=1;
       } else {
-        freemotif_2.motif_inversion=-1;
+        freemotif_2.scale_diatonic=-1;
       }
       freemotif_2.diatonic_offset=-iter;
       freemotif_2.renderfreemotif();
@@ -394,10 +411,10 @@ public void ss_descending_inv_scales(){
       if((iter%2)==1)
       {
           freemotif_3.diatonic_offset=7;
-          freemotif_3.motif_inversion=-1;
+          freemotif_3.scale_diatonic=-1;
       } else {
           freemotif_3.diatonic_offset=0;
-          freemotif_3.motif_inversion=1;
+          freemotif_3.scale_diatonic=1;
       }
       freemotif_3.diatonic_offset=freemotif_3.diatonic_offset-(iter/2);
       freemotif_3.renderfreemotif();
@@ -406,10 +423,10 @@ public void ss_descending_inv_scales(){
       if((iter%2)==1)
       {
           freemotif_4.diatonic_offset=7;
-          freemotif_4.motif_inversion=-1;
+          freemotif_4.scale_diatonic=-1;
       } else {
           freemotif_4.diatonic_offset=0;
-          freemotif_4.motif_inversion=1;
+          freemotif_4.scale_diatonic=1;
       }
       freemotif_4.diatonic_offset=freemotif_4.diatonic_offset-(iter/2);
       freemotif_4.renderfreemotif();
@@ -435,7 +452,7 @@ public void ss_descending_inv_scales_b(){
     freemotif_4.pos_tonic=12+freemotif_3.pos_tonic;
     freemotif_4.scale_time=8;
     freemotif_4.scale_dur=16;
-    freemotif_4.motif_inversion=-1;
+    freemotif_4.scale_diatonic=-1;
 
     for(int iter=0; iter<8; iter++)
     {
@@ -451,10 +468,10 @@ public void ss_descending_inv_scales_b(){
       if((iter%2)==1)
       {
           freemotif_1.diatonic_offset=7;
-          freemotif_1.motif_inversion=-1;
+          freemotif_1.scale_diatonic=-1;
       } else {
           freemotif_1.diatonic_offset=0;
-          freemotif_1.motif_inversion=1;
+          freemotif_1.scale_diatonic=1;
       }
       freemotif_1.diatonic_offset=freemotif_1.diatonic_offset-(iter/2);
       freemotif_1.renderfreemotif();
@@ -473,9 +490,9 @@ public void ss_descending_inv_scales_b(){
 
       freemotif_2.pos_time=2+iter*4;
       if(iter==(2)||iter==(4)||iter==(6)) {
-        freemotif_2.motif_inversion=1;
+        freemotif_2.scale_diatonic=1;
       } else {
-        freemotif_2.motif_inversion=-1;
+        freemotif_2.scale_diatonic=-1;
       }
       freemotif_2.diatonic_offset=-iter;
       freemotif_2.renderfreemotif();
@@ -485,10 +502,10 @@ public void ss_descending_inv_scales_b(){
       if((iter%2)==1)
       {
           freemotif_3.diatonic_offset=7;
-          freemotif_3.motif_inversion=-1;
+          freemotif_3.scale_diatonic=-1;
       } else {
           freemotif_3.diatonic_offset=0;
-          freemotif_3.motif_inversion=1;
+          freemotif_3.scale_diatonic=1;
       }
       freemotif_3.diatonic_offset=freemotif_3.diatonic_offset-(iter/2);
       freemotif_3.renderfreemotif();
@@ -497,10 +514,10 @@ public void ss_descending_inv_scales_b(){
       if((iter%2)==1)
       {
           freemotif_4.diatonic_offset=7;
-          freemotif_4.motif_inversion=-1;
+          freemotif_4.scale_diatonic=-1;
       } else {
           freemotif_4.diatonic_offset=0;
-          freemotif_4.motif_inversion=1;
+          freemotif_4.scale_diatonic=1;
       }
       freemotif_4.diatonic_offset=freemotif_4.diatonic_offset-(iter/2);
       freemotif_4.renderfreemotif();
@@ -524,7 +541,7 @@ public void ss_descending_inv_scales2(){
     freemotif_4.pos_tonic=12+freemotif_3.pos_tonic;
     freemotif_4.scale_time=8;
     freemotif_4.scale_dur=16;
-    freemotif_4.motif_inversion=-1;
+    freemotif_4.scale_diatonic=-1;
 
     for(int iter=0; iter<8; iter++)
     {
@@ -533,17 +550,17 @@ public void ss_descending_inv_scales2(){
       if((iter%2)==1)
       {
           freemotif_1.diatonic_offset=7;
-          freemotif_1.motif_inversion=-1;
+          freemotif_1.scale_diatonic=-1;
       } else {
           freemotif_1.diatonic_offset=0;
-          freemotif_1.motif_inversion=1;
+          freemotif_1.scale_diatonic=1;
       }
       freemotif_1.diatonic_offset=freemotif_1.diatonic_offset-(iter/2);
       freemotif_1.renderfreemotif();
 
       setcurrentkey(2);
       freemotif_2.pos_time=3+iter*4;
-      freemotif_2.motif_inversion=-1;
+      freemotif_2.scale_diatonic=-1;
       freemotif_2.diatonic_offset=-iter;
       freemotif_2.renderfreemotif();
       setcurrentkey(1);
@@ -553,10 +570,10 @@ public void ss_descending_inv_scales2(){
       if((iter%2)==1)
       {
           freemotif_3.diatonic_offset=7;
-          freemotif_3.motif_inversion=-1;
+          freemotif_3.scale_diatonic=-1;
       } else {
           freemotif_3.diatonic_offset=0;
-          freemotif_3.motif_inversion=1;
+          freemotif_3.scale_diatonic=1;
       }
       freemotif_3.diatonic_offset=freemotif_3.diatonic_offset-(iter/2);
       freemotif_3.renderfreemotif();
@@ -565,10 +582,10 @@ public void ss_descending_inv_scales2(){
       if((iter%2)==1)
       {
           freemotif_4.diatonic_offset=7;
-          freemotif_4.motif_inversion=-1;
+          freemotif_4.scale_diatonic=-1;
       } else {
           freemotif_4.diatonic_offset=0;
-          freemotif_4.motif_inversion=1;
+          freemotif_4.scale_diatonic=1;
       }
       freemotif_4.diatonic_offset=freemotif_4.diatonic_offset-(iter/2);
       freemotif_4.renderfreemotif();
