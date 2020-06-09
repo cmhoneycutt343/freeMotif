@@ -35,7 +35,7 @@ freeMotif_table freemotif_table4obj;
 // score length in measures
 int score_length=16;
 // score bpm
-int score_bpm=200;
+int score_bpm=180;
 
 int global_time_render_offset=0;
 
@@ -49,6 +49,7 @@ public void setup() {
 
   loadMetamotifs();
   globalscoresetup();
+  drawBackground();
   renderScore();
 
 
@@ -70,8 +71,8 @@ public void handleCallbacks(int callbackID) {
     }
 }
 /*---------GUI VARIABLES------------*/
-int gridline_y_minor=color(32, 32, 32);
-int gridline_y_major=color(64, 64, 64);
+int gridline_y_minor=color(16, 16, 16);
+int gridline_y_major=color(32, 32, 32);
 int gridline_middleC=color(128, 0, 0);
 int gridline_tonic=color(82, 0, 0);
 
@@ -95,9 +96,9 @@ float brcorny;
 float noteyheight = gheight/128;
 float quarternotexwidth = gwidth/128;
 
-public void drawGUI(){
-  drawgrid();
+public void drawBackground(){
   background(0,0,0);
+  drawgrid();
 
   //DEBUG
   //drawnote(0,0.0,0.0,0,0,0,0);
@@ -110,7 +111,7 @@ public void drawgrid(){
 
       //float gl_ulcornx=quarternotexwidth*drawgrid_noteindex;
       float stretchpixheight=gheight/(zoom_notehigh-zoom_notelow+1);
-      float gl_ulcornx=stretchpixheight*drawgrid_noteindex;
+      float gl_ulcornx=gheight-stretchpixheight*drawgrid_noteindex;
 
       //note seperator grid
       if((drawgrid_noteindex+zoom_notelow)==60){
@@ -151,7 +152,7 @@ public void drawnote(float pitch, float start_pos, float dur, float velo, float 
     /***DEBUG; 'i' will be subbed in for MIDI#number*/
 
     colorMode(HSB);
-    int note_color_byinst=color((inst*100)%255,128,128);
+    int note_color_byinst=color((inst*100)%255,128,velo);
     fill(note_color_byinst);
 
     //duration in .25=quarternote
@@ -176,6 +177,48 @@ public void drawnote(float pitch, float start_pos, float dur, float velo, float 
 
     rectMode(CORNERS);
     rect(ulcornx,ulcorny,brcornx,brcorny);
+
+    // textSize(10);
+    // text(pitch, ulcornx+.5*stretchpixheight, ulcorny-.5*stretchpixwidth);
+
+    //*/
+
+
+
+  colorMode(RGB);
+}
+
+public void addGUIcom(float pitch, float start_pos, int inst, String inputcomment ) {
+
+    /***DEBUG; 'i' will be subbed in for MIDI#number*/
+
+    colorMode(HSB);
+    int note_color_byinst=color((inst*100)%255,128,128);
+    fill(note_color_byinst);
+
+    //duration in .25=quarternote
+
+    ///*--unstretch proto-typed render--
+    //float ulcornx=noteyheight*start_pos;
+    //float ulcorny=gheight-quarternotexwidth*(pitch+1);
+    //float brcornx=ulcornx+noteyheight;
+    //float brcorny=ulcorny+quarternotexwidth;
+    //rectMode(CORNERS);
+    //rect(ulcornx,ulcorny,brcornx,brcorny);
+    //*/
+
+    ///*--unstretch proto-typed render--
+    stretchpixwidth=gwidth/((zoom_stoptime-zoom_starttime+1)*4);
+    ulcornx=(start_pos)*stretchpixwidth*4-(zoom_starttime)*stretchpixwidth;
+    // brcornx=ulcornx+(stretchpixwidth*dur*4);
+
+    stretchpixheight=gheight/(zoom_notehigh-zoom_notelow+1);
+    ulcorny=gheight-stretchpixheight*(pitch-zoom_notelow+1);
+    // brcorny=ulcorny+stretchpixheight;
+
+    textSize(14);
+    text(inputcomment, ulcornx+.5f*stretchpixheight, ulcorny+4.5f*stretchpixwidth);
+
     //*/
 
 
@@ -184,6 +227,8 @@ public void drawnote(float pitch, float start_pos, float dur, float velo, float 
 }
 /*---------'freeMotif Class'--------*/
 class freeMotif_table{
+
+  String motif_name="default";
 
   //counter variable for scanning / rendering notes
   int noterenderindex;
@@ -248,7 +293,6 @@ class freeMotif_table{
   public void renderfreemotif(){
       //drawgrid();
 
-
       //println(notearray.length);
       //println(notearray[0][0]);
       //println(notearray[0][1]);
@@ -257,6 +301,8 @@ class freeMotif_table{
       //println(notearray[0][4]);
       //println(notearray[0][5]);
 
+
+
       // { {pitch <diatonic reference>,
       //    start position,
       //    duration,
@@ -264,17 +310,9 @@ class freeMotif_table{
       //    timbre A,
       //    timbre B} }
       for(int notescan_abspos=frag_index; notescan_abspos<frag_length ; notescan_abspos++){
-        //experiment --- will redefining 'noterenderindex'
 
-        // motif_retrograde
-        //noterenderindex=abs(int(((frag_length-1)*motif_retrograde)-noterenderindex));
-        // if(motif_retrograde==0)
-        // {
-        //   noterenderindex = notescan_abspos;
-        // } else if(motif_retrograde==1)  {
-        //   noterenderindex = notescan_abspos;
-        // }
 
+        /*-------start rendering calcuations--------*/
         noterenderindex = notescan_abspos;
 
         //factor in 'tonal_retrograde'
@@ -306,8 +344,10 @@ class freeMotif_table{
           }
         }
 
-        //chromatic pitch is returned
-        float output_pitch = return_diaton(notearray_table.getFloat(tablepitch_index, "pitch")*(scale_diatonic)+diatonic_offset,pos_tonic);
+        //calculate overall diatonic degree
+        float diatonic_degree = (notearray_table.getFloat(tablepitch_index, "pitch"))*(scale_diatonic)+diatonic_offset;
+
+        float output_pitch = return_diaton(diatonic_degree,pos_tonic);
 
         //absolute time (relative to score)
         float output_pos = global_time_render_offset+pos_time+tablepos_fromindex*scale_time;
@@ -316,8 +356,16 @@ class freeMotif_table{
         float output_vel = notearray_table.getFloat(notescan_abspos, "velocity");
         float output_timb1 = notearray_table.getFloat(notescan_abspos, "timbre1");
         float output_timb2 = notearray_table.getFloat(notescan_abspos, "timbre2");
+        /*-------end rendering calcuations--------*/
 
-        drawgrid();
+
+        if(notescan_abspos==0)
+        {
+          addGUIcom(output_pitch,output_pos,inst_index,motif_name);
+        }
+
+
+
         //draw notes in GUI
         drawnote(output_pitch,
                 output_pos,
@@ -414,28 +462,80 @@ public void retrograde_scoretest(){
       //1. Tonal retrograde
       //2. Rhythmic retrograde
       //3. Full retrograde
+      score.addCallback(32, 1);
 
+      freemotif_table1obj = new freeMotif_table(simpleforms_table1);
 
-      freemotif_table1obj = new freeMotif_table(simpleforms_table2);
-
-      freemotif_table1obj.diatonic_offset=0;
-      freemotif_table1obj.scale_time=4;
-      freemotif_table1obj.scale_dur=4;
+      freemotif_table1obj.duration_retrograde=0;
+      freemotif_table1obj.position_retrograde=0;
+      freemotif_table1obj.scale_time=2;
+      freemotif_table1obj.scale_dur=2;
+      freemotif_table1obj.motif_name="original";
       freemotif_table1obj.renderfreemotif();
 
-      freemotif_table1obj.tonal_retrograde=1;
-      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
-      freemotif_table1obj.renderfreemotif();
-
-      freemotif_table1obj.tonal_retrograde=0;
       freemotif_table1obj.duration_retrograde=1;
+      freemotif_table1obj.position_retrograde=0;
+      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+      freemotif_table1obj.motif_name="duration_retrograde";
+      freemotif_table1obj.renderfreemotif();
+
+      freemotif_table1obj.duration_retrograde=0;
+      freemotif_table1obj.position_retrograde=1;
+      freemotif_table1obj.motif_name="position_retrograde";
       freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
       freemotif_table1obj.renderfreemotif();
 
       freemotif_table1obj.duration_retrograde=1;
       freemotif_table1obj.position_retrograde=1;
+      freemotif_table1obj.motif_name="both";
       freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
       freemotif_table1obj.renderfreemotif();
+
+      freemotif_table1obj.tonal_retrograde=1;
+
+      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+      freemotif_table1obj.duration_retrograde=0;
+      freemotif_table1obj.position_retrograde=0;
+      freemotif_table1obj.scale_time=4;
+      freemotif_table1obj.scale_dur=4;
+      freemotif_table1obj.motif_name="original";
+      freemotif_table1obj.renderfreemotif();
+
+      freemotif_table1obj.duration_retrograde=1;
+      freemotif_table1obj.position_retrograde=0;
+      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+      freemotif_table1obj.motif_name="duration_retrograde";
+      freemotif_table1obj.renderfreemotif();
+
+      freemotif_table1obj.duration_retrograde=0;
+      freemotif_table1obj.position_retrograde=1;
+      freemotif_table1obj.motif_name="position_retrograde";
+      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+      freemotif_table1obj.renderfreemotif();
+
+      freemotif_table1obj.duration_retrograde=1;
+      freemotif_table1obj.position_retrograde=1;
+      freemotif_table1obj.motif_name="both";
+      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+      freemotif_table1obj.renderfreemotif();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
       // freemotif_table1obj = new freeMotif_table(arch1_mm_table);
       //
@@ -870,12 +970,12 @@ public void compound_score1_tables(){
     ss_non_even_scaling_tables();
 }
 /*---GUI ZOOM SETTINGS--*/
-int zoom_notelow=0;
-int zoom_notehigh=127;
+int zoom_notelow=36;
+int zoom_notehigh=83;
 
 //by beat eg: <0 = display includes measure 1; 3 = measure includes measure 4>
 float zoom_starttime=0;
-float zoom_stoptime=15;
+float zoom_stoptime=31;
 
 // List of Instruments at http://explodingart.com/soundcipher/doc/arb/soundcipher/constants/ProgramChanges.html
 float[] inst_cata = {score.BELL,score.CELLO,score.VIOLIN,score.MUSIC_BOX};
@@ -981,8 +1081,8 @@ public void setcurrentkey(int keyindex)
     }
 }
 
-public float return_diaton(float dia_degree_in, float tonic_offset)
-{
+public float return_diaton(float dia_degree_in, float tonic_offset){
+
     // float currentnote = tonic_offset+scalebuffer[int(truemod(dia_degree_in+degreebuffer[k], 7))];
     // float currentoctave = (floor((pitches[i]+degreebuffer[k])/7))*12;
     float calc_diatonic = tonic_offset + scalebuffer[PApplet.parseInt(truemod(dia_degree_in,7.0f))];

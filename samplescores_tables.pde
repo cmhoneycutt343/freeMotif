@@ -4,28 +4,80 @@ void retrograde_scoretest(){
       //1. Tonal retrograde
       //2. Rhythmic retrograde
       //3. Full retrograde
+      score.addCallback(32, 1);
 
+      freemotif_table1obj = new freeMotif_table(simpleforms_table1);
 
-      freemotif_table1obj = new freeMotif_table(simpleforms_table2);
-
-      freemotif_table1obj.diatonic_offset=0;
-      freemotif_table1obj.scale_time=4;
-      freemotif_table1obj.scale_dur=4;
+      freemotif_table1obj.duration_retrograde=0;
+      freemotif_table1obj.position_retrograde=0;
+      freemotif_table1obj.scale_time=2;
+      freemotif_table1obj.scale_dur=2;
+      freemotif_table1obj.motif_name="original";
       freemotif_table1obj.renderfreemotif();
 
-      freemotif_table1obj.tonal_retrograde=1;
-      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
-      freemotif_table1obj.renderfreemotif();
-
-      freemotif_table1obj.tonal_retrograde=0;
       freemotif_table1obj.duration_retrograde=1;
+      freemotif_table1obj.position_retrograde=0;
+      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+      freemotif_table1obj.motif_name="duration_retrograde";
+      freemotif_table1obj.renderfreemotif();
+
+      freemotif_table1obj.duration_retrograde=0;
+      freemotif_table1obj.position_retrograde=1;
+      freemotif_table1obj.motif_name="position_retrograde";
       freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
       freemotif_table1obj.renderfreemotif();
 
       freemotif_table1obj.duration_retrograde=1;
       freemotif_table1obj.position_retrograde=1;
+      freemotif_table1obj.motif_name="both";
       freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
       freemotif_table1obj.renderfreemotif();
+
+      freemotif_table1obj.tonal_retrograde=1;
+
+      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+      freemotif_table1obj.duration_retrograde=0;
+      freemotif_table1obj.position_retrograde=0;
+      freemotif_table1obj.scale_time=4;
+      freemotif_table1obj.scale_dur=4;
+      freemotif_table1obj.motif_name="original";
+      freemotif_table1obj.renderfreemotif();
+
+      freemotif_table1obj.duration_retrograde=1;
+      freemotif_table1obj.position_retrograde=0;
+      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+      freemotif_table1obj.motif_name="duration_retrograde";
+      freemotif_table1obj.renderfreemotif();
+
+      freemotif_table1obj.duration_retrograde=0;
+      freemotif_table1obj.position_retrograde=1;
+      freemotif_table1obj.motif_name="position_retrograde";
+      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+      freemotif_table1obj.renderfreemotif();
+
+      freemotif_table1obj.duration_retrograde=1;
+      freemotif_table1obj.position_retrograde=1;
+      freemotif_table1obj.motif_name="both";
+      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+      freemotif_table1obj.renderfreemotif();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
       // freemotif_table1obj = new freeMotif_table(arch1_mm_table);
       //

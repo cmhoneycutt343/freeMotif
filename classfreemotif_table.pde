@@ -1,6 +1,8 @@
 /*---------'freeMotif Class'--------*/
 class freeMotif_table{
 
+  String motif_name="default";
+
   //counter variable for scanning / rendering notes
   int noterenderindex;
   // number of notes in freemotif
@@ -64,7 +66,6 @@ class freeMotif_table{
   void renderfreemotif(){
       //drawgrid();
 
-
       //println(notearray.length);
       //println(notearray[0][0]);
       //println(notearray[0][1]);
@@ -73,6 +74,8 @@ class freeMotif_table{
       //println(notearray[0][4]);
       //println(notearray[0][5]);
 
+
+
       // { {pitch <diatonic reference>,
       //    start position,
       //    duration,
@@ -80,17 +83,9 @@ class freeMotif_table{
       //    timbre A,
       //    timbre B} }
       for(int notescan_abspos=frag_index; notescan_abspos<frag_length ; notescan_abspos++){
-        //experiment --- will redefining 'noterenderindex'
 
-        // motif_retrograde
-        //noterenderindex=abs(int(((frag_length-1)*motif_retrograde)-noterenderindex));
-        // if(motif_retrograde==0)
-        // {
-        //   noterenderindex = notescan_abspos;
-        // } else if(motif_retrograde==1)  {
-        //   noterenderindex = notescan_abspos;
-        // }
 
+        /*-------start rendering calcuations--------*/
         noterenderindex = notescan_abspos;
 
         //factor in 'tonal_retrograde'
@@ -122,8 +117,10 @@ class freeMotif_table{
           }
         }
 
-        //chromatic pitch is returned
-        float output_pitch = return_diaton(notearray_table.getFloat(tablepitch_index, "pitch")*(scale_diatonic)+diatonic_offset,pos_tonic);
+        //calculate overall diatonic degree
+        float diatonic_degree = (notearray_table.getFloat(tablepitch_index, "pitch"))*(scale_diatonic)+diatonic_offset;
+
+        float output_pitch = return_diaton(diatonic_degree,pos_tonic);
 
         //absolute time (relative to score)
         float output_pos = global_time_render_offset+pos_time+tablepos_fromindex*scale_time;
@@ -132,8 +129,16 @@ class freeMotif_table{
         float output_vel = notearray_table.getFloat(notescan_abspos, "velocity");
         float output_timb1 = notearray_table.getFloat(notescan_abspos, "timbre1");
         float output_timb2 = notearray_table.getFloat(notescan_abspos, "timbre2");
+        /*-------end rendering calcuations--------*/
 
-        drawgrid();
+
+        if(notescan_abspos==0)
+        {
+          addGUIcom(output_pitch,output_pos,inst_index,motif_name);
+        }
+
+
+
         //draw notes in GUI
         drawnote(output_pitch,
                 output_pos,

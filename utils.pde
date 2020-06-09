@@ -81,8 +81,8 @@ void setcurrentkey(int keyindex)
     }
 }
 
-float return_diaton(float dia_degree_in, float tonic_offset)
-{
+float return_diaton(float dia_degree_in, float tonic_offset){
+
     // float currentnote = tonic_offset+scalebuffer[int(truemod(dia_degree_in+degreebuffer[k], 7))];
     // float currentoctave = (floor((pitches[i]+degreebuffer[k])/7))*12;
     float calc_diatonic = tonic_offset + scalebuffer[int(truemod(dia_degree_in,7.0))];
