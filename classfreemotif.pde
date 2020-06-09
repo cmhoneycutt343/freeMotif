@@ -22,7 +22,7 @@ class freeMotif{
   // Diatonic Offset to shift motif up and down within scale
   float diatonic_offset=0;
   // ??? use for fragmentation?
-  float motif_length=1;
+  float motif_length;
   // scales motif in time
   float scale_time=1;
   // scales duration of note durations in motif
@@ -30,7 +30,7 @@ class freeMotif{
   // scales diatonic values (-1) is an inversion
   float scale_diatonic=1;
   // Bool; 0=normal direction, 1 motif is reversed
-  float motif_retrograde=0;
+  float motif_retrograde=1;
   // Fragmentation: index of first note fragment
   int frag_index=0;
   // Fragmentation: number of notes in frag
@@ -44,10 +44,15 @@ class freeMotif{
       frag_length=numnotes;
   }
 
+  void nestedmethod(){
+      println("test print in testmethod");
+  }
+
   //Method is called to write motif to score / GUI
   void renderfreemotif(){
       //drawgrid();
 
+      nestedmethod();
       //println(notearray.length);
       //println(notearray[0][0]);
       //println(notearray[0][1]);
@@ -62,7 +67,20 @@ class freeMotif{
       //    velocity,
       //    timbre A,
       //    timbre B} }
-      for(noterenderindex=0; noterenderindex<frag_length ; noterenderindex++){
+      for(int notescan_abspos=0; notescan_abspos<frag_length ; notescan_abspos++){
+        //experiment --- will redefining 'noterenderindex'
+
+        // motif_retrograde
+        //noterenderindex=abs(int(((frag_length-1)*motif_retrograde)-noterenderindex));
+        // if(motif_retrograde==0)
+        // {
+        //   noterenderindex = notescan_abspos;
+        // } else if(motif_retrograde==1)  {
+        //   noterenderindex = notescan_abspos;
+        // }
+
+        noterenderindex = notescan_abspos;
+
         float output_pitch = return_diaton(notearray[noterenderindex][0]*(scale_diatonic)+diatonic_offset,pos_tonic);
         float output_pos = global_time_render_offset+pos_time+notearray[noterenderindex][1]*scale_time;
         float output_dur = notearray[noterenderindex][2]*scale_dur;
@@ -110,5 +128,7 @@ class freeMotif{
 
         // end 'renderfreemotif' method
       }
+
+      printArray(notearray);
   }
 }

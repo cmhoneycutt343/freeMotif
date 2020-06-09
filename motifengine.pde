@@ -12,6 +12,11 @@ freeMotif freemotif_2;
 freeMotif freemotif_3;
 freeMotif freemotif_4;
 
+freeMotif_table  freemotif_table1obj;
+freeMotif_table freemotif_table2obj;
+freeMotif_table freemotif_table3obj;
+freeMotif_table freemotif_table4obj;
+
 
 /*-------------SCORE VARIABLES------------*/
 // score length in measures
@@ -29,6 +34,7 @@ void setup() {
   background(0, 0, 0);
   colorMode(RGB, 256);
 
+  loadMetamotifs();
   globalscoresetup();
   renderScore();
 

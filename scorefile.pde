@@ -14,21 +14,15 @@ void globalscoresetup(){
 }
 
 void renderScore(){
-    // Sample_Score1();
-    score.addCallback(94,1);
 
-    global_time_render_offset=0;
-    // ss_descending_inv_scales2();
-    ss_non_even_scaling_asc();
+    // compound_score1();
 
+    // debug_score_tables();
+    // Sample_Score1_tables();
+    // ss_descending_inv_scales_tables();
+    // ss_descending_inv_scales_b_tables();
+    // ss_non_even_scaling_tables();
+    // ss_non_even_scaling_asc_tables();
 
-    global_time_render_offset=8;
-    ss_descending_inv_scales();
-
-
-    global_time_render_offset=8+32;
-    ss_descending_inv_scales_b();
-
-    global_time_render_offset=44+32;
-    ss_non_even_scaling();
+    compound_score1_tables();
 }

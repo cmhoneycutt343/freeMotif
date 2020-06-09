@@ -1,3 +1,32 @@
+void debug_score(){
+
+  int starting_time_offset=global_time_render_offset;
+
+  for(int iter=0; iter<17; iter++)
+  {
+    freemotif_1 = new freeMotif(even_ascent_mm);
+    freemotif_1.scale_time=2;
+    //freemotif_1.pos_time=2;
+    freemotif_1.renderfreemotif();
+
+    freemotif_2 = new freeMotif(arch1_mm);
+    freemotif_2.inst_index=1;
+    freemotif_2.scale_time=1/3;
+    if(iter<13){
+      freemotif_2.diatonic_offset=freemotif_1.diatonic_offset+12+((iter-1)/4);
+    } else {
+      freemotif_2.diatonic_offset=freemotif_1.diatonic_offset+12+2;
+    }
+    freemotif_2.renderfreemotif();
+
+    global_time_render_offset=starting_time_offset+iter*4;
+  }
+
+  setcurrentkey(0);
+
+
+}
+
 void Sample_Score1(){
      freemotif_1 = new freeMotif(simpleforms_2);
 
@@ -275,7 +304,7 @@ void ss_descending_inv_scales2(){
 }
 
 void ss_non_even_scaling(){
-    //Sample_Score1();
+  //Sample_Score1();
 
     freemotif_1 = new freeMotif(arch1_mm);
     freemotif_2 = new freeMotif(arch1_mm);
@@ -381,4 +410,24 @@ void ss_non_even_scaling_asc(){
     freemotif_1.pos_time = 8;
     freemotif_1.diatonic_offset = 4;
     freemotif_1.renderfreemotif();
+}
+
+void compound_score1(){
+    // Sample_Score1();
+    score.addCallback(94,1);
+
+    global_time_render_offset=0;
+    // ss_descending_inv_scales2();
+    ss_non_even_scaling_asc();
+
+
+    global_time_render_offset=8;
+    ss_descending_inv_scales();
+
+
+    global_time_render_offset=8+32;
+    ss_descending_inv_scales_b();
+
+    global_time_render_offset=44+32;
+    ss_non_even_scaling();
 }

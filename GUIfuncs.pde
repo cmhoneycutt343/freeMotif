@@ -25,6 +25,7 @@ float noteyheight = gheight/128;
 float quarternotexwidth = gwidth/128;
 
 void drawGUI(){
+  drawgrid();
   background(0,0,0);
 
   //DEBUG

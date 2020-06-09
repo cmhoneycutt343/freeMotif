@@ -4,6 +4,51 @@ float truemod(float input, float modulus)
       return ((input%modulus+modulus)%modulus);
 }
 
+void printArray(float[][] a)
+{
+  println("############ Array ############");
+  for(int i=0; i < a.length; i ++){
+    for(int j = 0; j < a[i].length; j++){
+     print(" " + a[i][j]);
+    }
+    println();
+  }
+}
+
+void printTable(Table input_table)
+{
+      //scan notes in table
+      for(int tab_print_iter=0;tab_print_iter<input_table.getRowCount();tab_print_iter++){
+
+          //
+          print("pitch: ");
+          print(input_table.getFloat(tab_print_iter, "pitch"));
+          print(" - ");
+
+          print("time_pos: ");
+          print(input_table.getFloat(tab_print_iter, "time_pos"));
+          print(" - ");
+
+          print("duration: ");
+          print(input_table.getFloat(tab_print_iter, "duration"));
+          print(" - ");
+
+          print("velocity: ");
+          print(input_table.getFloat(tab_print_iter, "velocity"));
+          print(" - ");
+
+          print("timbre1: ");
+          print(input_table.getFloat(tab_print_iter, "timbre1"));
+          print(" - ");
+
+          print("timbre2: ");
+          print(input_table.getFloat(tab_print_iter, "timbre2"));
+          print(" - ");
+          println();
+      }
+      println("---------------");
+}
+
 void setcurrentkey(int keyindex)
 {
     switch(keyindex){

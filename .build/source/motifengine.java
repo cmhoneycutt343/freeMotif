@@ -30,6 +30,11 @@ freeMotif freemotif_2;
 freeMotif freemotif_3;
 freeMotif freemotif_4;
 
+freeMotif_table  freemotif_table1obj;
+freeMotif_table freemotif_table2obj;
+freeMotif_table freemotif_table3obj;
+freeMotif_table freemotif_table4obj;
+
 
 /*-------------SCORE VARIABLES------------*/
 // score length in measures
@@ -47,6 +52,7 @@ public void setup() {
   background(0, 0, 0);
   colorMode(RGB, 256);
 
+  loadMetamotifs();
   globalscoresetup();
   renderScore();
 
@@ -94,6 +100,7 @@ float noteyheight = gheight/128;
 float quarternotexwidth = gwidth/128;
 
 public void drawGUI(){
+  drawgrid();
   background(0,0,0);
 
   //DEBUG
@@ -179,34 +186,6 @@ public void drawnote(float pitch, float start_pos, float dur, float velo, float 
 
   colorMode(RGB);
 }
-/*------MOTIF / CLASS VARIABLES---*/
-// { {pitch <diatonic reference>, start position, duration, velocity, timbre A, timbre B} }
-//simple form 1
-float[][] simpleforms_1 =
-{{ 0, 0.00f, .375f, 127, 0, 0},
-{ 2, .375f, .375f, 127, 0, 0},
-{-2, .750f, .250f, 127, 0, 0}};
-
-float[][] simpleforms_2 =
-{{ 0, 0.00f, .375f, 127, 0, 0},
-{1, .375f, .375f, 127, 0, 0},
-{2, .750f, .250f, 127, 0, 0}};
-
-float[][] arch1_mm =
-{{ 0, 0.00f, .25f, 127, 0, 0},
-{ 4, 1/4.0f, .25f, 127, 0, 0},
-{ 2, 2/4.0f, .25f, 127, 0, 0},
-{ 7, 3/4.0f, .25f, 127, 0, 0}};
-
-float[][] even_ascent_mm =
-{{ 0, 0.00f, .25f, 127, 0, 0},
-{ 1, 1/4.0f, .25f, 127, 0, 0},
-{ 2, 2/4.0f, .25f, 127, 0, 0},
-{ 3, 3/4.0f, .25f, 127, 0, 0},
-{ 4, 4/4.0f, .25f, 127, 0, 0},
-{ 5, 5/4.0f, .25f, 127, 0, 0},
-{ 6, 6/4.0f, .25f, 127, 0, 0},
-{ 7, 7/4.0f, .25f, 127, 0, 0}};
 
 /*---------'freeMotif Class'--------*/
 class freeMotif{
@@ -231,16 +210,20 @@ class freeMotif{
   // Diatonic Offset to shift motif up and down within scale
   float diatonic_offset=0;
   // ??? use for fragmentation?
-  float motif_length=1;
+  float motif_length;
   // scales motif in time
   float scale_time=1;
   // scales duration of note durations in motif
   float scale_dur=1;
-  // scales diatonic values
+  // scales diatonic values (-1) is an inversion
   float scale_diatonic=1;
-  float motif_retrograde=0;
+  // Bool; 0=normal direction, 1 motif is reversed
+  float motif_retrograde=1;
+  // Fragmentation: index of first note fragment
   int frag_index=0;
+  // Fragmentation: number of notes in frag
   int frag_length;
+  // index of instrument
   int inst_index=0;
 
   freeMotif(float[][] classinputmotif){
@@ -249,9 +232,15 @@ class freeMotif{
       frag_length=numnotes;
   }
 
+  public void nestedmethod(){
+      println("test print in testmethod");
+  }
+
+  //Method is called to write motif to score / GUI
   public void renderfreemotif(){
       //drawgrid();
 
+      nestedmethod();
       //println(notearray.length);
       //println(notearray[0][0]);
       //println(notearray[0][1]);
@@ -266,7 +255,20 @@ class freeMotif{
       //    velocity,
       //    timbre A,
       //    timbre B} }
-      for(noterenderindex=0; noterenderindex<frag_length ; noterenderindex++){
+      for(int notescan_abspos=0; notescan_abspos<frag_length ; notescan_abspos++){
+        //experiment --- will redefining 'noterenderindex'
+
+        // motif_retrograde
+        //noterenderindex=abs(int(((frag_length-1)*motif_retrograde)-noterenderindex));
+        // if(motif_retrograde==0)
+        // {
+        //   noterenderindex = notescan_abspos;
+        // } else if(motif_retrograde==1)  {
+        //   noterenderindex = notescan_abspos;
+        // }
+
+        noterenderindex = notescan_abspos;
+
         float output_pitch = return_diaton(notearray[noterenderindex][0]*(scale_diatonic)+diatonic_offset,pos_tonic);
         float output_pos = global_time_render_offset+pos_time+notearray[noterenderindex][1]*scale_time;
         float output_dur = notearray[noterenderindex][2]*scale_dur;
@@ -314,9 +316,230 @@ class freeMotif{
 
         // end 'renderfreemotif' method
       }
+
+      printArray(notearray);
+  }
+}
+/*---------'freeMotif Class'--------*/
+class freeMotif_table{
+
+  //counter variable for scanning / rendering notes
+  int noterenderindex;
+  // number of notes in freemotif
+  int numnotes;
+  // Multidimensional array,
+  // notearray[<# note in motif>,<attribute #>]
+  // { {pitch <diatonic reference>,
+  //    start position,
+  //    duration,
+  //    velocity,
+  //    timbre A,
+  //    timbre B} }
+
+  /***********REMOVE*****/
+  Table notearray_table;
+  // motif position (for iterations relative to first iteration)
+  /***********REMOVE*****/
+  float pos_time=0;
+  // MIDI note Tonic index (60= Middle C)
+  float pos_tonic=60;
+  // Diatonic Offset to shift motif up and down within scale
+  float diatonic_offset=0;
+  // ??? use for fragmentation?
+  float motif_length;
+  // scales motif in time
+  float scale_time=1;
+  // scales duration of note durations in motif
+  float scale_dur=1;
+  // scales diatonic values (-1) is an inversion
+  float scale_diatonic=1;
+  // Bool; 0=normal direction, 1 motif is reversed
+  float motif_retrograde=1;
+  // Fragmentation: index of first note fragment
+  int frag_index=0;
+  // Fragmentation: number of notes in frag
+  int frag_length;
+  // index of instrument
+  int inst_index=0;
+
+  freeMotif_table(Table classinputmotif_table){
+      notearray_table=classinputmotif_table;
+      numnotes=notearray_table.getRowCount();
+      frag_length=numnotes;
+
   }
 
+  public void nestedmethod(){
+      println("test print in testmethod");
+  }
+
+  //Method is called to write motif to score / GUI
+  public void renderfreemotif(){
+      //drawgrid();
+
+      nestedmethod();
+      //println(notearray.length);
+      //println(notearray[0][0]);
+      //println(notearray[0][1]);
+      //println(notearray[0][2]);
+      //println(notearray[0][3]);
+      //println(notearray[0][4]);
+      //println(notearray[0][5]);
+
+      // { {pitch <diatonic reference>,
+      //    start position,
+      //    duration,
+      //    velocity,
+      //    timbre A,
+      //    timbre B} }
+      for(int notescan_abspos=0; notescan_abspos<frag_length ; notescan_abspos++){
+        //experiment --- will redefining 'noterenderindex'
+
+        // motif_retrograde
+        //noterenderindex=abs(int(((frag_length-1)*motif_retrograde)-noterenderindex));
+        // if(motif_retrograde==0)
+        // {
+        //   noterenderindex = notescan_abspos;
+        // } else if(motif_retrograde==1)  {
+        //   noterenderindex = notescan_abspos;
+        // }
+
+        noterenderindex = notescan_abspos;
+
+        float output_pitch = return_diaton(notearray_table.getFloat(notescan_abspos, "pitch")*(scale_diatonic)+diatonic_offset,pos_tonic);
+        float output_pos = global_time_render_offset+pos_time+notearray_table.getFloat(notescan_abspos, "time_pos")*scale_time;
+        float output_dur = notearray_table.getFloat(notescan_abspos, "duration")*scale_dur;
+        float output_vel = notearray_table.getFloat(notescan_abspos, "velocity");
+        float output_timb1 = notearray_table.getFloat(notescan_abspos, "timbre1");
+        float output_timb2 = notearray_table.getFloat(notescan_abspos, "timbre2");
+
+
+
+
+
+
+        //draw notes in GUI
+        drawnote(output_pitch,
+                output_pos,
+                output_dur,
+                output_vel,
+                output_timb1,
+                output_timb2,
+                inst_index);
+
+
+        //add notes to MIDI score
+
+        //score.addNote(startTime,
+        //              channel,
+        //              instrument,
+        //              pitch,
+        //              dynamic,
+        //              duration,
+        //              articulation,
+        //               pan);
+
+        score.addNote(output_pos,
+                      inst_index,
+                      inst_cata[inst_index],
+                      output_pitch,
+                      output_vel,
+                      output_dur,
+                      127,
+                      64);
+
+
+        //add noteOffs
+        score.addNote(output_pos+output_dur,
+                      inst_index,
+                      inst_cata[inst_index],
+                      output_pitch,
+                      0,
+                      output_dur,
+                      127,
+                      64);
+        /******************/
+
+        // end 'renderfreemotif' method
+      }
+
+      /******************
+      printArray(notearray);
+      /******************/
+  }
 }
+/*------MOTIF / CLASS VARIABLES---*/
+// { {pitch <diatonic reference>, start position, duration, velocity, timbre A, timbre B} }
+//simple form 1
+float[][] simpleforms_1 =
+{{ 0, 0.00f, .375f, 127, 0, 0},
+{ 2, .375f, .375f, 127, 0, 0},
+{-2, .750f, .250f, 127, 0, 0}};
+
+Table simpleforms_table1;
+
+float[][] simpleforms_2 =
+{{ 0, 0.00f, .375f, 127, 0, 0},
+{1, .375f, .375f, 127, 0, 0},
+{2, .750f, .250f, 127, 0, 0}};
+
+Table simpleforms_table2;
+
+float[][] arch1_mm =
+{{ 0, 0.00f, .25f, 127, 0, 0},
+{ 4, 1/4.0f, .25f, 127, 0, 0},
+{ 2, 2/4.0f, .25f, 127, 0, 0},
+{ 7, 3/4.0f, .25f, 127, 0, 0}};
+
+Table arch1_mm_table;
+
+float[][] even_ascent_mm =
+{{ 0, 0.00f, .25f, 127, 0, 0},
+{ 1, 1/4.0f, .25f, 127, 0, 0},
+{ 2, 2/4.0f, .25f, 127, 0, 0},
+{ 3, 3/4.0f, .25f, 127, 0, 0},
+{ 4, 4/4.0f, .25f, 127, 0, 0},
+{ 5, 5/4.0f, .25f, 127, 0, 0},
+{ 6, 6/4.0f, .25f, 127, 0, 0},
+{ 7, 7/4.0f, .25f, 127, 0, 0}};
+
+Table even_ascent_mm_table;
+
+public void loadMetamotifs(){
+      simpleforms_table1 = loadTable("simpleforms_1.csv", "header");
+      simpleforms_table2 = loadTable("simpleforms_2.csv", "header");
+      arch1_mm_table = loadTable("arch1_mm.csv", "header");
+      even_ascent_mm_table = loadTable("even_ascent_mm.csv", "header");
+}
+public void debug_score(){
+
+  int starting_time_offset=global_time_render_offset;
+
+  for(int iter=0; iter<17; iter++)
+  {
+    freemotif_1 = new freeMotif(even_ascent_mm);
+    freemotif_1.scale_time=2;
+    //freemotif_1.pos_time=2;
+    freemotif_1.renderfreemotif();
+
+    freemotif_2 = new freeMotif(arch1_mm);
+    freemotif_2.inst_index=1;
+    freemotif_2.scale_time=1/3;
+    if(iter<13){
+      freemotif_2.diatonic_offset=freemotif_1.diatonic_offset+12+((iter-1)/4);
+    } else {
+      freemotif_2.diatonic_offset=freemotif_1.diatonic_offset+12+2;
+    }
+    freemotif_2.renderfreemotif();
+
+    global_time_render_offset=starting_time_offset+iter*4;
+  }
+
+  setcurrentkey(0);
+
+
+}
+
 public void Sample_Score1(){
      freemotif_1 = new freeMotif(simpleforms_2);
 
@@ -594,7 +817,7 @@ public void ss_descending_inv_scales2(){
 }
 
 public void ss_non_even_scaling(){
-    //Sample_Score1();
+  //Sample_Score1();
 
     freemotif_1 = new freeMotif(arch1_mm);
     freemotif_2 = new freeMotif(arch1_mm);
@@ -701,22 +924,8 @@ public void ss_non_even_scaling_asc(){
     freemotif_1.diatonic_offset = 4;
     freemotif_1.renderfreemotif();
 }
-/*---GUI ZOOM SETTINGS--*/
-int zoom_notelow=32;
-int zoom_notehigh=100;
 
-//by beat eg: <0 = display includes measure 1; 3 = measure includes measure 4>
-float zoom_starttime=0;
-float zoom_stoptime=93;
-
-// List of Instruments at http://explodingart.com/soundcipher/doc/arb/soundcipher/constants/ProgramChanges.html
-float[] inst_cata = {score.BELL,score.CELLO,score.VIOLIN,score.MUSIC_BOX};
-
-public void globalscoresetup(){
-      setcurrentkey(1);
-}
-
-public void renderScore(){
+public void compound_score1(){
     // Sample_Score1();
     score.addCallback(94,1);
 
@@ -735,10 +944,501 @@ public void renderScore(){
     global_time_render_offset=44+32;
     ss_non_even_scaling();
 }
+public void debug_score_tables_beta(){
+
+  int starting_time_offset=global_time_render_offset;
+
+
+    freemotif_table1obj = new freeMotif_table(simpleforms_table1);
+    freemotif_table1obj.scale_time=4;
+    freemotif_table1obj.renderfreemotif();
+
+    freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+    freemotif_table1obj.renderfreemotif();
+
+    freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+    freemotif_table1obj.diatonic_offset=1;
+    freemotif_table1obj.renderfreemotif();
+
+    freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+    freemotif_table1obj.diatonic_offset=1;
+    freemotif_table1obj.renderfreemotif();
+
+    freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+    freemotif_table1obj.diatonic_offset=2;
+    freemotif_table1obj.renderfreemotif();
+
+    freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+    freemotif_table1obj.diatonic_offset=2;
+    freemotif_table1obj.renderfreemotif();
+
+    freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+    freemotif_table1obj.diatonic_offset=2;
+    freemotif_table1obj.renderfreemotif();
+
+    freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+    freemotif_table1obj.diatonic_offset=2;
+    freemotif_table1obj.renderfreemotif();
+
+  setcurrentkey(0);
+
+}
+
+
+
+
+public void debug_score_tables(){
+
+  int starting_time_offset=global_time_render_offset;
+
+  for(int iter=0; iter<17; iter++)
+  {
+    freemotif_table1obj = new freeMotif_table(simpleforms_table1);
+    freemotif_table1obj.scale_time=2;
+    //freemotif_table1obj.pos_time=2;
+    freemotif_table1obj.renderfreemotif();
+
+    freemotif_table2obj = new freeMotif_table(arch1_mm_table);
+    freemotif_table2obj.inst_index=1;
+    freemotif_table2obj.scale_time=1/3;
+    if(iter<13){
+      freemotif_table2obj.diatonic_offset=freemotif_table1obj.diatonic_offset+12+((iter-1)/4);
+    } else {
+      freemotif_table2obj.diatonic_offset=freemotif_table1obj.diatonic_offset+12+2;
+    }
+    freemotif_table2obj.renderfreemotif();
+
+    global_time_render_offset=starting_time_offset+iter*4;
+  }
+
+  setcurrentkey(0);
+
+
+}
+
+
+
+
+
+
+
+
+
+
+public void Sample_Score1_tables(){
+     //freemotif_table1obj = new freeMotif(simpleforms_2);
+     freemotif_table1obj = new freeMotif_table(simpleforms_table2);
+
+     setcurrentkey(0);
+
+     freemotif_table1obj.pos_time=0.0f;
+     freemotif_table1obj.diatonic_offset=0;
+     freemotif_table1obj.renderfreemotif();
+
+     freemotif_table1obj.pos_time=1.0f;
+     freemotif_table1obj.diatonic_offset=3;
+     freemotif_table1obj.renderfreemotif();
+
+     freemotif_table1obj.pos_time=2.0f;
+     freemotif_table1obj.diatonic_offset=-1;
+     freemotif_table1obj.renderfreemotif();
+
+     freemotif_table1obj.pos_time=3.0f;
+     freemotif_table1obj.diatonic_offset=2;
+     freemotif_table1obj.renderfreemotif();
+
+     freemotif_table1obj.pos_time=4.0f;
+     freemotif_table1obj.diatonic_offset=-2;
+     freemotif_table1obj.renderfreemotif();
+
+     freemotif_table1obj.pos_time=5.0f;
+     freemotif_table1obj.diatonic_offset=1;
+     freemotif_table1obj.renderfreemotif();
+
+     freemotif_table1obj.pos_time=6.0f;
+     freemotif_table1obj.diatonic_offset=-3;
+     freemotif_table1obj.renderfreemotif();
+
+     freemotif_table1obj.pos_time=7.0f;
+     freemotif_table1obj.diatonic_offset=0;
+     freemotif_table1obj.renderfreemotif();
+}
+
+public void ss_descending_inv_scales_tables(){
+    //Sample_Score1();
+    //repeat at measure 32
+    // score.addCallback(32, 1);
+
+    freemotif_table1obj = new freeMotif_table(arch1_mm_table);
+    freemotif_table2obj = new freeMotif_table(even_ascent_mm_table);
+    freemotif_table3obj = new freeMotif_table(arch1_mm_table);
+    freemotif_table4obj = new freeMotif_table(arch1_mm_table);
+
+    freemotif_table2obj.inst_index=1;
+    freemotif_table3obj.inst_index=2;
+    freemotif_table4obj.inst_index=3;
+
+    freemotif_table3obj.pos_tonic=12+freemotif_table3obj.pos_tonic;
+    freemotif_table4obj.pos_tonic=12+freemotif_table3obj.pos_tonic;
+    freemotif_table4obj.scale_time=8;
+    freemotif_table4obj.scale_dur=16;
+    freemotif_table4obj.scale_diatonic=-1;
+
+    for(int iter=0; iter<8; iter++)
+    {
+
+      if(iter==6){
+        setcurrentkey(2);
+      } else {
+        setcurrentkey(1);
+      }
+
+      freemotif_table1obj.pos_time=0+iter*4;
+      freemotif_table1obj.scale_time=2;
+      if((iter%2)==1)
+      {
+          freemotif_table1obj.diatonic_offset=7;
+          freemotif_table1obj.scale_diatonic=-1;
+      } else {
+          freemotif_table1obj.diatonic_offset=0;
+          freemotif_table1obj.scale_diatonic=1;
+      }
+      freemotif_table1obj.diatonic_offset=freemotif_table1obj.diatonic_offset-(iter/2);
+      freemotif_table1obj.renderfreemotif();
+
+      freemotif_table2obj.pos_time=2+iter*4;
+      if(iter==(2)||iter==(4)||iter==(6)) {
+        freemotif_table2obj.scale_diatonic=1;
+      } else {
+        freemotif_table2obj.scale_diatonic=-1;
+      }
+      freemotif_table2obj.diatonic_offset=-iter;
+      freemotif_table2obj.renderfreemotif();
+
+      freemotif_table3obj.pos_time=0+iter*4;
+      freemotif_table3obj.scale_time=4;
+      if((iter%2)==1)
+      {
+          freemotif_table3obj.diatonic_offset=7;
+          freemotif_table3obj.scale_diatonic=-1;
+      } else {
+          freemotif_table3obj.diatonic_offset=0;
+          freemotif_table3obj.scale_diatonic=1;
+      }
+      freemotif_table3obj.diatonic_offset=freemotif_table3obj.diatonic_offset-(iter/2);
+      freemotif_table3obj.renderfreemotif();
+
+      freemotif_table4obj.pos_time=0+iter*4;
+      if((iter%2)==1)
+      {
+          freemotif_table4obj.diatonic_offset=7;
+          freemotif_table4obj.scale_diatonic=-1;
+      } else {
+          freemotif_table4obj.diatonic_offset=0;
+          freemotif_table4obj.scale_diatonic=1;
+      }
+      freemotif_table4obj.diatonic_offset=freemotif_table4obj.diatonic_offset-(iter/2);
+      freemotif_table4obj.renderfreemotif();
+
+    }
+}
+
+public void ss_descending_inv_scales_b_tables(){
+    //Sample_Score1();
+    //repeat at measure 32
+    // score.addCallback(32, 1);
+
+    freemotif_table1obj = new freeMotif_table(arch1_mm_table);
+    freemotif_table2obj = new freeMotif_table(even_ascent_mm_table);
+    freemotif_table3obj = new freeMotif_table(arch1_mm_table);
+    freemotif_table4obj = new freeMotif_table(arch1_mm_table);
+
+    freemotif_table2obj.inst_index=1;
+    freemotif_table3obj.inst_index=2;
+    freemotif_table4obj.inst_index=3;
+
+    freemotif_table3obj.pos_tonic=12+freemotif_table3obj.pos_tonic;
+    freemotif_table4obj.pos_tonic=12+freemotif_table3obj.pos_tonic;
+    freemotif_table4obj.scale_time=8;
+    freemotif_table4obj.scale_dur=16;
+    freemotif_table4obj.scale_diatonic=-1;
+
+    for(int iter=0; iter<8; iter++)
+    {
+
+      if(iter==6){
+        setcurrentkey(2);
+      } else {
+        setcurrentkey(1);
+      }
+
+      freemotif_table1obj.pos_time=0+iter*4;
+      freemotif_table1obj.scale_time=2;
+      if((iter%2)==1)
+      {
+          freemotif_table1obj.diatonic_offset=7;
+          freemotif_table1obj.scale_diatonic=-1;
+      } else {
+          freemotif_table1obj.diatonic_offset=0;
+          freemotif_table1obj.scale_diatonic=1;
+      }
+      freemotif_table1obj.diatonic_offset=freemotif_table1obj.diatonic_offset-(iter/2);
+      freemotif_table1obj.renderfreemotif();
+      freemotif_table1obj.pos_time=2+iter*4;
+      freemotif_table1obj.diatonic_offset=freemotif_table1obj.diatonic_offset+7;
+      freemotif_table1obj.renderfreemotif();
+      freemotif_table1obj.diatonic_offset=freemotif_table1obj.diatonic_offset-7;
+
+
+
+
+
+
+
+
+
+      freemotif_table2obj.pos_time=2+iter*4;
+      if(iter==(2)||iter==(4)||iter==(6)) {
+        freemotif_table2obj.scale_diatonic=1;
+      } else {
+        freemotif_table2obj.scale_diatonic=-1;
+      }
+      freemotif_table2obj.diatonic_offset=-iter;
+      freemotif_table2obj.renderfreemotif();
+
+      freemotif_table3obj.pos_time=0+iter*4;
+      freemotif_table3obj.scale_time=4;
+      if((iter%2)==1)
+      {
+          freemotif_table3obj.diatonic_offset=7;
+          freemotif_table3obj.scale_diatonic=-1;
+      } else {
+          freemotif_table3obj.diatonic_offset=0;
+          freemotif_table3obj.scale_diatonic=1;
+      }
+      freemotif_table3obj.diatonic_offset=freemotif_table3obj.diatonic_offset-(iter/2);
+      freemotif_table3obj.renderfreemotif();
+
+      freemotif_table4obj.pos_time=0+iter*4;
+      if((iter%2)==1)
+      {
+          freemotif_table4obj.diatonic_offset=7;
+          freemotif_table4obj.scale_diatonic=-1;
+      } else {
+          freemotif_table4obj.diatonic_offset=0;
+          freemotif_table4obj.scale_diatonic=1;
+      }
+      freemotif_table4obj.diatonic_offset=freemotif_table4obj.diatonic_offset-(iter/2);
+      freemotif_table4obj.renderfreemotif();
+
+    }
+}
+
+public void ss_non_even_scaling_tables(){
+  //Sample_Score1();
+
+    freemotif_table1obj = new freeMotif_table(arch1_mm_table);
+    freemotif_table2obj = new freeMotif_table(arch1_mm_table);
+    freemotif_table3obj = new freeMotif_table(arch1_mm_table);
+    freemotif_table4obj = new freeMotif_table(arch1_mm_table);
+
+    freemotif_table2obj.inst_index=1;
+    freemotif_table3obj.inst_index=2;
+    freemotif_table4obj.inst_index=3;
+
+    freemotif_table1obj.diatonic_offset = 0;
+    freemotif_table2obj.diatonic_offset = -2;
+    freemotif_table3obj.diatonic_offset = 0;
+    freemotif_table4obj.diatonic_offset = 0;
+
+    freemotif_table1obj.pos_time = 0;
+    freemotif_table2obj.pos_time = 1;
+    freemotif_table3obj.pos_time = 2;
+    freemotif_table4obj.pos_time = 3;
+
+    freemotif_table1obj.scale_time = 1;
+    freemotif_table2obj.scale_time = 2;
+    freemotif_table3obj.scale_time = 4;
+    freemotif_table4obj.scale_time = 8;
+
+    freemotif_table1obj.scale_dur = 1;
+    freemotif_table2obj.scale_dur = 2;
+    freemotif_table3obj.scale_dur = 4;
+    freemotif_table4obj.scale_dur = 8;
+
+    freemotif_table1obj.renderfreemotif();
+    freemotif_table2obj.renderfreemotif();
+    freemotif_table3obj.renderfreemotif();
+    freemotif_table4obj.renderfreemotif();
+
+    freemotif_table3obj.pos_time = 10;
+    freemotif_table3obj.renderfreemotif();
+
+    freemotif_table2obj.pos_time = 13;
+    freemotif_table2obj.renderfreemotif();
+
+    freemotif_table1obj.pos_time = 14;
+    freemotif_table1obj.renderfreemotif();
+
+    freemotif_table1obj.pos_time = 15;
+    freemotif_table1obj.scale_time =0;
+    freemotif_table1obj.renderfreemotif();
+}
+
+public void ss_non_even_scaling_asc_tables(){
+    //Sample_Score1();
+
+    freemotif_table1obj = new freeMotif_table(arch1_mm_table);
+    freemotif_table2obj = new freeMotif_table(arch1_mm_table);
+    freemotif_table3obj = new freeMotif_table(arch1_mm_table);
+    freemotif_table4obj = new freeMotif_table(arch1_mm_table);
+
+    freemotif_table2obj.inst_index=1;
+    freemotif_table3obj.inst_index=2;
+    freemotif_table4obj.inst_index=3;
+
+    freemotif_table1obj.diatonic_offset = 0;
+    freemotif_table2obj.diatonic_offset = 1;
+    freemotif_table3obj.diatonic_offset = 2;
+    freemotif_table4obj.diatonic_offset = 3;
+
+    freemotif_table1obj.pos_time = 0;
+    freemotif_table2obj.pos_time = 1;
+    freemotif_table3obj.pos_time = 2;
+    freemotif_table4obj.pos_time = 3;
+
+    freemotif_table1obj.scale_time = 1;
+    freemotif_table2obj.scale_time = 2/3;
+    freemotif_table3obj.scale_time = 1/3;
+    freemotif_table4obj.scale_time = 4/3;
+
+    freemotif_table1obj.renderfreemotif();
+    freemotif_table2obj.renderfreemotif();
+    freemotif_table3obj.renderfreemotif();
+    freemotif_table4obj.renderfreemotif();
+
+    freemotif_table1obj.pos_time = 4;
+    freemotif_table1obj.scale_time = 0;
+    freemotif_table1obj.diatonic_offset = 4;
+    freemotif_table1obj.renderfreemotif();
+
+    freemotif_table2obj.pos_time = 5;
+    freemotif_table2obj.diatonic_offset = 6;
+    freemotif_table2obj.renderfreemotif();
+
+    freemotif_table1obj.pos_time = 6;
+    freemotif_table1obj.diatonic_offset = 4;
+    freemotif_table1obj.renderfreemotif();
+
+    freemotif_table1obj.pos_time = 7;
+    freemotif_table1obj.diatonic_offset = 4;
+    freemotif_table1obj.renderfreemotif();
+
+    freemotif_table1obj.pos_time = 7.5f;
+    freemotif_table1obj.diatonic_offset = 2;
+    freemotif_table1obj.renderfreemotif();
+
+    freemotif_table1obj.pos_time = 8;
+    freemotif_table1obj.diatonic_offset = 4;
+    freemotif_table1obj.renderfreemotif();
+}
+
+public void compound_score1_tables(){
+    // Sample_Score1();
+    score.addCallback(94,1);
+
+    global_time_render_offset=0;
+    // ss_descending_inv_scales2();
+    ss_non_even_scaling_asc_tables();
+
+
+    global_time_render_offset=8;
+    ss_descending_inv_scales_tables();
+
+
+    global_time_render_offset=8+32;
+    ss_descending_inv_scales_b_tables();
+
+    global_time_render_offset=44+32;
+    ss_non_even_scaling_tables();
+}
+/*---GUI ZOOM SETTINGS--*/
+int zoom_notelow=32;
+int zoom_notehigh=100;
+
+//by beat eg: <0 = display includes measure 1; 3 = measure includes measure 4>
+float zoom_starttime=0;
+float zoom_stoptime=93;
+
+// List of Instruments at http://explodingart.com/soundcipher/doc/arb/soundcipher/constants/ProgramChanges.html
+float[] inst_cata = {score.BELL,score.CELLO,score.VIOLIN,score.MUSIC_BOX};
+
+public void globalscoresetup(){
+      setcurrentkey(1);
+}
+
+public void renderScore(){
+
+    // compound_score1();
+
+    // debug_score_tables();
+    // Sample_Score1_tables();
+    // ss_descending_inv_scales_tables();
+    // ss_descending_inv_scales_b_tables();
+    // ss_non_even_scaling_tables();
+    // ss_non_even_scaling_asc_tables();
+
+    compound_score1_tables();
+}
 
 public float truemod(float input, float modulus)
 {
       return ((input%modulus+modulus)%modulus);
+}
+
+public void printArray(float[][] a)
+{
+  println("############ Array ############");
+  for(int i=0; i < a.length; i ++){
+    for(int j = 0; j < a[i].length; j++){
+     print(" " + a[i][j]);
+    }
+    println();
+  }
+}
+
+public void printTable(Table input_table)
+{
+      //scan notes in table
+      for(int tab_print_iter=0;tab_print_iter<input_table.getRowCount();tab_print_iter++){
+
+          //
+          print("pitch: ");
+          print(input_table.getFloat(tab_print_iter, "pitch"));
+          print(" - ");
+
+          print("time_pos: ");
+          print(input_table.getFloat(tab_print_iter, "time_pos"));
+          print(" - ");
+
+          print("duration: ");
+          print(input_table.getFloat(tab_print_iter, "duration"));
+          print(" - ");
+
+          print("velocity: ");
+          print(input_table.getFloat(tab_print_iter, "velocity"));
+          print(" - ");
+
+          print("timbre1: ");
+          print(input_table.getFloat(tab_print_iter, "timbre1"));
+          print(" - ");
+
+          print("timbre2: ");
+          print(input_table.getFloat(tab_print_iter, "timbre2"));
+          print(" - ");
+          println();
+      }
+      println("---------------");
 }
 
 public void setcurrentkey(int keyindex)
