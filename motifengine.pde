@@ -33,6 +33,7 @@ void setup() {
   globalscoresetup();
   renderScore();
 
+
   score.addCallbackListener(this);
 
   score.tempo(score_bpm);

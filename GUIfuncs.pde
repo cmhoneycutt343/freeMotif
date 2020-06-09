@@ -1,6 +1,6 @@
 /*---------GUI VARIABLES------------*/
-color gridline_y_minor=color(82, 82, 82);
-color gridline_y_major=color(126, 126, 126);
+color gridline_y_minor=color(32, 32, 32);
+color gridline_y_major=color(64, 64, 64);
 color gridline_middleC=color(128, 0, 0);
 color gridline_tonic=color(82, 0, 0);
 
@@ -34,12 +34,12 @@ void drawGUI(){
 
 void drawgrid(){
   //pitch seperation grid
-  for(int drawgrid_noteindex=0; drawgrid_noteindex<(zoom_notehigh-zoom_notelow+5); drawgrid_noteindex++){
+  for(int drawgrid_noteindex=0; drawgrid_noteindex<129; drawgrid_noteindex++){
       //duration in .25=quarternote
 
       //float gl_ulcornx=quarternotexwidth*drawgrid_noteindex;
       float stretchpixheight=gheight/(zoom_notehigh-zoom_notelow+1);
-      float gl_ulcornx=gwidth-stretchpixheight*drawgrid_noteindex;
+      float gl_ulcornx=stretchpixheight*drawgrid_noteindex;
 
       //note seperator grid
       if((drawgrid_noteindex+zoom_notelow)==60){
@@ -54,8 +54,8 @@ void drawgrid(){
       }
     }
 
-    //time seperation grid
-    for(int drawgrid_timeindex=0; drawgrid_timeindex<int((zoom_stoptime+1)*4); drawgrid_timeindex++){
+  //time seperation grid
+  for(int drawgrid_timeindex=0; drawgrid_timeindex<int((zoom_stoptime+1)*4); drawgrid_timeindex++){
 
       //float gl_ulcorny=noteyheight*drawgrid_timeindex;
       float stretchpixwidth=gwidth/(zoom_stoptime-zoom_starttime+1)/4;
