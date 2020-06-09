@@ -7,12 +7,7 @@ SCScore score = new SCScore();
 /// Use traditional note legnth "quarter note, 1/2, etc" to define 'length' decimals
 
 /*-----"FREE MOTIF" OBJECTS--------*/
-freeMotif freemotif_1;
-freeMotif freemotif_2;
-freeMotif freemotif_3;
-freeMotif freemotif_4;
-
-freeMotif_table  freemotif_table1obj;
+freeMotif_table freemotif_table1obj;
 freeMotif_table freemotif_table2obj;
 freeMotif_table freemotif_table3obj;
 freeMotif_table freemotif_table4obj;
