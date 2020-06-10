@@ -1,6 +1,6 @@
 /*---GUI ZOOM SETTINGS--*/
 int zoom_notelow=36;
-int zoom_notehigh=83;
+int zoom_notehigh=96;
 
 //by beat eg: <0 = display includes measure 1; 3 = measure includes measure 4>
 float zoom_starttime=0;
@@ -14,16 +14,7 @@ void globalscoresetup(){
 }
 
 void renderScore(){
-
-    // compound_score1();
-
-    // debug_score_tables();
-    // Sample_Score1_tables();
-    // ss_descending_inv_scales_tables();
-    // ss_descending_inv_scales_b_tables();
-    // ss_non_even_scaling_tables();
-    // ss_non_even_scaling_asc_tables();
-
-    // compound_score1_tables();
+    //*-------function examples--------*//
+    // basics_examples();
     retrograde_examples();
 }

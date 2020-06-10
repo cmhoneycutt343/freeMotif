@@ -98,7 +98,84 @@ void retrograde_examples(){
       // // freemotif_table1obj.renderfreemotif();
 }
 
+void basics_examples(){
+      //retrograde function tester
+      //0. Dry
+      //1. Tonal retrograde
+      //2. Rhythmic retrograde
+      //3. Full retrograde
+      scoreTitle("Basics Examples");
 
+      score.addCallback(32, 1);
+
+      freemotif_table1obj = new freeMotif_table(simpleforms_1_table);
+      freemotif_table1obj = new freeMotif_table(simpleforms_2_table);
+      freemotif_table1obj = new freeMotif_table(arch1_mm_table);
+      freemotif_table1obj = new freeMotif_table(even_ascent_mm_table);
+      // freemotif_table1obj = new freeMotif_table(fanfare_table);
+
+      freemotif_table1obj.duration_retrograde=0;
+      freemotif_table1obj.position_retrograde=0;
+      freemotif_table1obj.scale_time=2;
+      freemotif_table1obj.scale_dur=2;
+      freemotif_table1obj.motif_name="original";
+      freemotif_table1obj.renderfreemotif();
+
+      freemotif_table1obj.diatonic_offset=-1;
+      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+      freemotif_table1obj.motif_name="-> diatonic -1";
+      freemotif_table1obj.renderfreemotif();
+
+      freemotif_table1obj.pos_tonic=freemotif_table1obj.pos_tonic+1;
+      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+      freemotif_table1obj.motif_name="-> chromatic +1";
+      freemotif_table1obj.renderfreemotif();
+
+      freemotif_table1obj.scale_time=freemotif_table1obj.scale_time*2;
+      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+      freemotif_table1obj.motif_name="-> timescale *2";
+      freemotif_table1obj.renderfreemotif();
+
+      freemotif_table1obj.scale_time=freemotif_table1obj.scale_time/2;
+      freemotif_table1obj.scale_diatonic=2;
+      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+8;
+      freemotif_table1obj.motif_name="-> scale diatonically *2";
+      freemotif_table1obj.renderfreemotif();
+
+      freemotif_table1obj.pos_tonic=freemotif_table1obj.pos_tonic+24;
+      freemotif_table1obj.scale_diatonic=freemotif_table1obj.scale_diatonic*-1;
+      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+      freemotif_table1obj.motif_name="-> chrom +24 / Inv";
+      freemotif_table1obj.renderfreemotif();
+
+
+      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+      freemotif_table1obj.pos_tonic=freemotif_table1obj.pos_tonic-12;
+      freemotif_table1obj.motif_name="-> chrom -12";
+      freemotif_table1obj.renderfreemotif();
+
+
+      // freemotif_table1obj = new freeMotif_table(arch1_mm_table);
+      //
+      // freemotif_table1obj.diatonic_offset=freemotif_table1obj.diatonic_offset=0;
+      // freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+16;
+      // freemotif_table1obj.scale_time=2;
+      // freemotif_table1obj.renderfreemotif();
+      //
+      // freemotif_table1obj.tonal_retrograde=1;
+      // freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+      // freemotif_table1obj.renderfreemotif();
+      //
+      // // freemotif_table1obj.tonal_retrograde=0;
+      // // freemotif_table1obj.duration_retrograde=1;
+      // // freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+      // // freemotif_table1obj.renderfreemotif();
+      // //
+      // // freemotif_table1obj.tonal_retrograde=1;
+      // // freemotif_table1obj.position_retrograde=1;
+      // // freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+      // // freemotif_table1obj.renderfreemotif();
+}
 
 
 
@@ -275,6 +352,7 @@ void ss_descending_inv_scales_tables(){
       freemotif_table3obj.renderfreemotif();
 
       freemotif_table4obj.pos_time=0+iter*4;
+      freemotif_table4obj.scale_time=2;
       if((iter%2)==1)
       {
           freemotif_table4obj.diatonic_offset=7;
