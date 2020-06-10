@@ -2,7 +2,6 @@
 class freeMotif_table{
 
   String motif_name="default";
-
   //counter variable for scanning / rendering notes
   int noterenderindex;
   // number of notes in freemotif
@@ -105,6 +104,7 @@ class freeMotif_table{
 
         //relative position of note in riff
         float tablepos_fromindex;
+        float fragmentationoffset = notearray_table.getFloat(frag_index, "time_pos");
         if(position_retrograde==0){
           tablepos_fromindex = notearray_table.getFloat(notescan_abspos, "time_pos");
         } else {
@@ -129,7 +129,7 @@ class freeMotif_table{
         float output_pitch = return_diaton(diatonic_degree,pos_tonic);
 
         //absolute time (relative to score)
-        float output_pos = global_time_render_offset+pos_time+tablepos_fromindex*scale_time;
+        float output_pos = (global_time_render_offset+pos_time+tablepos_fromindex*scale_time)-fragmentationoffset;
 
         float output_dur = notearray_table.getFloat(tabledur_index, "duration")*scale_dur;
         float output_vel = notearray_table.getFloat(tablevel_index, "velocity");
@@ -138,7 +138,7 @@ class freeMotif_table{
         /*-------end rendering calcuations--------*/
 
 
-        if(notescan_abspos==0)
+        if(notescan_abspos==frag_index)
         {
           addGUIcom(output_pitch,output_pos,inst_index,motif_name);
         }
