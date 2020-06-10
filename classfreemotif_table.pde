@@ -40,6 +40,8 @@ class freeMotif_table{
   float duration_retrograde=0;
   // Bool; 0=normal direction, 1 motif is reversed
   float position_retrograde=0;
+  // Bool; 0=normal direction, 1 motif is reversed
+  float velocity_retrograde=0;
 
 
   // Fragmentation: index of first note fragment
@@ -56,10 +58,7 @@ class freeMotif_table{
 
       //calculate motif length ()
       motif_length=notearray_table.getFloat((frag_length-1),"time_pos")+notearray_table.getFloat((frag_length-1),"duration");
-  }
-
-  void retro(){
-      println("test print in testmethod");
+      println(motif_length);
   }
 
   //Method is called to write motif to score / GUI
@@ -117,6 +116,13 @@ class freeMotif_table{
           }
         }
 
+        int tablevel_index;
+        if(velocity_retrograde==0){
+          tablevel_index = notescan_abspos;
+        } else {
+          tablevel_index = frag_length-1-notescan_abspos;
+        }
+
         //calculate overall diatonic degree
         float diatonic_degree = (notearray_table.getFloat(tablepitch_index, "pitch"))*(scale_diatonic)+diatonic_offset;
 
@@ -126,7 +132,7 @@ class freeMotif_table{
         float output_pos = global_time_render_offset+pos_time+tablepos_fromindex*scale_time;
 
         float output_dur = notearray_table.getFloat(tabledur_index, "duration")*scale_dur;
-        float output_vel = notearray_table.getFloat(notescan_abspos, "velocity");
+        float output_vel = notearray_table.getFloat(tablevel_index, "velocity");
         float output_timb1 = notearray_table.getFloat(notescan_abspos, "timbre1");
         float output_timb2 = notearray_table.getFloat(notescan_abspos, "timbre2");
         /*-------end rendering calcuations--------*/

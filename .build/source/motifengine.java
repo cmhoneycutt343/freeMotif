@@ -225,6 +225,16 @@ public void addGUIcom(float pitch, float start_pos, int inst, String inputcommen
 
   colorMode(RGB);
 }
+
+public void scoreTitle(String titletext){
+
+  textSize(28);
+  text(titletext, 20, 20);
+
+  //*/
+
+  colorMode(RGB);
+}
 /*---------'freeMotif Class'--------*/
 class freeMotif_table{
 
@@ -267,6 +277,8 @@ class freeMotif_table{
   float duration_retrograde=0;
   // Bool; 0=normal direction, 1 motif is reversed
   float position_retrograde=0;
+  // Bool; 0=normal direction, 1 motif is reversed
+  float velocity_retrograde=0;
 
 
   // Fragmentation: index of first note fragment
@@ -283,10 +295,7 @@ class freeMotif_table{
 
       //calculate motif length ()
       motif_length=notearray_table.getFloat((frag_length-1),"time_pos")+notearray_table.getFloat((frag_length-1),"duration");
-  }
-
-  public void retro(){
-      println("test print in testmethod");
+      println(motif_length);
   }
 
   //Method is called to write motif to score / GUI
@@ -344,6 +353,13 @@ class freeMotif_table{
           }
         }
 
+        int tablevel_index;
+        if(velocity_retrograde==0){
+          tablevel_index = notescan_abspos;
+        } else {
+          tablevel_index = frag_length-1-notescan_abspos;
+        }
+
         //calculate overall diatonic degree
         float diatonic_degree = (notearray_table.getFloat(tablepitch_index, "pitch"))*(scale_diatonic)+diatonic_offset;
 
@@ -353,7 +369,7 @@ class freeMotif_table{
         float output_pos = global_time_render_offset+pos_time+tablepos_fromindex*scale_time;
 
         float output_dur = notearray_table.getFloat(tabledur_index, "duration")*scale_dur;
-        float output_vel = notearray_table.getFloat(notescan_abspos, "velocity");
+        float output_vel = notearray_table.getFloat(tablevel_index, "velocity");
         float output_timb1 = notearray_table.getFloat(notescan_abspos, "timbre1");
         float output_timb2 = notearray_table.getFloat(notescan_abspos, "timbre2");
         /*-------end rendering calcuations--------*/
@@ -421,14 +437,14 @@ float[][] simpleforms_1 =
 { 2, .375f, .375f, 127, 0, 0},
 {-2, .750f, .250f, 127, 0, 0}};
 
-Table simpleforms_table1;
+Table simpleforms_1_table;
 
 float[][] simpleforms_2 =
 {{ 0, 0.00f, .375f, 127, 0, 0},
 {1, .375f, .375f, 127, 0, 0},
 {2, .750f, .250f, 127, 0, 0}};
 
-Table simpleforms_table2;
+Table simpleforms_2_table;
 
 float[][] arch1_mm =
 {{ 0, 0.00f, .25f, 127, 0, 0},
@@ -450,50 +466,31 @@ float[][] even_ascent_mm =
 
 Table even_ascent_mm_table;
 
+Table fanfare_table;
+
 public void loadMetamotifs(){
-      simpleforms_table1 = loadTable("simpleforms_1.csv", "header");
-      simpleforms_table2 = loadTable("simpleforms_2.csv", "header");
+      simpleforms_1_table = loadTable("simpleforms_1.csv", "header");
+      simpleforms_2_table = loadTable("simpleforms_2.csv", "header");
       arch1_mm_table = loadTable("arch1_mm.csv", "header");
       even_ascent_mm_table = loadTable("even_ascent_mm.csv", "header");
+      fanfare_table = loadTable("fanfare.csv","header");
 }
-public void retrograde_scoretest(){
+public void retrograde_examples(){
       //retrograde function tester
       //0. Dry
       //1. Tonal retrograde
       //2. Rhythmic retrograde
       //3. Full retrograde
+      scoreTitle("Retrograde Examples");
+
       score.addCallback(32, 1);
 
-      freemotif_table1obj = new freeMotif_table(simpleforms_table1);
+      // freemotif_table1obj = new freeMotif_table(simpleforms_1_table);
+      // freemotif_table1obj = new freeMotif_table(simpleforms_2_table);
+      // freemotif_table1obj = new freeMotif_table(arch1_mm_table);
+      // freemotif_table1obj = new freeMotif_table(even_ascent_mm_table);
+      freemotif_table1obj = new freeMotif_table(fanfare_table);
 
-      freemotif_table1obj.duration_retrograde=0;
-      freemotif_table1obj.position_retrograde=0;
-      freemotif_table1obj.scale_time=2;
-      freemotif_table1obj.scale_dur=2;
-      freemotif_table1obj.motif_name="original";
-      freemotif_table1obj.renderfreemotif();
-
-      freemotif_table1obj.duration_retrograde=1;
-      freemotif_table1obj.position_retrograde=0;
-      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
-      freemotif_table1obj.motif_name="duration_retrograde";
-      freemotif_table1obj.renderfreemotif();
-
-      freemotif_table1obj.duration_retrograde=0;
-      freemotif_table1obj.position_retrograde=1;
-      freemotif_table1obj.motif_name="position_retrograde";
-      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
-      freemotif_table1obj.renderfreemotif();
-
-      freemotif_table1obj.duration_retrograde=1;
-      freemotif_table1obj.position_retrograde=1;
-      freemotif_table1obj.motif_name="both";
-      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
-      freemotif_table1obj.renderfreemotif();
-
-      freemotif_table1obj.tonal_retrograde=1;
-
-      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
       freemotif_table1obj.duration_retrograde=0;
       freemotif_table1obj.position_retrograde=0;
       freemotif_table1obj.scale_time=4;
@@ -504,19 +501,38 @@ public void retrograde_scoretest(){
       freemotif_table1obj.duration_retrograde=1;
       freemotif_table1obj.position_retrograde=0;
       freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
-      freemotif_table1obj.motif_name="duration_retrograde";
+      freemotif_table1obj.motif_name="duration";
       freemotif_table1obj.renderfreemotif();
 
       freemotif_table1obj.duration_retrograde=0;
       freemotif_table1obj.position_retrograde=1;
-      freemotif_table1obj.motif_name="position_retrograde";
+      freemotif_table1obj.motif_name="position";
       freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
       freemotif_table1obj.renderfreemotif();
 
-      freemotif_table1obj.duration_retrograde=1;
-      freemotif_table1obj.position_retrograde=1;
-      freemotif_table1obj.motif_name="both";
+      freemotif_table1obj.position_retrograde=0;
+      freemotif_table1obj.tonal_retrograde=1;
       freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+      freemotif_table1obj.duration_retrograde=0;
+      freemotif_table1obj.position_retrograde=0;
+      freemotif_table1obj.motif_name="pitch";
+      freemotif_table1obj.renderfreemotif();
+
+      freemotif_table1obj.tonal_retrograde=0;
+      freemotif_table1obj.velocity_retrograde=1;
+      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+      freemotif_table1obj.motif_name="velocity";
+      freemotif_table1obj.renderfreemotif();
+
+      freemotif_table1obj.tonal_retrograde=1;
+      freemotif_table1obj.velocity_retrograde=1;
+      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+      freemotif_table1obj.motif_name="pitch+vel";
+      freemotif_table1obj.renderfreemotif();
+
+      freemotif_table1obj.duration_retrograde=1;
+      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+      freemotif_table1obj.motif_name="pitch+vel+dur";
       freemotif_table1obj.renderfreemotif();
 
 
@@ -572,7 +588,7 @@ public void debug_score_tables_beta()
   int starting_time_offset=global_time_render_offset;
 
 
-    freemotif_table1obj = new freeMotif_table(simpleforms_table1);
+    freemotif_table1obj = new freeMotif_table(simpleforms_1_table);
     freemotif_table1obj.scale_time=8;
     freemotif_table1obj.renderfreemotif();
 
@@ -612,7 +628,7 @@ public void debug_score_tables()
 
   for(int iter=0; iter<17; iter++)
   {
-    freemotif_table1obj = new freeMotif_table(simpleforms_table1);
+    freemotif_table1obj = new freeMotif_table(simpleforms_1_table);
     freemotif_table1obj.scale_time=2;
     //freemotif_table1obj.pos_time=2;
     freemotif_table1obj.renderfreemotif();
@@ -634,7 +650,7 @@ public void debug_score_tables()
 
 public void Sample_Score1_tables(){
      //freemotif_table1obj = new freeMotif(simpleforms_2);
-     freemotif_table1obj = new freeMotif_table(simpleforms_table2);
+     freemotif_table1obj = new freeMotif_table(simpleforms_2_table);
 
      setcurrentkey(0);
 
@@ -996,7 +1012,7 @@ public void renderScore(){
     // ss_non_even_scaling_asc_tables();
 
     // compound_score1_tables();
-    retrograde_scoretest();
+    retrograde_examples();
 }
 
 public float truemod(float input, float modulus)

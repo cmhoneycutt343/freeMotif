@@ -153,3 +153,13 @@ void addGUIcom(float pitch, float start_pos, int inst, String inputcomment ) {
 
   colorMode(RGB);
 }
+
+void scoreTitle(String titletext){
+
+  textSize(28);
+  text(titletext, 20, 20);
+
+  //*/
+
+  colorMode(RGB);
+}

@@ -25,5 +25,5 @@ void renderScore(){
     // ss_non_even_scaling_asc_tables();
 
     // compound_score1_tables();
-    retrograde_scoretest();
+    retrograde_examples();
 }

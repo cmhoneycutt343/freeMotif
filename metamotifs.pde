@@ -6,14 +6,14 @@ float[][] simpleforms_1 =
 { 2, .375, .375, 127, 0, 0},
 {-2, .750, .250, 127, 0, 0}};
 
-Table simpleforms_table1;
+Table simpleforms_1_table;
 
 float[][] simpleforms_2 =
 {{ 0, 0.00, .375, 127, 0, 0},
 {1, .375, .375, 127, 0, 0},
 {2, .750, .250, 127, 0, 0}};
 
-Table simpleforms_table2;
+Table simpleforms_2_table;
 
 float[][] arch1_mm =
 {{ 0, 0.00, .25, 127, 0, 0},
@@ -35,9 +35,12 @@ float[][] even_ascent_mm =
 
 Table even_ascent_mm_table;
 
+Table fanfare_table;
+
 void loadMetamotifs(){
-      simpleforms_table1 = loadTable("simpleforms_1.csv", "header");
-      simpleforms_table2 = loadTable("simpleforms_2.csv", "header");
+      simpleforms_1_table = loadTable("simpleforms_1.csv", "header");
+      simpleforms_2_table = loadTable("simpleforms_2.csv", "header");
       arch1_mm_table = loadTable("arch1_mm.csv", "header");
       even_ascent_mm_table = loadTable("even_ascent_mm.csv", "header");
+      fanfare_table = loadTable("fanfare.csv","header");
 }
