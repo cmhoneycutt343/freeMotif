@@ -162,7 +162,10 @@ void concat_examples(){
       //3. Full retrograde
       scoreTitle("Fragmentation Examples");
 
-      score.addCallback(32, 1);
+      setcurrentkey(1);
+
+
+      score.addCallback(16, 1);
 
       // freemotif_table1obj = new freeMotif_table(simpleforms_1_table);
       // freemotif_table1obj = new freeMotif_table(simpleforms_2_table);
@@ -184,10 +187,12 @@ void concat_examples(){
       freemotif_table2obj.inst_index=1;
       freemotif_table2obj.renderfreemotif();
 
-      freemotif_table1obj.motif_name="motif 1 + <mm 1>";
+      freemotif_table1obj.motif_name="concat";
       freemotif_table1obj.inst_index=2;
       freemotif_table1obj.concat_mm(freemotif_table2obj.notearray_table);
-      //freemotif_table1obj.print_mm();
       freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+8;
+      freemotif_table1obj.diatonic_offset=7;
+      freemotif_table1obj.scale_time=4;
+      freemotif_table1obj.frag_length=8;
       freemotif_table1obj.renderfreemotif();
 }
