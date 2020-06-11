@@ -7,7 +7,7 @@ float zoom_starttime=0;
 float zoom_stoptime=31;
 
 // List of Instruments at http://explodingart.com/soundcipher/doc/arb/soundcipher/constants/ProgramChanges.html
-float[] inst_cata = {score.BELL,score.CELLO,score.VIOLIN,score.MUSIC_BOX};
+float[] inst_cata = {score.BELL,score.CELLO,score.PIANO,score.MUSIC_BOX};
 
 void globalscoresetup(){
       setcurrentkey(0);
@@ -15,7 +15,8 @@ void globalscoresetup(){
 
 void renderScore(){
     //*-------function examples--------*//
-    // basics_examples();
-    // retrograde_examples();
-    fragmentation_examples();
+    //basics_examples();
+    //retrograde_examples();
+    //fragmentation_examples();
+    concat_examples();
 }

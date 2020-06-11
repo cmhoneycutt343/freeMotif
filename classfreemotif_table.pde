@@ -57,7 +57,9 @@ class freeMotif_table{
 
       //calculate motif length ()
       motif_length=notearray_table.getFloat((frag_length-1),"time_pos")+notearray_table.getFloat((frag_length-1),"duration");
-      println(motif_length);
+
+      // println(motif_name,"motif_length");
+      // println(motif_length);
   }
 
   //Method is called to write motif to score / GUI
@@ -191,4 +193,34 @@ class freeMotif_table{
       printArray(notearray);
       /******************/
   }
+
+  void concat_mm(Table appendtable){
+        //1. scanrows of new tabledur_index
+        for (TableRow row : appendtable.rows()) {
+
+            float time_pos_shifted=row.getFloat("time_pos")+motif_length;
+            row.setFloat("time_pos",time_pos_shifted);
+            notearray_table.addRow(row);
+  
+        }
+        numnotes=notearray_table.getRowCount();
+        frag_length=numnotes;
+        println(frag_length);
+      }
+
+  void print_mm(){
+        //1. scanrows of new tabledur_index
+        //2. Add rows onto notearray_table
+        //3. sort new table?? (shouldn't need to )
+        for (TableRow row : notearray_table.rows()) {
+            print("pitch:",row.getString("pitch"), " ");
+            print("time_pos:",row.getString("time_pos"), " ");
+            print("duration:",row.getString("duration"), " ");
+            print("velocity:",row.getString("velocity"), " ");
+            print("timbre1:",row.getString("timbre1"), " ");
+            print("timebre2:",row.getString("timbre2"), " ");
+            println("");
+        }
+  }
+
 }

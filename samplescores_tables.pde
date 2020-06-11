@@ -1,3 +1,57 @@
+void basics_examples(){
+      //retrograde function tester
+      //0. Dry
+      //1. Tonal retrograde
+      //2. Rhythmic retrograde
+      //3. Full retrograde
+      scoreTitle("Basics Examples");
+
+      score.addCallback(32, 1);
+
+      freemotif_table1obj = new freeMotif_table(simpleforms_1_table);
+      freemotif_table1obj = new freeMotif_table(simpleforms_2_table);
+      freemotif_table1obj = new freeMotif_table(arch1_mm_table);
+      freemotif_table1obj = new freeMotif_table(even_ascent_mm_table);
+      // freemotif_table1obj = new freeMotif_table(fanfare_table);
+
+      freemotif_table1obj.duration_retrograde=0;
+      freemotif_table1obj.position_retrograde=0;
+      freemotif_table1obj.motif_name="original";
+      freemotif_table1obj.renderfreemotif();
+
+      freemotif_table1obj.diatonic_offset=-1;
+      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+      freemotif_table1obj.motif_name="-> diatonic -1";
+      freemotif_table1obj.renderfreemotif();
+
+      freemotif_table1obj.pos_tonic=freemotif_table1obj.pos_tonic+1;
+      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+      freemotif_table1obj.motif_name="-> chromatic +1";
+      freemotif_table1obj.renderfreemotif();
+
+      freemotif_table1obj.scale_time=freemotif_table1obj.scale_time*2;
+      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+      freemotif_table1obj.motif_name="-> timescale *2";
+      freemotif_table1obj.renderfreemotif();
+
+      freemotif_table1obj.scale_time=freemotif_table1obj.scale_time/2;
+      freemotif_table1obj.scale_diatonic=2;
+      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+8;
+      freemotif_table1obj.motif_name="-> scale diatonically *2";
+      freemotif_table1obj.renderfreemotif();
+
+      freemotif_table1obj.pos_tonic=freemotif_table1obj.pos_tonic+24;
+      freemotif_table1obj.scale_diatonic=freemotif_table1obj.scale_diatonic*-1;
+      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+      freemotif_table1obj.motif_name="-> chrom +24 / Inv";
+      freemotif_table1obj.renderfreemotif();
+
+      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+      freemotif_table1obj.pos_tonic=freemotif_table1obj.pos_tonic-12;
+      freemotif_table1obj.motif_name="-> chrom -12";
+      freemotif_table1obj.renderfreemotif();
+}
+
 void retrograde_examples(){
       //retrograde function tester
       //0. Dry
@@ -10,14 +64,12 @@ void retrograde_examples(){
 
       // freemotif_table1obj = new freeMotif_table(simpleforms_1_table);
       // freemotif_table1obj = new freeMotif_table(simpleforms_2_table);
-      // freemotif_table1obj = new freeMotif_table(arch1_mm_table);
-      // freemotif_table1obj = new freeMotif_table(even_ascent_mm_table);
-      freemotif_table1obj = new freeMotif_table(fanfare_table);
+      freemotif_table1obj = new freeMotif_table(arch1_mm_table);
+      // // freemotif_table1obj = new freeMotif_table(even_ascent_mm_table);
+      // freemotif_table1obj = new freeMotif_table(fanfare_table);
 
       freemotif_table1obj.duration_retrograde=0;
       freemotif_table1obj.position_retrograde=0;
-      freemotif_table1obj.scale_time=4;
-      freemotif_table1obj.scale_dur=4;
       freemotif_table1obj.motif_name="original";
       freemotif_table1obj.renderfreemotif();
 
@@ -60,62 +112,6 @@ void retrograde_examples(){
 
 }
 
-void basics_examples(){
-      //retrograde function tester
-      //0. Dry
-      //1. Tonal retrograde
-      //2. Rhythmic retrograde
-      //3. Full retrograde
-      scoreTitle("Basics Examples");
-
-      score.addCallback(32, 1);
-
-      freemotif_table1obj = new freeMotif_table(simpleforms_1_table);
-      freemotif_table1obj = new freeMotif_table(simpleforms_2_table);
-      freemotif_table1obj = new freeMotif_table(arch1_mm_table);
-      freemotif_table1obj = new freeMotif_table(even_ascent_mm_table);
-      // freemotif_table1obj = new freeMotif_table(fanfare_table);
-
-      freemotif_table1obj.duration_retrograde=0;
-      freemotif_table1obj.position_retrograde=0;
-      freemotif_table1obj.scale_time=2;
-      freemotif_table1obj.scale_dur=2;
-      freemotif_table1obj.motif_name="original";
-      freemotif_table1obj.renderfreemotif();
-
-      freemotif_table1obj.diatonic_offset=-1;
-      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
-      freemotif_table1obj.motif_name="-> diatonic -1";
-      freemotif_table1obj.renderfreemotif();
-
-      freemotif_table1obj.pos_tonic=freemotif_table1obj.pos_tonic+1;
-      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
-      freemotif_table1obj.motif_name="-> chromatic +1";
-      freemotif_table1obj.renderfreemotif();
-
-      freemotif_table1obj.scale_time=freemotif_table1obj.scale_time*2;
-      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
-      freemotif_table1obj.motif_name="-> timescale *2";
-      freemotif_table1obj.renderfreemotif();
-
-      freemotif_table1obj.scale_time=freemotif_table1obj.scale_time/2;
-      freemotif_table1obj.scale_diatonic=2;
-      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+8;
-      freemotif_table1obj.motif_name="-> scale diatonically *2";
-      freemotif_table1obj.renderfreemotif();
-
-      freemotif_table1obj.pos_tonic=freemotif_table1obj.pos_tonic+24;
-      freemotif_table1obj.scale_diatonic=freemotif_table1obj.scale_diatonic*-1;
-      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
-      freemotif_table1obj.motif_name="-> chrom +24 / Inv";
-      freemotif_table1obj.renderfreemotif();
-
-      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
-      freemotif_table1obj.pos_tonic=freemotif_table1obj.pos_tonic-12;
-      freemotif_table1obj.motif_name="-> chrom -12";
-      freemotif_table1obj.renderfreemotif();
-}
-
 void fragmentation_examples(){
       //retrograde function tester
       //0. Dry
@@ -129,8 +125,8 @@ void fragmentation_examples(){
       freemotif_table1obj = new freeMotif_table(simpleforms_1_table);
       freemotif_table1obj = new freeMotif_table(simpleforms_2_table);
       freemotif_table1obj = new freeMotif_table(arch1_mm_table);
-      // freemotif_table1obj = new freeMotif_table(even_ascent_mm_table);
-      // freemotif_table1obj = new freeMotif_table(fanfare_table);
+      freemotif_table1obj = new freeMotif_table(even_ascent_mm_table);
+      freemotif_table1obj = new freeMotif_table(fanfare_table);
 
       freemotif_table1obj.motif_name="original";
       freemotif_table1obj.renderfreemotif();
@@ -155,5 +151,43 @@ void fragmentation_examples(){
       freemotif_table1obj.frag_index=0;
       freemotif_table1obj.frag_length=freemotif_table1obj.frag_length-1;
       freemotif_table1obj.motif_name="ignore last 2 notes";
+      freemotif_table1obj.renderfreemotif();
+}
+
+void concat_examples(){
+      //retrograde function tester
+      //0. Dry
+      //1. Tonal retrograde
+      //2. Rhythmic retrograde
+      //3. Full retrograde
+      scoreTitle("Fragmentation Examples");
+
+      score.addCallback(32, 1);
+
+      // freemotif_table1obj = new freeMotif_table(simpleforms_1_table);
+      // freemotif_table1obj = new freeMotif_table(simpleforms_2_table);
+      freemotif_table1obj = new freeMotif_table(arch1_mm_table);
+      // freemotif_table1obj = new freeMotif_table(even_ascent_mm_table);
+      // freemotif_table1obj = new freeMotif_table(fanfare_table);
+
+      // freemotif_table2obj = new freeMotif_table(simpleforms_1_table);
+      // freemotif_table2obj = new freeMotif_table(simpleforms_2_table);
+      // freemotif_table2obj = new freeMotif_table(arch1_mm_table);
+      freemotif_table2obj = new freeMotif_table(even_ascent_mm_table);
+      // freemotif_table2obj = new freeMotif_table(fanfare_table);
+
+      freemotif_table1obj.motif_name="motif 1";
+      freemotif_table1obj.renderfreemotif();
+
+      freemotif_table2obj.motif_name="motif 2";
+      freemotif_table2obj.pos_time=freemotif_table1obj.pos_time+4;
+      freemotif_table2obj.inst_index=1;
+      freemotif_table2obj.renderfreemotif();
+
+      freemotif_table1obj.motif_name="motif 1 + <mm 1>";
+      freemotif_table1obj.inst_index=2;
+      freemotif_table1obj.concat_mm(freemotif_table2obj.notearray_table);
+      //freemotif_table1obj.print_mm();
+      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+8;
       freemotif_table1obj.renderfreemotif();
 }

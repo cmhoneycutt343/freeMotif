@@ -34,13 +34,11 @@ void setup() {
   drawBackground();
   renderScore();
 
-
   score.addCallbackListener(this);
 
   score.tempo(score_bpm);
   score.repeat(5);
   score.play();
-
 }
 
 void draw() {
