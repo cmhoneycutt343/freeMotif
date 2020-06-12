@@ -528,15 +528,16 @@ class freeMotif_table{
                 }
 
                 //sort table
-                println("print_mm: prepend_mm");
-                print_mm();
 
                 numnotes=notearray_table.getRowCount();
                 frag_length=numnotes;
                 motif_length=notearray_table.getFloat((frag_length-1),"time_pos")+notearray_table.getFloat((frag_length-1),"duration");
                 println(frag_length);
 
+                //notearray_table.setFloat(9,"time_pos",0.5);
                 notearray_table.sort("time_pos");
+                println("print_mm: prepend_mm");
+                print_mm();
 }
 
   public void render_frag(){
@@ -580,7 +581,10 @@ class freeMotif_table{
         //1. scanrows of new tabledur_index
         //2. Add rows onto notearray_table
         //3. sort new table?? (shouldn't need to )
+        int rowcounter=0;
         for (TableRow row : notearray_table.rows()) {
+            rowcounter++;
+            print("row counter:", rowcounter, " ");
             print("pitch:",row.getString("pitch"), " ");
             print("time_pos:",row.getString("time_pos"), " ");
             print("duration:",row.getString("duration"), " ");
@@ -813,9 +817,9 @@ public void concat_examples(){
       // freemotif_table1obj = new freeMotif_table(fanfare_table);
 
       // freemotif_table2obj = new freeMotif_table(simpleforms_1_table);
-      freemotif_table2obj = new freeMotif_table(simpleforms_2_table);
+      // freemotif_table2obj = new freeMotif_table(simpleforms_2_table);
       // freemotif_table2obj = new freeMotif_table(arch1_mm_table);
-      // freemotif_table2obj = new freeMotif_table(even_ascent_mm_table);
+      freemotif_table2obj = new freeMotif_table(even_ascent_mm_table);
       // freemotif_table2obj = new freeMotif_table(fanfare_table);
 
       freemotif_table1obj.motif_name="motif 1";
