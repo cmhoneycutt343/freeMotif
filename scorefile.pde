@@ -7,7 +7,7 @@ float zoom_starttime=0;
 float zoom_stoptime=31;
 
 // List of Instruments at http://explodingart.com/soundcipher/doc/arb/soundcipher/constants/ProgramChanges.html
-float[] inst_cata = {score.BELL,score.CELLO,score.PIANO,score.MUSIC_BOX};
+float[] inst_cata = {score.PIANO,score.PIANO,score.PIANO,score.PIANO};
 
 void globalscoresetup(){
       setcurrentkey(0);

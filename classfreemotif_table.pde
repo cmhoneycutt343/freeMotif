@@ -74,8 +74,6 @@ class freeMotif_table{
       //println(notearray[0][4]);
       //println(notearray[0][5]);
 
-
-
       // { {pitch <diatonic reference>,
       //    start position,
       //    duration,
@@ -189,24 +187,159 @@ class freeMotif_table{
         // end 'renderfreemotif' method
       }
 
-      /******************
-      printArray(notearray);
+      /******************/
+      print("motif_name ");
+      println(motif_name);
+      print_mm();
       /******************/
   }
 
   void concat_mm(Table appendtable){
         //1. scanrows of new tabledur_index
-        for (TableRow row : appendtable.rows()) {
+        Table buffertable = new Table();
+        int buffertablerowcount = appendtable.getRowCount();
+        buffertable.addColumn("pitch");
+        buffertable.addColumn("time_pos");
+        buffertable.addColumn("duration");
+        buffertable.addColumn("velocity");
+        buffertable.addColumn("timbre1");
+        buffertable.addColumn("timbre2");
+
+        for (int rowiter=0; rowiter<buffertablerowcount; rowiter++) {
+            buffertable.addRow(appendtable.getRow(rowiter));
+        }
+
+
+        println("@after Table buffertable = appendtable;");
+
+
+        println(buffertablerowcount);
+        println("buffertablerowcount");
+
+        // for (TableRow row : buffertable.rows()) {
+        //
+        //     float time_pos_shifted=row.getFloat("time_pos")+motif_length;
+        //     row.setFloat("time_pos",time_pos_shifted);
+        //     notearray_table.addRow(row);
+        //     //println("@after notearray_table.addRow(row);");
+        // }
+
+        for (int rowiter=0; rowiter<buffertablerowcount; rowiter++) {
+
+            TableRow row = buffertable.getRow(rowiter);
 
             float time_pos_shifted=row.getFloat("time_pos")+motif_length;
+            println(time_pos_shifted);
+            println("time_pos_shifted");
             row.setFloat("time_pos",time_pos_shifted);
             notearray_table.addRow(row);
-  
         }
+
+        // println("print_mm():concat_mm");
+        // //print_mm();
+
         numnotes=notearray_table.getRowCount();
         frag_length=numnotes;
+        motif_length=notearray_table.getFloat((frag_length-1),"time_pos")+notearray_table.getFloat((frag_length-1),"duration");
         println(frag_length);
+
+        notearray_table.sort("time_pos");
       }
+
+  void prepend_mm(Table appendtable){
+                //Make Buffer Table
+                Table buffertable = new Table();
+                int buffertablerowcount = appendtable.getRowCount();
+                buffertable.addColumn("pitch");
+                buffertable.addColumn("time_pos");
+                buffertable.addColumn("duration");
+                buffertable.addColumn("velocity");
+                buffertable.addColumn("timbre1");
+                buffertable.addColumn("timbre2");
+                for (int rowiter=0; rowiter<buffertablerowcount; rowiter++) {
+                    buffertable.addRow(appendtable.getRow(rowiter));
+                }
+
+                //time length of prepend_mm
+                float prepend_mm_length = buffertable.getFloat((buffertablerowcount-1),"time_pos")
+                                         +buffertable.getFloat(((buffertablerowcount-1)),"duration");
+
+                println("prepend_mm_length");
+                println(prepend_mm_length);
+
+
+                // scan: add prepend_mm_length to all existing notes
+                for (int rowiter=0; rowiter<numnotes; rowiter++) {
+                      //load buffer row
+                      TableRow row = notearray_table.getRow(rowiter);
+
+                      //calculate time shift
+                      float time_pos_shifted=row.getFloat("time_pos")+prepend_mm_length;
+
+                      //write to note
+                      notearray_table.setFloat(rowiter,"time_pos",time_pos_shifted);
+                }
+
+                //
+                for (int rowiter=0; rowiter<buffertablerowcount; rowiter++) {
+                    //load buffer row
+                    TableRow row = buffertable.getRow(rowiter);
+                    // //calculate timeshift ( )
+                    // float time_pos_shifted=row.getFloat("time_pos")+motif_length;
+                    // println(time_pos_shifted);
+                    // println("time_pos_shifted");
+                    // row.setFloat("time_pos",time_pos_shifted);
+                    notearray_table.addRow(row);
+                }
+
+                //sort table
+                println("print_mm: prepend_mm");
+                print_mm();
+
+                numnotes=notearray_table.getRowCount();
+                frag_length=numnotes;
+                motif_length=notearray_table.getFloat((frag_length-1),"time_pos")+notearray_table.getFloat((frag_length-1),"duration");
+                println(frag_length);
+
+                notearray_table.sort("time_pos");
+}
+
+  void render_frag(){
+
+            //buffer table for fragment
+            Table des_frag_table = new Table();
+            des_frag_table.addColumn("pitch");
+            des_frag_table.addColumn("time_pos");
+            des_frag_table.addColumn("duration");
+            des_frag_table.addColumn("velocity");
+            des_frag_table.addColumn("timbre1");
+            des_frag_table.addColumn("timbre2");
+
+            float frag_time_offset = notearray_table.getFloat(frag_index,"time_pos");
+
+            //
+            for(int notescan_abspos=frag_index; notescan_abspos<frag_length ; notescan_abspos++){
+                TableRow row = notearray_table.getRow(notescan_abspos);
+                row.setFloat("time_pos",(row.getFloat("time_pos")-frag_time_offset));
+                des_frag_table.addRow(row);
+
+            }
+
+            //clear old scan and scan in fragment
+            notearray_table.clearRows();
+            for (TableRow row : des_frag_table.rows()) {
+                notearray_table.addRow(row);
+            }
+
+            print_mm();
+
+            numnotes=notearray_table.getRowCount();
+            frag_index=0;
+            frag_length=numnotes;
+            println(frag_length);
+
+            notearray_table.sort("time_pos");
+          }
 
   void print_mm(){
         //1. scanrows of new tabledur_index
