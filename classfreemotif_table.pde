@@ -17,8 +17,8 @@ class freeMotif_table{
 
   /***********REMOVE*****/
   Table notearray_table;
-  // motif position (for iterations relative to first iteration)
   /***********REMOVE*****/
+  // motif position (for iterations relative to first iteration)
   float pos_time=0;
   // MIDI note Tonic index (60= Middle C)
   float pos_tonic=60;
@@ -51,7 +51,31 @@ class freeMotif_table{
   int inst_index=0;
 
   freeMotif_table(Table classinputmotif_table){
-      notearray_table=classinputmotif_table;
+      //notearray_table=classinputmotif_table;
+
+      notearray_table = new Table();
+
+      notearray_table.addColumn("pitch");
+      notearray_table.addColumn("time_pos");
+      notearray_table.addColumn("duration");
+      notearray_table.addColumn("velocity");
+      notearray_table.addColumn("timbre1");
+      notearray_table.addColumn("timbre2");
+
+
+      for (int load_scan_iter=0; load_scan_iter<classinputmotif_table.getRowCount(); load_scan_iter++){
+            TableRow rowbuffer = classinputmotif_table.getRow(load_scan_iter);
+            notearray_table.addRow(rowbuffer);
+      }
+
+      println("notearray_table.getFloat(0,pitch)");
+      println(notearray_table.getFloat(0,"pitch"));
+
+      println("post 'classinputmotif_table' loading to 'notearray_table'");
+      print_mm();
+
+      notearray_table.sort("time_pos");
+
       numnotes=notearray_table.getRowCount();
       frag_length=numnotes;
 
@@ -346,9 +370,11 @@ class freeMotif_table{
         //1. scanrows of new tabledur_index
         //2. Add rows onto notearray_table
         //3. sort new table?? (shouldn't need to )
-        int rowcounter=0;
-        for (TableRow row : notearray_table.rows()) {
-            rowcounter++;
+
+        for (int rowcounter=0; rowcounter<notearray_table.getRowCount(); rowcounter++) {
+            TableRow row = notearray_table.getRow(rowcounter);
+
+            println("in print_mm loop");
             print("row counter:", rowcounter, " ");
             print("pitch:",row.getString("pitch"), " ");
             print("time_pos:",row.getString("time_pos"), " ");

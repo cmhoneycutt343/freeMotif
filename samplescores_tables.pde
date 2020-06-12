@@ -166,16 +166,16 @@ void concat_examples(){
 
       score.addCallback(64, 1);
 
-      freemotif_table1obj = new freeMotif_table(simpleforms_1_table);
+      // freemotif_table1obj = new freeMotif_table(simpleforms_1_table);
       // freemotif_table1obj = new freeMotif_table(simpleforms_2_table);
-      // freemotif_table1obj = new freeMotif_table(arch1_mm_table);
+      freemotif_table1obj = new freeMotif_table(arch1_mm_table);
       // freemotif_table1obj = new freeMotif_table(even_ascent_mm_table);
       // freemotif_table1obj = new freeMotif_table(fanfare_table);
 
       // freemotif_table2obj = new freeMotif_table(simpleforms_1_table);
       // freemotif_table2obj = new freeMotif_table(simpleforms_2_table);
-      // freemotif_table2obj = new freeMotif_table(arch1_mm_table);
-      freemotif_table2obj = new freeMotif_table(even_ascent_mm_table);
+      freemotif_table2obj = new freeMotif_table(arch1_mm_table);
+      // freemotif_table2obj = new freeMotif_table(even_ascent_mm_table);
       // freemotif_table2obj = new freeMotif_table(fanfare_table);
 
       freemotif_table1obj.motif_name="motif 1";
