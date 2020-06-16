@@ -52,6 +52,43 @@ void basics_examples(){
       freemotif_table1obj.renderfreemotif();
 }
 
+void renderproperties_example(){
+      //retrograde function tester
+      //0. Dry
+      //1. Tonal retrograde
+      //2. Rhythmic retrograde
+      //3. Full retrograde
+      scoreTitle("Basics Examples");
+
+      score.addCallback(32, 1);
+
+      freemotif_table1obj = new freeMotif_table(simpleforms_1_table);
+      freemotif_table1obj = new freeMotif_table(simpleforms_2_table);
+      freemotif_table1obj = new freeMotif_table(arch1_mm_table);
+      freemotif_table1obj = new freeMotif_table(even_ascent_mm_table);
+      // freemotif_table1obj = new freeMotif_table(fanfare_table);
+
+      freemotif_table1obj.duration_retrograde=0;
+      freemotif_table1obj.position_retrograde=0;
+      freemotif_table1obj.motif_name="original";
+      freemotif_table1obj.renderfreemotif();
+
+      freemotif_table1obj.diatonic_offset=-1;
+      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+      freemotif_table1obj.motif_name="-> diatonic -1";
+      freemotif_table1obj.renderfreemotif();
+
+      freemotif_table1obj.scale_time=freemotif_table1obj.scale_time*.5;
+      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+      freemotif_table1obj.motif_name="-> timescale *.5";
+      freemotif_table1obj.renderfreemotif();
+
+      freemotif_table1obj.reset_properties();
+      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+      freemotif_table1obj.motif_name="reset properties";
+      freemotif_table1obj.renderfreemotif();
+}
+
 void retrograde_examples(){
       //retrograde function tester
       //0. Dry
@@ -162,19 +199,17 @@ void concat_examples(){
       //3. Full retrograde
       scoreTitle("Fragmentation Examples");
 
-      setcurrentkey(1);
-
       score.addCallback(64, 1);
 
       // freemotif_table1obj = new freeMotif_table(simpleforms_1_table);
-      // freemotif_table1obj = new freeMotif_table(simpleforms_2_table);
-      freemotif_table1obj = new freeMotif_table(arch1_mm_table);
+      freemotif_table1obj = new freeMotif_table(simpleforms_2_table);
+      // freemotif_table1obj = new freeMotif_table(arch1_mm_table);
       // freemotif_table1obj = new freeMotif_table(even_ascent_mm_table);
       // freemotif_table1obj = new freeMotif_table(fanfare_table);
 
       // freemotif_table2obj = new freeMotif_table(simpleforms_1_table);
-      // freemotif_table2obj = new freeMotif_table(simpleforms_2_table);
-      freemotif_table2obj = new freeMotif_table(arch1_mm_table);
+      freemotif_table2obj = new freeMotif_table(simpleforms_2_table);
+      // freemotif_table2obj = new freeMotif_table(arch1_mm_table);
       // freemotif_table2obj = new freeMotif_table(even_ascent_mm_table);
       // freemotif_table2obj = new freeMotif_table(fanfare_table);
 
@@ -208,53 +243,5 @@ void concat_examples(){
       freemotif_table1obj.pos_time=20;
       freemotif_table1obj.motif_name="prepend motif 2";
       freemotif_table1obj.prepend_mm(freemotif_table2obj.notearray_table);
-      freemotif_table1obj.renderfreemotif();
-}
-
-void concat_fun(){
-      //retrograde function tester
-      //0. Dry
-      //1. Tonal retrograde
-      //2. Rhythmic retrograde
-      //3. Full retrograde
-      scoreTitle("Fragmentation Examples");
-
-      setcurrentkey(1);
-
-      score.addCallback(16, 1);
-
-      // freemotif_table1obj = new freeMotif_table(simpleforms_1_table);
-      // freemotif_table1obj = new freeMotif_table(simpleforms_2_table);
-      freemotif_table1obj = new freeMotif_table(arch1_mm_table);
-      // freemotif_table1obj = new freeMotif_table(even_ascent_mm_table);
-      // freemotif_table1obj = new freeMotif_table(fanfare_table);
-
-      // freemotif_table2obj = new freeMotif_table(simpleforms_1_table);
-      // freemotif_table2obj = new freeMotif_table(simpleforms_2_table);
-      // freemotif_table2obj = new freeMotif_table(arch1_mm_table);
-      freemotif_table2obj = new freeMotif_table(even_ascent_mm_table);
-      // freemotif_table2obj = new freeMotif_table(fanfare_table);
-
-      freemotif_table1obj.motif_name="concat";
-      freemotif_table1obj.inst_index=0;
-      freemotif_table1obj.concat_mm(freemotif_table2obj.notearray_table);
-      freemotif_table1obj.pos_time=0;
-      freemotif_table1obj.renderfreemotif();
-
-      freemotif_table1obj.pos_time=12;
-      freemotif_table1obj.frag_length=8;
-      freemotif_table1obj.renderfreemotif();
-      freemotif_table1obj.frag_length=12;
-
-      freemotif_table1obj.inst_index=2;
-      freemotif_table1obj.diatonic_offset=-1;
-      freemotif_table1obj.inst_index=1;
-      freemotif_table1obj.pos_time=4;
-      freemotif_table1obj.renderfreemotif();
-
-      freemotif_table1obj.inst_index=2;
-      freemotif_table1obj.diatonic_offset=-2;
-      freemotif_table1obj.inst_index=2;
-      freemotif_table1obj.pos_time=8;
       freemotif_table1obj.renderfreemotif();
 }

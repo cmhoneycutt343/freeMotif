@@ -56,7 +56,7 @@ public void setup() {
 
   score.tempo(score_bpm);
   score.repeat(5);
-  score.play();
+  //score.play();
 }
 
 public void draw() {
@@ -346,6 +346,8 @@ class freeMotif_table{
         noterenderindex = notescan_abspos;
 
         //factor in 'tonal_retrograde'
+
+
         int tablepitch_index;
         if(tonal_retrograde==0){
           tablepitch_index = notescan_abspos;
@@ -446,11 +448,43 @@ class freeMotif_table{
         // end 'renderfreemotif' method
       }
 
+        //
       /******************/
       print("motif_name ");
       println(motif_name);
       print_mm();
       /******************/
+  }
+
+  public void reset_properties(){
+    // // motif position (for iterations relative to first iteration)
+    // pos_time=0;
+    // MIDI note Tonic index (60= Middle C)
+    pos_tonic=60;
+    // Diatonic Offset to shift motif up and down within scale
+    diatonic_offset=0;
+    // scales motif in time
+    scale_time=1;
+    // scales duration of note durations in motif
+    scale_dur=1;
+    // scales diatonic values (-1) is an inversion
+    scale_diatonic=1;
+
+    // Bool; 0=normal direction, 1 motif is reversed
+    tonal_retrograde=0;
+    // Bool; 0=normal direction, 1 motif is reversed
+    duration_retrograde=0;
+    // Bool; 0=normal direction, 1 motif is reversed
+    position_retrograde=0;
+    // Bool; 0=normal direction, 1 motif is reversed
+    velocity_retrograde=0;
+
+
+    // Fragmentation: index of first note fragment
+    frag_index=0;
+    // Fragmentation: number of notes in frag
+    frag_length=numnotes;
+    // index of instrument
   }
 
   public void concat_mm(Table appendtable){
@@ -722,6 +756,43 @@ public void basics_examples(){
       freemotif_table1obj.renderfreemotif();
 }
 
+public void renderproperties_example(){
+      //retrograde function tester
+      //0. Dry
+      //1. Tonal retrograde
+      //2. Rhythmic retrograde
+      //3. Full retrograde
+      scoreTitle("Basics Examples");
+
+      score.addCallback(32, 1);
+
+      freemotif_table1obj = new freeMotif_table(simpleforms_1_table);
+      freemotif_table1obj = new freeMotif_table(simpleforms_2_table);
+      freemotif_table1obj = new freeMotif_table(arch1_mm_table);
+      freemotif_table1obj = new freeMotif_table(even_ascent_mm_table);
+      // freemotif_table1obj = new freeMotif_table(fanfare_table);
+
+      freemotif_table1obj.duration_retrograde=0;
+      freemotif_table1obj.position_retrograde=0;
+      freemotif_table1obj.motif_name="original";
+      freemotif_table1obj.renderfreemotif();
+
+      freemotif_table1obj.diatonic_offset=-1;
+      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+      freemotif_table1obj.motif_name="-> diatonic -1";
+      freemotif_table1obj.renderfreemotif();
+
+      freemotif_table1obj.scale_time=freemotif_table1obj.scale_time*.5f;
+      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+      freemotif_table1obj.motif_name="-> timescale *.5";
+      freemotif_table1obj.renderfreemotif();
+
+      freemotif_table1obj.reset_properties();
+      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+      freemotif_table1obj.motif_name="reset properties";
+      freemotif_table1obj.renderfreemotif();
+}
+
 public void retrograde_examples(){
       //retrograde function tester
       //0. Dry
@@ -832,19 +903,17 @@ public void concat_examples(){
       //3. Full retrograde
       scoreTitle("Fragmentation Examples");
 
-      setcurrentkey(1);
-
       score.addCallback(64, 1);
 
       // freemotif_table1obj = new freeMotif_table(simpleforms_1_table);
-      // freemotif_table1obj = new freeMotif_table(simpleforms_2_table);
-      freemotif_table1obj = new freeMotif_table(arch1_mm_table);
+      freemotif_table1obj = new freeMotif_table(simpleforms_2_table);
+      // freemotif_table1obj = new freeMotif_table(arch1_mm_table);
       // freemotif_table1obj = new freeMotif_table(even_ascent_mm_table);
       // freemotif_table1obj = new freeMotif_table(fanfare_table);
 
       // freemotif_table2obj = new freeMotif_table(simpleforms_1_table);
-      // freemotif_table2obj = new freeMotif_table(simpleforms_2_table);
-      freemotif_table2obj = new freeMotif_table(arch1_mm_table);
+      freemotif_table2obj = new freeMotif_table(simpleforms_2_table);
+      // freemotif_table2obj = new freeMotif_table(arch1_mm_table);
       // freemotif_table2obj = new freeMotif_table(even_ascent_mm_table);
       // freemotif_table2obj = new freeMotif_table(fanfare_table);
 
@@ -880,54 +949,6 @@ public void concat_examples(){
       freemotif_table1obj.prepend_mm(freemotif_table2obj.notearray_table);
       freemotif_table1obj.renderfreemotif();
 }
-
-public void concat_fun(){
-      //retrograde function tester
-      //0. Dry
-      //1. Tonal retrograde
-      //2. Rhythmic retrograde
-      //3. Full retrograde
-      scoreTitle("Fragmentation Examples");
-
-      setcurrentkey(1);
-
-      score.addCallback(16, 1);
-
-      // freemotif_table1obj = new freeMotif_table(simpleforms_1_table);
-      // freemotif_table1obj = new freeMotif_table(simpleforms_2_table);
-      freemotif_table1obj = new freeMotif_table(arch1_mm_table);
-      // freemotif_table1obj = new freeMotif_table(even_ascent_mm_table);
-      // freemotif_table1obj = new freeMotif_table(fanfare_table);
-
-      // freemotif_table2obj = new freeMotif_table(simpleforms_1_table);
-      // freemotif_table2obj = new freeMotif_table(simpleforms_2_table);
-      // freemotif_table2obj = new freeMotif_table(arch1_mm_table);
-      freemotif_table2obj = new freeMotif_table(even_ascent_mm_table);
-      // freemotif_table2obj = new freeMotif_table(fanfare_table);
-
-      freemotif_table1obj.motif_name="concat";
-      freemotif_table1obj.inst_index=0;
-      freemotif_table1obj.concat_mm(freemotif_table2obj.notearray_table);
-      freemotif_table1obj.pos_time=0;
-      freemotif_table1obj.renderfreemotif();
-
-      freemotif_table1obj.pos_time=12;
-      freemotif_table1obj.frag_length=8;
-      freemotif_table1obj.renderfreemotif();
-      freemotif_table1obj.frag_length=12;
-
-      freemotif_table1obj.inst_index=2;
-      freemotif_table1obj.diatonic_offset=-1;
-      freemotif_table1obj.inst_index=1;
-      freemotif_table1obj.pos_time=4;
-      freemotif_table1obj.renderfreemotif();
-
-      freemotif_table1obj.inst_index=2;
-      freemotif_table1obj.diatonic_offset=-2;
-      freemotif_table1obj.inst_index=2;
-      freemotif_table1obj.pos_time=8;
-      freemotif_table1obj.renderfreemotif();
-}
 /*---GUI ZOOM SETTINGS--*/
 int zoom_notelow=36;
 int zoom_notehigh=96;
@@ -945,10 +966,11 @@ public void globalscoresetup(){
 
 public void renderScore(){
     //*-------function examples--------*//
-    //basics_examples();
-    //retrograde_examples();
-    //fragmentation_examples();
-    concat_examples();
+    // basics_examples();
+    renderproperties_example();
+    // retrograde_examples();
+    // fragmentation_examples();
+    // concat_examples();
 }
 
 public float truemod(float input, float modulus)

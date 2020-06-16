@@ -111,6 +111,8 @@ class freeMotif_table{
         noterenderindex = notescan_abspos;
 
         //factor in 'tonal_retrograde'
+
+
         int tablepitch_index;
         if(tonal_retrograde==0){
           tablepitch_index = notescan_abspos;
@@ -211,11 +213,43 @@ class freeMotif_table{
         // end 'renderfreemotif' method
       }
 
+        //
       /******************/
       print("motif_name ");
       println(motif_name);
       print_mm();
       /******************/
+  }
+
+  void reset_properties(){
+    // // motif position (for iterations relative to first iteration)
+    // pos_time=0;
+    // MIDI note Tonic index (60= Middle C)
+    pos_tonic=60;
+    // Diatonic Offset to shift motif up and down within scale
+    diatonic_offset=0;
+    // scales motif in time
+    scale_time=1;
+    // scales duration of note durations in motif
+    scale_dur=1;
+    // scales diatonic values (-1) is an inversion
+    scale_diatonic=1;
+
+    // Bool; 0=normal direction, 1 motif is reversed
+    tonal_retrograde=0;
+    // Bool; 0=normal direction, 1 motif is reversed
+    duration_retrograde=0;
+    // Bool; 0=normal direction, 1 motif is reversed
+    position_retrograde=0;
+    // Bool; 0=normal direction, 1 motif is reversed
+    velocity_retrograde=0;
+
+
+    // Fragmentation: index of first note fragment
+    frag_index=0;
+    // Fragmentation: number of notes in frag
+    frag_length=numnotes;
+    // index of instrument
   }
 
   void concat_mm(Table appendtable){

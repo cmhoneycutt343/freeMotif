@@ -38,7 +38,7 @@ void setup() {
 
   score.tempo(score_bpm);
   score.repeat(5);
-  score.play();
+  //score.play();
 }
 
 void draw() {

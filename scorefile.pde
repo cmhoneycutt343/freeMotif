@@ -15,8 +15,9 @@ void globalscoresetup(){
 
 void renderScore(){
     //*-------function examples--------*//
-    //basics_examples();
-    //retrograde_examples();
-    //fragmentation_examples();
-    concat_examples();
+    // basics_examples();
+    renderproperties_example();
+    // retrograde_examples();
+    // fragmentation_examples();
+    // concat_examples();
 }
