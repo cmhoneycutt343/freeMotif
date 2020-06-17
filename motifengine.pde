@@ -17,7 +17,7 @@ freeMotif_table freemotif_table4obj;
 // score length in measures
 int score_length=16;
 // score bpm
-int score_bpm=180;
+int score_bpm=90;
 
 int global_time_render_offset=0;
 
@@ -38,7 +38,7 @@ void setup() {
 
   score.tempo(score_bpm);
   score.repeat(5);
-  //score.play();
+  score.play();
 }
 
 void draw() {

@@ -35,7 +35,7 @@ freeMotif_table freemotif_table4obj;
 // score length in measures
 int score_length=16;
 // score bpm
-int score_bpm=180;
+int score_bpm=90;
 
 int global_time_render_offset=0;
 
@@ -56,7 +56,7 @@ public void setup() {
 
   score.tempo(score_bpm);
   score.repeat(5);
-  //score.play();
+  score.play();
 }
 
 public void draw() {
@@ -256,7 +256,7 @@ Table notearray_table;
 // motif position (for iterations relative to first iteration)
 float pos_time=0;
 // MIDI note Tonic index (60= Middle C)
-float pos_tonic=60;
+float pos_tonic=59;
 // Diatonic Offset to shift motif up and down within scale
 float diatonic_offset=0;
 // motif length in time (not number of notes)?
@@ -307,7 +307,7 @@ freeMotif_table(Table classinputmotif_table){
         notearray_table = new Table();
 
         notearray_table.addColumn("pitch");
-        notearray_table.addColumn("time_pos");
+        notearray_table.addColumn("time_pos", Table.FLOAT);
         notearray_table.addColumn("duration");
         notearray_table.addColumn("velocity");
         notearray_table.addColumn("timbre1");
@@ -347,6 +347,8 @@ public void renderfreemotif(){
         //    velocity,
         //    timbre A,
         //    timbre B} }
+
+        notearray_table.sort("time_pos");
 
         //scan all notes in fragment
         for(int notescan_abspos=frag_index; notescan_abspos<frag_length; notescan_abspos++) {
@@ -408,8 +410,11 @@ public void renderfreemotif(){
         }
 
         /******************/
+        println("***********");
         print("motif_name ");
         println(motif_name);
+        print("frag_length");
+        println(frag_length);
         print_mm();
         /******************/
 }
@@ -751,12 +756,16 @@ Table even_ascent_mm_table;
 
 Table fanfare_table;
 
+Table fugue_theme_mm_table;
+
 public void loadMetamotifs(){
       simpleforms_1_table = loadTable("simpleforms_1.csv", "header");
       simpleforms_2_table = loadTable("simpleforms_2.csv", "header");
       arch1_mm_table = loadTable("arch1_mm.csv", "header");
       even_ascent_mm_table = loadTable("even_ascent_mm.csv", "header");
       fanfare_table = loadTable("fanfare.csv","header");
+
+      fugue_theme_mm_table = loadTable("fugue_theme_mm.csv","header");
 }
 public void basics_examples(){
       //retrograde function tester
@@ -811,6 +820,41 @@ public void basics_examples(){
       freemotif_table1obj.motif_name="-> chrom -12";
       freemotif_table1obj.renderfreemotif();
 }
+
+public void fugue_examples(){
+      //retrograde function tester
+      //0. Dry
+      //1. Tonal retrograde
+      //2. Rhythmic retrograde
+      //3. Full retrograde
+      scoreTitle("Basics Examples");
+
+      score.addCallback(32, 1);
+
+      //harmonic minor
+      setcurrentkey(2);
+
+      freemotif_table1obj = new freeMotif_table(fugue_theme_mm_table);
+      freemotif_table2obj = new freeMotif_table(fugue_theme_mm_table);
+
+      freemotif_table1obj.motif_name="original";
+      freemotif_table1obj.renderfreemotif();
+
+      freemotif_table1obj.motif_name="retro1";
+      freemotif_table1obj.velocity_retrograde=1;
+      freemotif_table1obj.position_retrograde=1;
+      freemotif_table1obj.duration_retrograde=1;
+      freemotif_table1obj.tonal_retrograde=1;
+      freemotif_table1obj.inst_index=1;
+      freemotif_table1obj.pos_time=16;
+      freemotif_table1obj.renderfreemotif();
+
+      freemotif_table2obj.inst_index=2;
+      freemotif_table2obj.diatonic_offset=-7;
+      freemotif_table2obj.pos_time=16;
+      freemotif_table2obj.renderfreemotif();
+}
+
 
 public void renderproperties_example(){
       //retrograde function tester
@@ -1043,10 +1087,11 @@ public void globalscoresetup(){
 public void renderScore(){
     //*-------function examples--------*//
     // basics_examples();
-    renderproperties_example();
+    // renderproperties_example();
     // retrograde_examples();
     // fragmentation_examples();
     // concat_examples();
+    fugue_examples();
 }
 
 public float truemod(float input, float modulus)

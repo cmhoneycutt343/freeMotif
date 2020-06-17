@@ -21,7 +21,7 @@ Table notearray_table;
 // motif position (for iterations relative to first iteration)
 float pos_time=0;
 // MIDI note Tonic index (60= Middle C)
-float pos_tonic=60;
+float pos_tonic=59;
 // Diatonic Offset to shift motif up and down within scale
 float diatonic_offset=0;
 // motif length in time (not number of notes)?
@@ -72,7 +72,7 @@ freeMotif_table(Table classinputmotif_table){
         notearray_table = new Table();
 
         notearray_table.addColumn("pitch");
-        notearray_table.addColumn("time_pos");
+        notearray_table.addColumn("time_pos", Table.FLOAT);
         notearray_table.addColumn("duration");
         notearray_table.addColumn("velocity");
         notearray_table.addColumn("timbre1");
@@ -112,6 +112,8 @@ void renderfreemotif(){
         //    velocity,
         //    timbre A,
         //    timbre B} }
+
+        notearray_table.sort("time_pos");
 
         //scan all notes in fragment
         for(int notescan_abspos=frag_index; notescan_abspos<frag_length; notescan_abspos++) {
@@ -173,8 +175,11 @@ void renderfreemotif(){
         }
 
         /******************/
+        println("***********");
         print("motif_name ");
         println(motif_name);
+        print("frag_length");
+        println(frag_length);
         print_mm();
         /******************/
 }

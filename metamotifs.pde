@@ -37,10 +37,14 @@ Table even_ascent_mm_table;
 
 Table fanfare_table;
 
+Table fugue_theme_mm_table;
+
 void loadMetamotifs(){
       simpleforms_1_table = loadTable("simpleforms_1.csv", "header");
       simpleforms_2_table = loadTable("simpleforms_2.csv", "header");
       arch1_mm_table = loadTable("arch1_mm.csv", "header");
       even_ascent_mm_table = loadTable("even_ascent_mm.csv", "header");
       fanfare_table = loadTable("fanfare.csv","header");
+
+      fugue_theme_mm_table = loadTable("fugue_theme_mm.csv","header");
 }

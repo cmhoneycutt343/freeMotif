@@ -52,6 +52,41 @@ void basics_examples(){
       freemotif_table1obj.renderfreemotif();
 }
 
+void fugue_examples(){
+      //retrograde function tester
+      //0. Dry
+      //1. Tonal retrograde
+      //2. Rhythmic retrograde
+      //3. Full retrograde
+      scoreTitle("Basics Examples");
+
+      score.addCallback(32, 1);
+
+      //harmonic minor
+      setcurrentkey(2);
+
+      freemotif_table1obj = new freeMotif_table(fugue_theme_mm_table);
+      freemotif_table2obj = new freeMotif_table(fugue_theme_mm_table);
+
+      freemotif_table1obj.motif_name="original";
+      freemotif_table1obj.renderfreemotif();
+
+      freemotif_table1obj.motif_name="retro1";
+      freemotif_table1obj.velocity_retrograde=1;
+      freemotif_table1obj.position_retrograde=1;
+      freemotif_table1obj.duration_retrograde=1;
+      freemotif_table1obj.tonal_retrograde=1;
+      freemotif_table1obj.inst_index=1;
+      freemotif_table1obj.pos_time=16;
+      freemotif_table1obj.renderfreemotif();
+
+      freemotif_table2obj.inst_index=2;
+      freemotif_table2obj.diatonic_offset=-7;
+      freemotif_table2obj.pos_time=16;
+      freemotif_table2obj.renderfreemotif();
+}
+
+
 void renderproperties_example(){
       //retrograde function tester
       //0. Dry
