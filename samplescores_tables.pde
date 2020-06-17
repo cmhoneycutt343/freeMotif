@@ -58,7 +58,7 @@ void renderproperties_example(){
       //1. Tonal retrograde
       //2. Rhythmic retrograde
       //3. Full retrograde
-      scoreTitle("Basics Examples");
+      scoreTitle("Property Reset and Apply Transformations Examples");
 
       score.addCallback(32, 1);
 
@@ -86,6 +86,26 @@ void renderproperties_example(){
       freemotif_table1obj.reset_properties();
       freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
       freemotif_table1obj.motif_name="reset properties";
+      freemotif_table1obj.renderfreemotif();
+
+      freemotif_table1obj.scale_diatonic=-1;
+      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+      freemotif_table1obj.motif_name="-> diatonic scale -1";
+      freemotif_table1obj.renderfreemotif();
+
+      freemotif_table1obj.diatonic_offset=7;
+      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+      freemotif_table1obj.motif_name="-> diatonic 12";
+      freemotif_table1obj.renderfreemotif();
+
+      freemotif_table1obj.scale_time=freemotif_table1obj.scale_time*.5;
+      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+      freemotif_table1obj.motif_name="-> timescale *.5";
+      freemotif_table1obj.renderfreemotif();
+
+      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+      freemotif_table1obj.motif_name="render & reset";
+      freemotif_table1obj.render_properties();
       freemotif_table1obj.renderfreemotif();
 }
 
