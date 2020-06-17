@@ -281,7 +281,9 @@ float velocity_retrograde=0;
 // Fragmentation: index of first note fragment
 int frag_index=0;
 // Fragmentation: number of notes in frag
-int frag_length;
+int frag_numnotes;
+// Fragmentation: fragment length in time
+float frag_length;
 // index of instrument
 int inst_index=0;
 
@@ -328,10 +330,10 @@ freeMotif_table(Table classinputmotif_table){
         notearray_table.sort("time_pos");
 
         numnotes=notearray_table.getRowCount();
-        frag_length=numnotes;
+        frag_numnotes=numnotes;
 
         //calculate motif length ()
-        motif_length=notearray_table.getFloat((frag_length-1),"time_pos")+notearray_table.getFloat((frag_length-1),"duration");
+        motif_length=notearray_table.getFloat((frag_numnotes-1),"time_pos")+notearray_table.getFloat((frag_numnotes-1),"duration");
 
         // println(motif_name,"motif_length");
         // println(motif_length);
@@ -351,7 +353,7 @@ public void renderfreemotif(){
         notearray_table.sort("time_pos");
 
         //scan all notes in fragment
-        for(int notescan_abspos=frag_index; notescan_abspos<frag_length; notescan_abspos++) {
+        for(int notescan_abspos=frag_index; notescan_abspos<frag_numnotes; notescan_abspos++) {
 
 
                 /*-------generate note rendering values--------*/
@@ -413,15 +415,22 @@ public void renderfreemotif(){
         println("***********");
         print("motif_name ");
         println(motif_name);
-        print("frag_length");
-        println(frag_length);
-        print_mm();
+        // print("frag_numnotes");
+        // println(frag_numnotes);
+        //print_mm();
         /******************/
 }
 
 //called generate output / post property transform values
 public void generate_noterender_vals(int notescan_abspos_fcnin){
+
+      //calculate fragment length in time
+      frag_length=(notearray_table.getFloat((frag_numnotes-1),"time_pos")+notearray_table.getFloat((frag_numnotes-1),"duration"))-notearray_table.getFloat((frag_index),"time_pos");
+
+
       noterenderindex = notescan_abspos_fcnin;
+
+
 
       /*-------start retrograde-------*/
       //factor in 'tonal_retrograde'
@@ -429,7 +438,7 @@ public void generate_noterender_vals(int notescan_abspos_fcnin){
       if(tonal_retrograde==0) {
               tablepitch_index = noterenderindex;
       } else {
-              tablepitch_index = frag_length-1-noterenderindex;
+              tablepitch_index = frag_numnotes-1-noterenderindex;
       }
 
       //factor in 'duration-retrograde'
@@ -437,12 +446,17 @@ public void generate_noterender_vals(int notescan_abspos_fcnin){
       if(duration_retrograde==0) {
               tabledur_index = noterenderindex;
       } else {
-              tabledur_index = frag_length-1-noterenderindex;
+              tabledur_index = frag_numnotes-1-noterenderindex;
       }
 
       //factor in 'time position_retrograde' (with fragmentation);
       float tablepos_fromindex;
+      //fragmentation offset; time value of "first" element in fragment?
+
       float fragmentationoffset = notearray_table.getFloat(frag_index, "time_pos");
+      // float fragmentationoffset = 0;
+
+      //position retrograde not rendering correctly
       if(position_retrograde==0) {
               tablepos_fromindex = notearray_table.getFloat(noterenderindex, "time_pos");
       } else {
@@ -450,7 +464,17 @@ public void generate_noterender_vals(int notescan_abspos_fcnin){
               {
                       tablepos_fromindex = 0;
               } else{
-                      tablepos_fromindex = motif_length-notearray_table.getFloat((frag_length-noterenderindex)%frag_length, "time_pos");
+                      tablepos_fromindex = motif_length-notearray_table.getFloat((frag_numnotes-noterenderindex)%frag_numnotes, "time_pos");
+                      //
+                          fragmentationoffset = motif_length-frag_length;
+
+
+                      // println("in position_retrograde");
+                      // println(motif_name);
+                      // print("tablepos_fromindex: ");
+                      // println(tablepos_fromindex);
+                      // print("noterenderindex: ");
+                      // println(noterenderindex);
               }
       }
 
@@ -459,7 +483,7 @@ public void generate_noterender_vals(int notescan_abspos_fcnin){
       if(velocity_retrograde==0) {
               tablevel_index = noterenderindex;
       } else {
-              tablevel_index = frag_length-1-noterenderindex;
+              tablevel_index = frag_numnotes-1-noterenderindex;
       }
 
       // pitch property transformations
@@ -478,6 +502,14 @@ public void generate_noterender_vals(int notescan_abspos_fcnin){
       output_timb2 = notearray_table.getFloat(noterenderindex, "timbre2");
       /*-------start retrograde-------*/
 }
+
+public void auto_retrograde(int bool_switch){
+  velocity_retrograde=bool_switch;
+  position_retrograde=bool_switch;
+  duration_retrograde=bool_switch;
+  tonal_retrograde=bool_switch;
+}
+
 
 //called to remove all properties
 public void reset_properties(){
@@ -507,7 +539,7 @@ public void reset_properties(){
         // Fragmentation: index of first note fragment
         frag_index=0;
         // Fragmentation: number of notes in frag
-        frag_length=numnotes;
+        frag_numnotes=numnotes;
         // index of instrument
 }
 
@@ -515,7 +547,7 @@ public void render_properties(){
     render_frag();
 
     //scan all notes in fragment
-    for(int notescan_abspos=frag_index; notescan_abspos<frag_length; notescan_abspos++){
+    for(int notescan_abspos=frag_index; notescan_abspos<frag_numnotes; notescan_abspos++){
         //generate note data
         generate_noterender_vals(notescan_abspos);
 
@@ -531,7 +563,7 @@ public void render_properties(){
         notearray_table.setFloat(notescan_abspos,"duration",output_dur);
 
         // output_vel = notearray_table.getFloat(tablevel_index, "velocity");
-        notearray_table.setFloat(notescan_abspos,"time_pos",relative_pos);
+        notearray_table.setFloat(notescan_abspos,"velocity",output_vel);
 
         // output_timb1 = notearray_table.getFloat(noterenderindex, "timbre1");
         notearray_table.setFloat(notescan_abspos,"timbre1",output_timb1);
@@ -590,9 +622,9 @@ public void concat_mm(Table appendtable){
         // //print_mm();
 
         numnotes=notearray_table.getRowCount();
-        frag_length=numnotes;
-        motif_length=notearray_table.getFloat((frag_length-1),"time_pos")+notearray_table.getFloat((frag_length-1),"duration");
-        println(frag_length);
+        frag_numnotes=numnotes;
+        motif_length=notearray_table.getFloat((frag_numnotes-1),"time_pos")+notearray_table.getFloat((frag_numnotes-1),"duration");
+        println(frag_numnotes);
 
         notearray_table.sort("time_pos");
 }
@@ -647,9 +679,9 @@ public void prepend_mm(Table appendtable){
         //sort table
 
         numnotes=notearray_table.getRowCount();
-        frag_length=numnotes;
-        motif_length=notearray_table.getFloat((frag_length-1),"time_pos")+notearray_table.getFloat((frag_length-1),"duration");
-        println(frag_length);
+        frag_numnotes=numnotes;
+        motif_length=notearray_table.getFloat((frag_numnotes-1),"time_pos")+notearray_table.getFloat((frag_numnotes-1),"duration");
+        println(frag_numnotes);
 
         //notearray_table.setFloat(9,"time_pos",0.5);
         notearray_table.sort("time_pos");
@@ -672,7 +704,7 @@ public void render_frag(){
         float frag_time_offset = notearray_table.getFloat(frag_index,"time_pos");
 
         //
-        for(int notescan_abspos=frag_index; notescan_abspos<frag_length; notescan_abspos++) {
+        for(int notescan_abspos=frag_index; notescan_abspos<frag_numnotes; notescan_abspos++) {
                 TableRow row = notearray_table.getRow(notescan_abspos);
                 row.setFloat("time_pos",(row.getFloat("time_pos")-frag_time_offset));
                 des_frag_table.addRow(row);
@@ -689,8 +721,8 @@ public void render_frag(){
 
         numnotes=notearray_table.getRowCount();
         frag_index=0;
-        frag_length=numnotes;
-        println(frag_length);
+        frag_numnotes=numnotes;
+        println(frag_numnotes);
 
         notearray_table.sort("time_pos");
 }
@@ -829,30 +861,82 @@ public void fugue_examples(){
       //3. Full retrograde
       scoreTitle("Basics Examples");
 
-      score.addCallback(32, 1);
+      score.addCallback(96, 1);
 
       //harmonic minor
       setcurrentkey(2);
 
       freemotif_table1obj = new freeMotif_table(fugue_theme_mm_table);
       freemotif_table2obj = new freeMotif_table(fugue_theme_mm_table);
+      freemotif_table3obj = new freeMotif_table(fugue_theme_mm_table);
+      freemotif_table4obj = new freeMotif_table(fugue_theme_mm_table);
 
+      /****round 1****/
       freemotif_table1obj.motif_name="original";
+      freemotif_table1obj.frag_numnotes=33;
       freemotif_table1obj.renderfreemotif();
 
-      freemotif_table1obj.motif_name="retro1";
-      freemotif_table1obj.velocity_retrograde=1;
-      freemotif_table1obj.position_retrograde=1;
-      freemotif_table1obj.duration_retrograde=1;
-      freemotif_table1obj.tonal_retrograde=1;
-      freemotif_table1obj.inst_index=1;
+      /****round 2****/
+      freemotif_table1obj.motif_name="Embellishment 1";
+      freemotif_table1obj.auto_retrograde(1);
       freemotif_table1obj.pos_time=16;
       freemotif_table1obj.renderfreemotif();
 
-      freemotif_table2obj.inst_index=2;
+      freemotif_table2obj.inst_index=1;
+      freemotif_table2obj.frag_numnotes=33;
       freemotif_table2obj.diatonic_offset=-7;
       freemotif_table2obj.pos_time=16;
       freemotif_table2obj.renderfreemotif();
+
+      /****round 3****/
+      freemotif_table1obj.motif_name="Embellishment 1";
+      freemotif_table1obj.auto_retrograde(0);
+      freemotif_table1obj.pos_time=32;
+      freemotif_table1obj.renderfreemotif();
+
+      freemotif_table2obj.pos_time=32;
+      freemotif_table2obj.renderfreemotif();
+
+      freemotif_table3obj.inst_index=2;
+      freemotif_table3obj.scale_time=4;
+      freemotif_table3obj.scale_dur=4;
+      freemotif_table3obj.frag_numnotes=4;
+      freemotif_table3obj.diatonic_offset=-14;
+      freemotif_table3obj.pos_time=32;
+      freemotif_table3obj.renderfreemotif();
+
+      /****round 4****/
+      freemotif_table2obj.pos_time=48;
+      freemotif_table2obj.frag_numnotes=freemotif_table2obj.numnotes;
+      freemotif_table2obj.renderfreemotif();
+      freemotif_table2obj.pos_time=freemotif_table2obj.pos_time+freemotif_table2obj.frag_length;
+      freemotif_table2obj.auto_retrograde(1);
+      freemotif_table2obj.renderfreemotif();
+      freemotif_table2obj.pos_time=freemotif_table2obj.pos_time+freemotif_table2obj.frag_length;
+      freemotif_table2obj.auto_retrograde(0);
+      freemotif_table2obj.renderfreemotif();
+
+      freemotif_table3obj.inst_index=2;
+      freemotif_table3obj.scale_time=4;
+      freemotif_table3obj.scale_dur=4;
+      freemotif_table3obj.frag_numnotes=freemotif_table3obj.numnotes;
+      freemotif_table3obj.diatonic_offset=-14;
+      freemotif_table3obj.pos_time=48;
+      freemotif_table3obj.renderfreemotif();
+
+      freemotif_table4obj.pos_time=48;
+      freemotif_table4obj.inst_index=3;
+      freemotif_table4obj.auto_retrograde(1);
+      freemotif_table4obj.diatonic_offset=4;
+      freemotif_table4obj.renderfreemotif();
+
+      freemotif_table4obj.pos_time=freemotif_table4obj.pos_time+freemotif_table4obj.frag_length;
+      freemotif_table4obj.auto_retrograde(0);
+      freemotif_table4obj.renderfreemotif();
+
+      freemotif_table4obj.pos_time=freemotif_table4obj.pos_time+freemotif_table4obj.frag_length;
+      freemotif_table4obj.auto_retrograde(1);
+      freemotif_table4obj.renderfreemotif();
 }
 
 
@@ -925,9 +1009,9 @@ public void retrograde_examples(){
 
       // freemotif_table1obj = new freeMotif_table(simpleforms_1_table);
       // freemotif_table1obj = new freeMotif_table(simpleforms_2_table);
-      freemotif_table1obj = new freeMotif_table(arch1_mm_table);
+      // freemotif_table1obj = new freeMotif_table(arch1_mm_table);
       // // freemotif_table1obj = new freeMotif_table(even_ascent_mm_table);
-      // freemotif_table1obj = new freeMotif_table(fanfare_table);
+      freemotif_table1obj = new freeMotif_table(fanfare_table);
 
       freemotif_table1obj.duration_retrograde=0;
       freemotif_table1obj.position_retrograde=0;
@@ -1004,13 +1088,13 @@ public void fragmentation_examples(){
 
       freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
       freemotif_table1obj.frag_index=0;
-      freemotif_table1obj.frag_length=freemotif_table1obj.frag_length-1;
+      freemotif_table1obj.frag_numnotes=freemotif_table1obj.frag_numnotes-1;
       freemotif_table1obj.motif_name="ignore last note";
       freemotif_table1obj.renderfreemotif();
 
       freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
       freemotif_table1obj.frag_index=0;
-      freemotif_table1obj.frag_length=freemotif_table1obj.frag_length-1;
+      freemotif_table1obj.frag_numnotes=freemotif_table1obj.frag_numnotes-1;
       freemotif_table1obj.motif_name="ignore last 2 notes";
       freemotif_table1obj.renderfreemotif();
 }
@@ -1060,7 +1144,7 @@ public void concat_examples(){
 
       freemotif_table1obj.pos_time=16;
       freemotif_table1obj.motif_name="remove last note";
-      freemotif_table1obj.frag_length=freemotif_table1obj.frag_length-1;
+      freemotif_table1obj.frag_numnotes=freemotif_table1obj.frag_numnotes-1;
       freemotif_table1obj.render_frag();
       freemotif_table1obj.renderfreemotif();
 
@@ -1070,12 +1154,12 @@ public void concat_examples(){
       freemotif_table1obj.renderfreemotif();
 }
 /*---GUI ZOOM SETTINGS--*/
-int zoom_notelow=36;
+int zoom_notelow=24;
 int zoom_notehigh=96;
 
 //by beat eg: <0 = display includes measure 1; 3 = measure includes measure 4>
 float zoom_starttime=0;
-float zoom_stoptime=31;
+float zoom_stoptime=95;
 
 // List of Instruments at http://explodingart.com/soundcipher/doc/arb/soundcipher/constants/ProgramChanges.html
 float[] inst_cata = {score.PIANO,score.PIANO,score.PIANO,score.PIANO};

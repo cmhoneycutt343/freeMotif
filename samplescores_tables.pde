@@ -60,30 +60,82 @@ void fugue_examples(){
       //3. Full retrograde
       scoreTitle("Basics Examples");
 
-      score.addCallback(32, 1);
+      score.addCallback(96, 1);
 
       //harmonic minor
       setcurrentkey(2);
 
       freemotif_table1obj = new freeMotif_table(fugue_theme_mm_table);
       freemotif_table2obj = new freeMotif_table(fugue_theme_mm_table);
+      freemotif_table3obj = new freeMotif_table(fugue_theme_mm_table);
+      freemotif_table4obj = new freeMotif_table(fugue_theme_mm_table);
 
+      /****round 1****/
       freemotif_table1obj.motif_name="original";
+      freemotif_table1obj.frag_numnotes=33;
       freemotif_table1obj.renderfreemotif();
 
-      freemotif_table1obj.motif_name="retro1";
-      freemotif_table1obj.velocity_retrograde=1;
-      freemotif_table1obj.position_retrograde=1;
-      freemotif_table1obj.duration_retrograde=1;
-      freemotif_table1obj.tonal_retrograde=1;
-      freemotif_table1obj.inst_index=1;
+      /****round 2****/
+      freemotif_table1obj.motif_name="Embellishment 1";
+      freemotif_table1obj.auto_retrograde(1);
       freemotif_table1obj.pos_time=16;
       freemotif_table1obj.renderfreemotif();
 
-      freemotif_table2obj.inst_index=2;
+      freemotif_table2obj.inst_index=1;
+      freemotif_table2obj.frag_numnotes=33;
       freemotif_table2obj.diatonic_offset=-7;
       freemotif_table2obj.pos_time=16;
       freemotif_table2obj.renderfreemotif();
+
+      /****round 3****/
+      freemotif_table1obj.motif_name="Embellishment 1";
+      freemotif_table1obj.auto_retrograde(0);
+      freemotif_table1obj.pos_time=32;
+      freemotif_table1obj.renderfreemotif();
+
+      freemotif_table2obj.pos_time=32;
+      freemotif_table2obj.renderfreemotif();
+
+      freemotif_table3obj.inst_index=2;
+      freemotif_table3obj.scale_time=4;
+      freemotif_table3obj.scale_dur=4;
+      freemotif_table3obj.frag_numnotes=4;
+      freemotif_table3obj.diatonic_offset=-14;
+      freemotif_table3obj.pos_time=32;
+      freemotif_table3obj.renderfreemotif();
+
+      /****round 4****/
+      freemotif_table2obj.pos_time=48;
+      freemotif_table2obj.frag_numnotes=freemotif_table2obj.numnotes;
+      freemotif_table2obj.renderfreemotif();
+      freemotif_table2obj.pos_time=freemotif_table2obj.pos_time+freemotif_table2obj.frag_length;
+      freemotif_table2obj.auto_retrograde(1);
+      freemotif_table2obj.renderfreemotif();
+      freemotif_table2obj.pos_time=freemotif_table2obj.pos_time+freemotif_table2obj.frag_length;
+      freemotif_table2obj.auto_retrograde(0);
+      freemotif_table2obj.renderfreemotif();
+
+      freemotif_table3obj.inst_index=2;
+      freemotif_table3obj.scale_time=4;
+      freemotif_table3obj.scale_dur=4;
+      freemotif_table3obj.frag_numnotes=freemotif_table3obj.numnotes;
+      freemotif_table3obj.diatonic_offset=-14;
+      freemotif_table3obj.pos_time=48;
+      freemotif_table3obj.renderfreemotif();
+
+      freemotif_table4obj.pos_time=48;
+      freemotif_table4obj.inst_index=3;
+      freemotif_table4obj.auto_retrograde(1);
+      freemotif_table4obj.diatonic_offset=4;
+      freemotif_table4obj.renderfreemotif();
+
+      freemotif_table4obj.pos_time=freemotif_table4obj.pos_time+freemotif_table4obj.frag_length;
+      freemotif_table4obj.auto_retrograde(0);
+      freemotif_table4obj.renderfreemotif();
+
+      freemotif_table4obj.pos_time=freemotif_table4obj.pos_time+freemotif_table4obj.frag_length;
+      freemotif_table4obj.auto_retrograde(1);
+      freemotif_table4obj.renderfreemotif();
 }
 
 
@@ -156,9 +208,9 @@ void retrograde_examples(){
 
       // freemotif_table1obj = new freeMotif_table(simpleforms_1_table);
       // freemotif_table1obj = new freeMotif_table(simpleforms_2_table);
-      freemotif_table1obj = new freeMotif_table(arch1_mm_table);
+      // freemotif_table1obj = new freeMotif_table(arch1_mm_table);
       // // freemotif_table1obj = new freeMotif_table(even_ascent_mm_table);
-      // freemotif_table1obj = new freeMotif_table(fanfare_table);
+      freemotif_table1obj = new freeMotif_table(fanfare_table);
 
       freemotif_table1obj.duration_retrograde=0;
       freemotif_table1obj.position_retrograde=0;
@@ -235,13 +287,13 @@ void fragmentation_examples(){
 
       freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
       freemotif_table1obj.frag_index=0;
-      freemotif_table1obj.frag_length=freemotif_table1obj.frag_length-1;
+      freemotif_table1obj.frag_numnotes=freemotif_table1obj.frag_numnotes-1;
       freemotif_table1obj.motif_name="ignore last note";
       freemotif_table1obj.renderfreemotif();
 
       freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
       freemotif_table1obj.frag_index=0;
-      freemotif_table1obj.frag_length=freemotif_table1obj.frag_length-1;
+      freemotif_table1obj.frag_numnotes=freemotif_table1obj.frag_numnotes-1;
       freemotif_table1obj.motif_name="ignore last 2 notes";
       freemotif_table1obj.renderfreemotif();
 }
@@ -291,7 +343,7 @@ void concat_examples(){
 
       freemotif_table1obj.pos_time=16;
       freemotif_table1obj.motif_name="remove last note";
-      freemotif_table1obj.frag_length=freemotif_table1obj.frag_length-1;
+      freemotif_table1obj.frag_numnotes=freemotif_table1obj.frag_numnotes-1;
       freemotif_table1obj.render_frag();
       freemotif_table1obj.renderfreemotif();
 

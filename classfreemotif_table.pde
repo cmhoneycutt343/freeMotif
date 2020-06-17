@@ -46,7 +46,9 @@ float velocity_retrograde=0;
 // Fragmentation: index of first note fragment
 int frag_index=0;
 // Fragmentation: number of notes in frag
-int frag_length;
+int frag_numnotes;
+// Fragmentation: fragment length in time
+float frag_length;
 // index of instrument
 int inst_index=0;
 
@@ -93,10 +95,10 @@ freeMotif_table(Table classinputmotif_table){
         notearray_table.sort("time_pos");
 
         numnotes=notearray_table.getRowCount();
-        frag_length=numnotes;
+        frag_numnotes=numnotes;
 
         //calculate motif length ()
-        motif_length=notearray_table.getFloat((frag_length-1),"time_pos")+notearray_table.getFloat((frag_length-1),"duration");
+        motif_length=notearray_table.getFloat((frag_numnotes-1),"time_pos")+notearray_table.getFloat((frag_numnotes-1),"duration");
 
         // println(motif_name,"motif_length");
         // println(motif_length);
@@ -116,7 +118,7 @@ void renderfreemotif(){
         notearray_table.sort("time_pos");
 
         //scan all notes in fragment
-        for(int notescan_abspos=frag_index; notescan_abspos<frag_length; notescan_abspos++) {
+        for(int notescan_abspos=frag_index; notescan_abspos<frag_numnotes; notescan_abspos++) {
 
 
                 /*-------generate note rendering values--------*/
@@ -178,15 +180,22 @@ void renderfreemotif(){
         println("***********");
         print("motif_name ");
         println(motif_name);
-        print("frag_length");
-        println(frag_length);
-        print_mm();
+        // print("frag_numnotes");
+        // println(frag_numnotes);
+        //print_mm();
         /******************/
 }
 
 //called generate output / post property transform values
 void generate_noterender_vals(int notescan_abspos_fcnin){
+
+      //calculate fragment length in time
+      frag_length=(notearray_table.getFloat((frag_numnotes-1),"time_pos")+notearray_table.getFloat((frag_numnotes-1),"duration"))-notearray_table.getFloat((frag_index),"time_pos");
+
+
       noterenderindex = notescan_abspos_fcnin;
+
+
 
       /*-------start retrograde-------*/
       //factor in 'tonal_retrograde'
@@ -194,7 +203,7 @@ void generate_noterender_vals(int notescan_abspos_fcnin){
       if(tonal_retrograde==0) {
               tablepitch_index = noterenderindex;
       } else {
-              tablepitch_index = frag_length-1-noterenderindex;
+              tablepitch_index = frag_numnotes-1-noterenderindex;
       }
 
       //factor in 'duration-retrograde'
@@ -202,12 +211,17 @@ void generate_noterender_vals(int notescan_abspos_fcnin){
       if(duration_retrograde==0) {
               tabledur_index = noterenderindex;
       } else {
-              tabledur_index = frag_length-1-noterenderindex;
+              tabledur_index = frag_numnotes-1-noterenderindex;
       }
 
       //factor in 'time position_retrograde' (with fragmentation);
       float tablepos_fromindex;
+      //fragmentation offset; time value of "first" element in fragment?
+
       float fragmentationoffset = notearray_table.getFloat(frag_index, "time_pos");
+      // float fragmentationoffset = 0;
+
+      //position retrograde not rendering correctly
       if(position_retrograde==0) {
               tablepos_fromindex = notearray_table.getFloat(noterenderindex, "time_pos");
       } else {
@@ -215,7 +229,17 @@ void generate_noterender_vals(int notescan_abspos_fcnin){
               {
                       tablepos_fromindex = 0;
               } else{
-                      tablepos_fromindex = motif_length-notearray_table.getFloat((frag_length-noterenderindex)%frag_length, "time_pos");
+                      tablepos_fromindex = motif_length-notearray_table.getFloat((frag_numnotes-noterenderindex)%frag_numnotes, "time_pos");
+                      //
+                          fragmentationoffset = motif_length-frag_length;
+
+
+                      // println("in position_retrograde");
+                      // println(motif_name);
+                      // print("tablepos_fromindex: ");
+                      // println(tablepos_fromindex);
+                      // print("noterenderindex: ");
+                      // println(noterenderindex);
               }
       }
 
@@ -224,7 +248,7 @@ void generate_noterender_vals(int notescan_abspos_fcnin){
       if(velocity_retrograde==0) {
               tablevel_index = noterenderindex;
       } else {
-              tablevel_index = frag_length-1-noterenderindex;
+              tablevel_index = frag_numnotes-1-noterenderindex;
       }
 
       // pitch property transformations
@@ -243,6 +267,14 @@ void generate_noterender_vals(int notescan_abspos_fcnin){
       output_timb2 = notearray_table.getFloat(noterenderindex, "timbre2");
       /*-------start retrograde-------*/
 }
+
+void auto_retrograde(int bool_switch){
+  velocity_retrograde=bool_switch;
+  position_retrograde=bool_switch;
+  duration_retrograde=bool_switch;
+  tonal_retrograde=bool_switch;
+}
+
 
 //called to remove all properties
 void reset_properties(){
@@ -272,7 +304,7 @@ void reset_properties(){
         // Fragmentation: index of first note fragment
         frag_index=0;
         // Fragmentation: number of notes in frag
-        frag_length=numnotes;
+        frag_numnotes=numnotes;
         // index of instrument
 }
 
@@ -280,7 +312,7 @@ void render_properties(){
     render_frag();
 
     //scan all notes in fragment
-    for(int notescan_abspos=frag_index; notescan_abspos<frag_length; notescan_abspos++){
+    for(int notescan_abspos=frag_index; notescan_abspos<frag_numnotes; notescan_abspos++){
         //generate note data
         generate_noterender_vals(notescan_abspos);
 
@@ -296,7 +328,7 @@ void render_properties(){
         notearray_table.setFloat(notescan_abspos,"duration",output_dur);
 
         // output_vel = notearray_table.getFloat(tablevel_index, "velocity");
-        notearray_table.setFloat(notescan_abspos,"time_pos",relative_pos);
+        notearray_table.setFloat(notescan_abspos,"velocity",output_vel);
 
         // output_timb1 = notearray_table.getFloat(noterenderindex, "timbre1");
         notearray_table.setFloat(notescan_abspos,"timbre1",output_timb1);
@@ -355,9 +387,9 @@ void concat_mm(Table appendtable){
         // //print_mm();
 
         numnotes=notearray_table.getRowCount();
-        frag_length=numnotes;
-        motif_length=notearray_table.getFloat((frag_length-1),"time_pos")+notearray_table.getFloat((frag_length-1),"duration");
-        println(frag_length);
+        frag_numnotes=numnotes;
+        motif_length=notearray_table.getFloat((frag_numnotes-1),"time_pos")+notearray_table.getFloat((frag_numnotes-1),"duration");
+        println(frag_numnotes);
 
         notearray_table.sort("time_pos");
 }
@@ -412,9 +444,9 @@ void prepend_mm(Table appendtable){
         //sort table
 
         numnotes=notearray_table.getRowCount();
-        frag_length=numnotes;
-        motif_length=notearray_table.getFloat((frag_length-1),"time_pos")+notearray_table.getFloat((frag_length-1),"duration");
-        println(frag_length);
+        frag_numnotes=numnotes;
+        motif_length=notearray_table.getFloat((frag_numnotes-1),"time_pos")+notearray_table.getFloat((frag_numnotes-1),"duration");
+        println(frag_numnotes);
 
         //notearray_table.setFloat(9,"time_pos",0.5);
         notearray_table.sort("time_pos");
@@ -437,7 +469,7 @@ void render_frag(){
         float frag_time_offset = notearray_table.getFloat(frag_index,"time_pos");
 
         //
-        for(int notescan_abspos=frag_index; notescan_abspos<frag_length; notescan_abspos++) {
+        for(int notescan_abspos=frag_index; notescan_abspos<frag_numnotes; notescan_abspos++) {
                 TableRow row = notearray_table.getRow(notescan_abspos);
                 row.setFloat("time_pos",(row.getFloat("time_pos")-frag_time_offset));
                 des_frag_table.addRow(row);
@@ -454,8 +486,8 @@ void render_frag(){
 
         numnotes=notearray_table.getRowCount();
         frag_index=0;
-        frag_length=numnotes;
-        println(frag_length);
+        frag_numnotes=numnotes;
+        println(frag_numnotes);
 
         notearray_table.sort("time_pos");
 }
