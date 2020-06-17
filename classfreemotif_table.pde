@@ -126,7 +126,7 @@ void renderfreemotif(){
 
 
                 /*-------start gui generation--------*/
-                if(notescan_abspos==frag_index)
+                if((notescan_abspos==frag_index)&&(motif_name!="default"))
                 {
                         addGUIcom(output_pitch,output_pos,inst_index,motif_name);
                 }

@@ -76,11 +76,12 @@ void fugue_examples(){
       freemotif_table1obj.renderfreemotif();
 
       /****round 2****/
-      freemotif_table1obj.motif_name="Embellishment 1";
+      freemotif_table1obj.motif_name="default";
+      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+freemotif_table1obj.frag_length;
       freemotif_table1obj.auto_retrograde(1);
-      freemotif_table1obj.pos_time=16;
       freemotif_table1obj.renderfreemotif();
 
+      freemotif_table2obj.motif_name="-1 Oct round";
       freemotif_table2obj.inst_index=1;
       freemotif_table2obj.frag_numnotes=33;
       freemotif_table2obj.diatonic_offset=-7;
@@ -88,14 +89,15 @@ void fugue_examples(){
       freemotif_table2obj.renderfreemotif();
 
       /****round 3****/
-      freemotif_table1obj.motif_name="Embellishment 1";
+      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+freemotif_table1obj.frag_length;
       freemotif_table1obj.auto_retrograde(0);
-      freemotif_table1obj.pos_time=32;
       freemotif_table1obj.renderfreemotif();
 
+      freemotif_table2obj.motif_name="default";
       freemotif_table2obj.pos_time=32;
       freemotif_table2obj.renderfreemotif();
 
+      freemotif_table3obj.motif_name="-2 Oct; Scale time 4";
       freemotif_table3obj.inst_index=2;
       freemotif_table3obj.scale_time=4;
       freemotif_table3obj.scale_dur=4;
@@ -105,6 +107,18 @@ void fugue_examples(){
       freemotif_table3obj.renderfreemotif();
 
       /****round 4****/
+      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+freemotif_table1obj.frag_length;
+      freemotif_table1obj.auto_retrograde(1);
+      freemotif_table1obj.renderfreemotif();
+
+      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+freemotif_table1obj.frag_length;
+      freemotif_table1obj.auto_retrograde(0);
+      freemotif_table1obj.renderfreemotif();
+
+      freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+freemotif_table1obj.frag_length;
+      freemotif_table1obj.auto_retrograde(1);
+      freemotif_table1obj.renderfreemotif();
+
       freemotif_table2obj.pos_time=48;
       freemotif_table2obj.frag_numnotes=freemotif_table2obj.numnotes;
       freemotif_table2obj.renderfreemotif();
@@ -115,6 +129,7 @@ void fugue_examples(){
       freemotif_table2obj.auto_retrograde(0);
       freemotif_table2obj.renderfreemotif();
 
+      freemotif_table3obj.motif_name="default";
       freemotif_table3obj.inst_index=2;
       freemotif_table3obj.scale_time=4;
       freemotif_table3obj.scale_dur=4;
@@ -123,6 +138,7 @@ void fugue_examples(){
       freemotif_table3obj.pos_time=48;
       freemotif_table3obj.renderfreemotif();
 
+      freemotif_table4obj.motif_name="Retro; oct +1; Reveal frag Section";
       freemotif_table4obj.pos_time=48;
       freemotif_table4obj.inst_index=3;
       freemotif_table4obj.auto_retrograde(1);
