@@ -377,7 +377,7 @@ void mapping_examples(){
         //3. Full retrograde
         scoreTitle("Mapping Examples");
 
-        score.addCallback(64, 1);
+        score.addCallback(128, 1);
 
         // freemotif_table1obj = new freeMotif_table(simpleforms_1_table);
         freemotif_table1obj = new freeMotif_table(simpleforms_2_table);
@@ -386,10 +386,12 @@ void mapping_examples(){
         // freemotif_table1obj = new freeMotif_table(fanfare_table);
 
         // freemotif_table2obj = new freeMotif_table(simpleforms_1_table);
-        freemotif_table2obj = new freeMotif_table(simpleforms_2_table);
-        // freemotif_table2obj = new freeMotif_table(arch1_mm_table);
+        // freemotif_table2obj = new freeMotif_table(simpleforms_2_table);
+        freemotif_table2obj = new freeMotif_table(arch1_mm_table);
         // freemotif_table2obj = new freeMotif_table(even_ascent_mm_table);
         // freemotif_table2obj = new freeMotif_table(fanfare_table);
+
+        freemotif_table3obj = new freeMotif_table(arch1_mm_table);
 
         freemotif_table1obj.motif_name="motif 1";
         freemotif_table1obj.scale_time=8;
@@ -409,4 +411,14 @@ void mapping_examples(){
         freemotif_table1obj.inst_index=2;
         freemotif_table1obj.pos_time=32;
         freemotif_table1obj.renderfreemotif();
+
+        freemotif_table1obj.inst_index=3;
+        freemotif_table1obj.pos_time=48;
+        freemotif_table1obj.scale_time=2;
+        freemotif_table1obj.scale_dur=2;
+        freemotif_table1obj.render_properties();
+        // freemotif_table1obj.renderfreemotif();
+        freemotif_table1obj.subdivmap_mm(freemotif_table2obj.notearray_table);
+        freemotif_table1obj.renderfreemotif();
+
 }

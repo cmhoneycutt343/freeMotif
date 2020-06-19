@@ -709,21 +709,23 @@ public void subdivmap_mm(Table input_mm){
         buffertable.addColumn("timbre1");
         buffertable.addColumn("timbre2");
 
-
         //each note (+silence to next note) of master mm becomes a 'section'
         //for each note in 'master' mm....
         for (int rowiter=0; rowiter<numnotes; rowiter++) {
               //1. calculate time width of note section (timepos[1]-timepos[0])
               if(rowiter==(0)){
-                  section_length = input_mm.getFloat((rowiter+1),"time_pos")-input_mm.getFloat((rowiter),"time_pos");
+                  section_length = notearray_table.getFloat((rowiter+1),"time_pos")-notearray_table.getFloat((rowiter),"time_pos");
               } else if (rowiter==(numnotes-1)){
-                  section_offset = input_mm.getFloat((rowiter),"time_pos")-input_mm.getFloat((rowiter-1),"time_pos")+section_offset;
-                  section_length = input_mm_length-input_mm.getFloat((rowiter),"time_pos");
+                  section_offset = notearray_table.getFloat((rowiter),"time_pos")-notearray_table.getFloat((rowiter-1),"time_pos")+section_offset;
+                  section_length = motif_length-notearray_table.getFloat((rowiter),"time_pos");
               } else {
-                  section_offset = input_mm.getFloat((rowiter),"time_pos")-input_mm.getFloat((rowiter-1),"time_pos")+section_offset;
-                  section_length = input_mm.getFloat((rowiter+1),"time_pos")-input_mm.getFloat((rowiter),"time_pos");
+                  section_offset = notearray_table.getFloat((rowiter),"time_pos")-notearray_table.getFloat((rowiter-1),"time_pos")+section_offset;
+                  section_length = notearray_table.getFloat((rowiter+1),"time_pos")-notearray_table.getFloat((rowiter),"time_pos");
               }
-              section_ratio=section_length/motif_length;
+              //how
+              section_ratio=(section_length/motif_length)*(16/input_mm_length);
+
+              //need to 'normalize' input_mm length
 
               //debugprints: section offset
               // print("rowiter:");
@@ -740,6 +742,8 @@ public void subdivmap_mm(Table input_mm){
                 //1. Scale postion (Add time shift (due to section)), and duration (to fit section)
                 float subdiv_pos_temp = input_mm.getFloat((input_mmrowiter),"time_pos")*section_ratio+section_offset;
                 float subdiv_dur_temp = input_mm.getFloat((input_mmrowiter),"duration")*section_ratio;
+
+
                 //3. Add Diatonic Degree
                 float subdiv_dia_temp = input_mm.getFloat((input_mmrowiter),"pitch")+notearray_table.getFloat((rowiter),"pitch");
                 //4. Add to buffertable
@@ -756,7 +760,15 @@ public void subdivmap_mm(Table input_mm){
               }
 
         }
-        notearray_table = buffertable;
+
+        notearray_table.clearRows();
+
+        for (int rowiter=0; rowiter<(numnotes*input_mm_numnotes); rowiter++)
+        {
+            TableRow row = buffertable.getRow(rowiter);
+            notearray_table.addRow(row);
+        }
+        //notearray_table = buffertable;
 
         //calcuate new mm properties
         numnotes=notearray_table.getRowCount();
@@ -1268,7 +1280,7 @@ public void mapping_examples(){
         //3. Full retrograde
         scoreTitle("Mapping Examples");
 
-        score.addCallback(64, 1);
+        score.addCallback(128, 1);
 
         // freemotif_table1obj = new freeMotif_table(simpleforms_1_table);
         freemotif_table1obj = new freeMotif_table(simpleforms_2_table);
@@ -1277,10 +1289,12 @@ public void mapping_examples(){
         // freemotif_table1obj = new freeMotif_table(fanfare_table);
 
         // freemotif_table2obj = new freeMotif_table(simpleforms_1_table);
-        freemotif_table2obj = new freeMotif_table(simpleforms_2_table);
-        // freemotif_table2obj = new freeMotif_table(arch1_mm_table);
+        // freemotif_table2obj = new freeMotif_table(simpleforms_2_table);
+        freemotif_table2obj = new freeMotif_table(arch1_mm_table);
         // freemotif_table2obj = new freeMotif_table(even_ascent_mm_table);
         // freemotif_table2obj = new freeMotif_table(fanfare_table);
+
+        freemotif_table3obj = new freeMotif_table(arch1_mm_table);
 
         freemotif_table1obj.motif_name="motif 1";
         freemotif_table1obj.scale_time=8;
@@ -1300,6 +1314,16 @@ public void mapping_examples(){
         freemotif_table1obj.inst_index=2;
         freemotif_table1obj.pos_time=32;
         freemotif_table1obj.renderfreemotif();
+
+        freemotif_table1obj.inst_index=3;
+        freemotif_table1obj.pos_time=48;
+        freemotif_table1obj.scale_time=2;
+        freemotif_table1obj.scale_dur=2;
+        freemotif_table1obj.render_properties();
+        // freemotif_table1obj.renderfreemotif();
+        freemotif_table1obj.subdivmap_mm(freemotif_table2obj.notearray_table);
+        freemotif_table1obj.renderfreemotif();
+
 }
 /*---GUI ZOOM SETTINGS--*/
 int zoom_notelow=24;
@@ -1307,7 +1331,7 @@ int zoom_notehigh=96;
 
 //by beat eg: <0 = display includes measure 1; 3 = measure includes measure 4>
 float zoom_starttime=0;
-float zoom_stoptime=95;
+float zoom_stoptime=63;
 
 // List of Instruments at http://explodingart.com/soundcipher/doc/arb/soundcipher/constants/ProgramChanges.html
 float[] inst_cata = {score.PIANO,score.PIANO,score.PIANO,score.PIANO};

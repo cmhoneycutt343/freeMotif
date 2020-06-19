@@ -474,21 +474,23 @@ void subdivmap_mm(Table input_mm){
         buffertable.addColumn("timbre1");
         buffertable.addColumn("timbre2");
 
-
         //each note (+silence to next note) of master mm becomes a 'section'
         //for each note in 'master' mm....
         for (int rowiter=0; rowiter<numnotes; rowiter++) {
               //1. calculate time width of note section (timepos[1]-timepos[0])
               if(rowiter==(0)){
-                  section_length = input_mm.getFloat((rowiter+1),"time_pos")-input_mm.getFloat((rowiter),"time_pos");
+                  section_length = notearray_table.getFloat((rowiter+1),"time_pos")-notearray_table.getFloat((rowiter),"time_pos");
               } else if (rowiter==(numnotes-1)){
-                  section_offset = input_mm.getFloat((rowiter),"time_pos")-input_mm.getFloat((rowiter-1),"time_pos")+section_offset;
-                  section_length = input_mm_length-input_mm.getFloat((rowiter),"time_pos");
+                  section_offset = notearray_table.getFloat((rowiter),"time_pos")-notearray_table.getFloat((rowiter-1),"time_pos")+section_offset;
+                  section_length = motif_length-notearray_table.getFloat((rowiter),"time_pos");
               } else {
-                  section_offset = input_mm.getFloat((rowiter),"time_pos")-input_mm.getFloat((rowiter-1),"time_pos")+section_offset;
-                  section_length = input_mm.getFloat((rowiter+1),"time_pos")-input_mm.getFloat((rowiter),"time_pos");
+                  section_offset = notearray_table.getFloat((rowiter),"time_pos")-notearray_table.getFloat((rowiter-1),"time_pos")+section_offset;
+                  section_length = notearray_table.getFloat((rowiter+1),"time_pos")-notearray_table.getFloat((rowiter),"time_pos");
               }
-              section_ratio=section_length/motif_length;
+              //how
+              section_ratio=(section_length/motif_length)*(16/input_mm_length);
+
+              //need to 'normalize' input_mm length
 
               //debugprints: section offset
               // print("rowiter:");
@@ -505,6 +507,8 @@ void subdivmap_mm(Table input_mm){
                 //1. Scale postion (Add time shift (due to section)), and duration (to fit section)
                 float subdiv_pos_temp = input_mm.getFloat((input_mmrowiter),"time_pos")*section_ratio+section_offset;
                 float subdiv_dur_temp = input_mm.getFloat((input_mmrowiter),"duration")*section_ratio;
+
+
                 //3. Add Diatonic Degree
                 float subdiv_dia_temp = input_mm.getFloat((input_mmrowiter),"pitch")+notearray_table.getFloat((rowiter),"pitch");
                 //4. Add to buffertable
@@ -521,7 +525,15 @@ void subdivmap_mm(Table input_mm){
               }
 
         }
-        notearray_table = buffertable;
+
+        notearray_table.clearRows();
+
+        for (int rowiter=0; rowiter<(numnotes*input_mm_numnotes); rowiter++)
+        {
+            TableRow row = buffertable.getRow(rowiter);
+            notearray_table.addRow(row);
+        }
+        //notearray_table = buffertable;
 
         //calcuate new mm properties
         numnotes=notearray_table.getRowCount();
