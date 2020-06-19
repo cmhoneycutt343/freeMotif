@@ -20,5 +20,7 @@ void renderScore(){
     // retrograde_examples();
     // fragmentation_examples();
     // concat_examples();
-    fugue_examples();
+    // fugue_examples();
+    mapping_examples();
+
 }
