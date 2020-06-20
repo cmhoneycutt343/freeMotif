@@ -377,48 +377,77 @@ void mapping_examples(){
         //3. Full retrograde
         scoreTitle("Mapping Examples");
 
-        score.addCallback(128, 1);
+        score.addCallback(zoom_stoptime, 1);
 
         // freemotif_table1obj = new freeMotif_table(simpleforms_1_table);
-        freemotif_table1obj = new freeMotif_table(simpleforms_2_table);
+        // freemotif_table1obj = new freeMotif_table(simpleforms_2_table);
         // freemotif_table1obj = new freeMotif_table(arch1_mm_table);
-        // freemotif_table1obj = new freeMotif_table(even_ascent_mm_table);
+        freemotif_table1obj = new freeMotif_table(even_ascent_mm_table);
         // freemotif_table1obj = new freeMotif_table(fanfare_table);
 
         // freemotif_table2obj = new freeMotif_table(simpleforms_1_table);
         // freemotif_table2obj = new freeMotif_table(simpleforms_2_table);
-        freemotif_table2obj = new freeMotif_table(arch1_mm_table);
-        // freemotif_table2obj = new freeMotif_table(even_ascent_mm_table);
+        // freemotif_table2obj = new freeMotif_table(arch1_mm_table);
+        freemotif_table2obj = new freeMotif_table(even_ascent_mm_table);
         // freemotif_table2obj = new freeMotif_table(fanfare_table);
 
-        freemotif_table3obj = new freeMotif_table(arch1_mm_table);
-
         freemotif_table1obj.motif_name="motif 1";
-        freemotif_table1obj.scale_time=8;
-        freemotif_table1obj.scale_dur=8;
-        freemotif_table1obj.render_properties();
+        freemotif_table1obj.tonal_retrograde=1;
+        freemotif_table1obj.scale_time=.5;
+        freemotif_table1obj.scale_dur=.5;
+        // freemotif_table1obj.render_properties();
         freemotif_table1obj.renderfreemotif();
 
         freemotif_table2obj.motif_name="motif 2";
-        freemotif_table2obj.scale_time=8;
-        freemotif_table2obj.scale_dur=8;
         freemotif_table2obj.inst_index=1;
+        freemotif_table2obj.scale_time=1;
+        freemotif_table2obj.scale_dur=1;
         freemotif_table2obj.render_properties();
-        freemotif_table2obj.pos_time=16;
+        freemotif_table2obj.pos_time=2;
         freemotif_table2obj.renderfreemotif();
 
-        freemotif_table1obj.subdivmap_mm(freemotif_table2obj.notearray_table);
-        freemotif_table1obj.inst_index=2;
-        freemotif_table1obj.pos_time=32;
-        freemotif_table1obj.renderfreemotif();
-
-        freemotif_table1obj.inst_index=3;
-        freemotif_table1obj.pos_time=48;
+        freemotif_table1obj.motif_name="motif 2 onto-> 1";
         freemotif_table1obj.scale_time=2;
         freemotif_table1obj.scale_dur=2;
+        freemotif_table1obj.inst_index=2;
+        freemotif_table1obj.pos_time=4;
         freemotif_table1obj.render_properties();
-        // freemotif_table1obj.renderfreemotif();
         freemotif_table1obj.subdivmap_mm(freemotif_table2obj.notearray_table);
         freemotif_table1obj.renderfreemotif();
+
+
+        freemotif_table1obj.motif_name="iter again";
+        freemotif_table1obj.scale_time=4;
+        freemotif_table1obj.scale_dur=4;
+        freemotif_table1obj.inst_index=3;
+        freemotif_table1obj.pos_time=8;
+        freemotif_table1obj.render_properties();
+        freemotif_table1obj.subdivmap_mm(freemotif_table2obj.notearray_table);
+        //freemotif_table1obj.subdivmap_mm(freemotif_table2obj.notearray_table);
+        freemotif_table1obj.renderfreemotif();
+
+        freemotif_table1obj.pos_time=40;
+        freemotif_table1obj.subdivmap_mm(freemotif_table2obj.notearray_table);
+        freemotif_table1obj.renderfreemotif();
+
+        // freemotif_table1obj.motif_name="motif 2 onto-> 1";
+        // freemotif_table1obj.scale_time=8;
+        // freemotif_table1obj.scale_dur=8;
+        // freemotif_table1obj.inst_index=3;
+        // freemotif_table1obj.pos_time=8;
+        // freemotif_table1obj.render_properties();
+        // freemotif_table1obj.subdivmap_mm(freemotif_table2obj.notearray_table);
+        // freemotif_table1obj.subdivmap_mm(freemotif_table2obj.notearray_table);
+        // freemotif_table1obj.renderfreemotif();
+
+
+        // freemotif_table1obj.motif_name="again (with scale)";
+        // freemotif_table1obj.inst_index=3;
+        // freemotif_table1obj.pos_time=48;
+        // freemotif_table1obj.scale_dur=1;
+        // freemotif_table1obj.render_properties();
+        // // freemotif_table1obj.renderfreemotif();
+        // freemotif_table1obj.subdivmap_mm(freemotif_table2obj.notearray_table);
+        // freemotif_table1obj.renderfreemotif();
 
 }

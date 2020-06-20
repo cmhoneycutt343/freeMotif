@@ -253,6 +253,21 @@ void generate_noterender_vals(int notescan_abspos_fcnin){
 
       // pitch property transformations
       diatonic_degree = (notearray_table.getFloat(tablepitch_index, "pitch"))*(scale_diatonic)+diatonic_offset;
+      //debug print
+      if(motif_name=="motif 1") {
+        //println("tablepitch_index = frag_numnotes-1-noterenderindex;");
+        print("tablepitch_index: ");
+        println(tablepitch_index);
+        // print("frag_numnotes: ");
+        // println(frag_numnotes);
+        print("noterenderindex: ");
+        println(noterenderindex);
+
+        print("diatonic_degree: ");
+        println(diatonic_degree);
+        println("");
+      }
+
       //score pitch (calculate chromatic; apply tonic)
       output_pitch = return_diaton(diatonic_degree,pos_tonic);
 
@@ -488,25 +503,38 @@ void subdivmap_mm(Table input_mm){
                   section_length = notearray_table.getFloat((rowiter+1),"time_pos")-notearray_table.getFloat((rowiter),"time_pos");
               }
               //how
-              section_ratio=(section_length/motif_length)*(16/input_mm_length);
+              section_length=section_length;
+
+              section_ratio=(section_length/motif_length);
+
+              //debugprints: section offset
+              // if(motif_name=="motif 2 onto-> 1")
+              // {
+              //   print("motif_name:");
+              //   println(motif_name);
+              //   print("input_mm_length:");
+              //   println(input_mm_length);
+              //   print("rowiter:");
+              //   println(rowiter);
+              //   print("section_offset:");
+              //   println(section_offset);
+              //   print("section_length:");
+              //   println(section_length);
+              //   print("section_ratio:");
+              //   println(section_ratio);
+              // }
 
               //need to 'normalize' input_mm length
 
-              //debugprints: section offset
-              // print("rowiter:");
-              // println(rowiter);
-              // print("section_offset:");
-              // println(section_offset);
-              // print("section_length:");
-              // println(section_length);
-              // print("section_ratio:");
-              // println(section_ratio);
+
 
               //2. for each note in input_mm
               for (int input_mmrowiter=0; input_mmrowiter<input_mm_numnotes; input_mmrowiter++) {
                 //1. Scale postion (Add time shift (due to section)), and duration (to fit section)
-                float subdiv_pos_temp = input_mm.getFloat((input_mmrowiter),"time_pos")*section_ratio+section_offset;
-                float subdiv_dur_temp = input_mm.getFloat((input_mmrowiter),"duration")*section_ratio;
+                //debug: section offset seems correct; scaling of both duration and timepos relative to this is wrong; seems like section_ratio is wrong
+                //
+                float subdiv_pos_temp = input_mm.getFloat((input_mmrowiter),"time_pos")*section_ratio*motif_length/input_mm_length+section_offset;
+                float subdiv_dur_temp = input_mm.getFloat((input_mmrowiter),"duration")*section_ratio*motif_length/input_mm_length;
 
 
                 //3. Add Diatonic Degree
