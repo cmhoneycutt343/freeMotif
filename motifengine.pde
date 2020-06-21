@@ -39,6 +39,7 @@ void setup() {
   score.tempo(score_bpm);
   score.repeat(5);
   score.play();
+  score.writeMidiFile("/Users/charleshoneycutt/Desktop/freemotiftemp.mid");
 }
 
 void draw() {

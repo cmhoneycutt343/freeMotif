@@ -325,6 +325,15 @@ void reset_properties(){
 void render_properties(){
     render_frag();
 
+    Table buffertable = new Table();
+
+    buffertable.addColumn("pitch");
+    buffertable.addColumn("time_pos", Table.FLOAT);
+    buffertable.addColumn("duration");
+    buffertable.addColumn("velocity");
+    buffertable.addColumn("timbre1");
+    buffertable.addColumn("timbre2");
+
     //scan all notes in fragment
     for(int notescan_abspos=frag_index; notescan_abspos<frag_numnotes; notescan_abspos++){
         //generate note data
@@ -332,24 +341,34 @@ void render_properties(){
 
         // pitch property transformations
         // diatonic_degree = (notearray_table.getFloat(tablepitch_index, "pitch"))*(scale_diatonic)+diatonic_offset;
-        notearray_table.setFloat(notescan_abspos,"pitch",diatonic_degree);
+        buffertable.setFloat(notescan_abspos,"pitch",diatonic_degree);
 
         // time property transformations
         // relative_pos = tablepos_fromindex*scale_time;
-        notearray_table.setFloat(notescan_abspos,"time_pos",relative_pos);
+        buffertable.setFloat(notescan_abspos,"time_pos",relative_pos);
 
         // output_dur = notearray_table.getFloat(tabledur_index, "duration")*scale_dur;
-        notearray_table.setFloat(notescan_abspos,"duration",output_dur);
+        buffertable.setFloat(notescan_abspos,"duration",output_dur);
 
         // output_vel = notearray_table.getFloat(tablevel_index, "velocity");
-        notearray_table.setFloat(notescan_abspos,"velocity",output_vel);
+        buffertable.setFloat(notescan_abspos,"velocity",output_vel);
 
         // output_timb1 = notearray_table.getFloat(noterenderindex, "timbre1");
-        notearray_table.setFloat(notescan_abspos,"timbre1",output_timb1);
+        buffertable.setFloat(notescan_abspos,"timbre1",output_timb1);
 
         // output_timb2 = notearray_table.getFloat(noterenderindex, "timbre2");
-        notearray_table.setFloat(notescan_abspos,"timbre2",output_timb2);
+        buffertable.setFloat(notescan_abspos,"timbre2",output_timb2);
     }
+
+    notearray_table.clearRows();
+
+    for(int notescan_abspos=frag_index; notescan_abspos<frag_numnotes; notescan_abspos++){
+          TableRow row = buffertable.getRow(notescan_abspos);
+
+          notearray_table.addRow(row);
+    }
+
+    notearray_table.sort("time_pos");
 
     //calculate new motif length
     motif_length=notearray_table.getFloat((frag_numnotes-1),"time_pos")+notearray_table.getFloat((frag_numnotes-1),"duration");

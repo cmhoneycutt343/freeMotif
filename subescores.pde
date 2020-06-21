@@ -385,17 +385,17 @@ void mapping_examples(){
         freemotif_table1obj = new freeMotif_table(even_ascent_mm_table);
         // freemotif_table1obj = new freeMotif_table(fanfare_table);
 
-        // freemotif_table2obj = new freeMotif_table(simpleforms_1_table);
+        freemotif_table2obj = new freeMotif_table(simpleforms_1_table);
         // freemotif_table2obj = new freeMotif_table(simpleforms_2_table);
         // freemotif_table2obj = new freeMotif_table(arch1_mm_table);
-        freemotif_table2obj = new freeMotif_table(even_ascent_mm_table);
+        // freemotif_table2obj = new freeMotif_table(even_ascent_mm_table);
         // freemotif_table2obj = new freeMotif_table(fanfare_table);
 
         freemotif_table1obj.motif_name="motif 1";
         freemotif_table1obj.tonal_retrograde=1;
         freemotif_table1obj.scale_time=.5;
         freemotif_table1obj.scale_dur=.5;
-        // freemotif_table1obj.render_properties();
+        freemotif_table1obj.render_properties();
         freemotif_table1obj.renderfreemotif();
 
         freemotif_table2obj.motif_name="motif 2";
