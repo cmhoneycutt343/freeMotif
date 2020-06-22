@@ -21,7 +21,7 @@ Table notearray_table;
 // motif position (for iterations relative to first iteration)
 float pos_time=0;
 // MIDI note Tonic index (60= Middle C)
-float pos_tonic=59;
+float pos_tonic=60;
 // Diatonic Offset to shift motif up and down within scale
 float diatonic_offset=0;
 // motif length in time (not number of notes)?

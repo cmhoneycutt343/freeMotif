@@ -35,7 +35,7 @@ freeMotif_table freemotif_table4obj;
 // score length in measures
 int score_length=16;
 // score bpm
-int score_bpm=100;
+int score_bpm=30;
 
 int global_time_render_offset=0;
 
@@ -257,7 +257,7 @@ Table notearray_table;
 // motif position (for iterations relative to first iteration)
 float pos_time=0;
 // MIDI note Tonic index (60= Middle C)
-float pos_tonic=59;
+float pos_tonic=60;
 // Diatonic Offset to shift motif up and down within scale
 float diatonic_offset=0;
 // motif length in time (not number of notes)?
@@ -940,6 +940,8 @@ Table fanfare_table;
 
 Table fugue_theme_mm_table;
 
+Table even_arch_mm_table;
+
 public void loadMetamotifs(){
       simpleforms_1_table = loadTable("simpleforms_1.csv", "header");
       simpleforms_2_table = loadTable("simpleforms_2.csv", "header");
@@ -948,18 +950,19 @@ public void loadMetamotifs(){
       fanfare_table = loadTable("fanfare.csv","header");
 
       fugue_theme_mm_table = loadTable("fugue_theme_mm.csv","header");
+      even_arch_mm_table = loadTable("even_arch_mm.csv","header");
 }
 /*---GUI ZOOM SETTINGS--*/
 int zoom_notelow=24;
-int zoom_notehigh=127;
+int zoom_notehigh=100;
 
 //by beat eg: <0 = display includes measure 1; 3 = measure includes measure 4>
 float zoom_starttime=0;
-float zoom_stoptime=15;
+float zoom_stoptime=31;
 
 
 // List of Instruments at http://explodingart.com/soundcipher/doc/arb/soundcipher/constants/ProgramChanges.html
-float[] inst_cata = {score.PIANO,score.PIANO,score.PIANO,score.PIANO};
+float[] inst_cata = {score.PIANO,score.PIANO,score.PIANO,score.PIANO,score.PIANO};
 
 public void globalscoresetup(){
       setcurrentkey(0);
@@ -973,8 +976,10 @@ public void renderScore(){
     // fragmentation_examples();
     // concat_examples();
     // fugue_examples();
-    mapping_examples();
-
+    //mapping_examples();
+    //mapping_examples_a();
+    fractal_motif();
+    // ascent_mapping_examples();
 }
 public void basics_examples(){
         //retrograde function tester
@@ -1355,7 +1360,98 @@ public void mapping_examples(){
         //3. Full retrograde
         scoreTitle("Mapping Examples");
 
-        score.addCallback(zoom_stoptime, 1);
+        setcurrentkey(0);
+
+        score.addCallback(zoom_stoptime+1, 1);
+
+        // freemotif_table1obj = new freeMotif_table(simpleforms_1_table);
+        // freemotif_table1obj = new freeMotif_table(simpleforms_2_table);
+        freemotif_table1obj = new freeMotif_table(arch1_mm_table);
+        // freemotif_table1obj = new freeMotif_table(even_arch_mm_table);
+        // freemotif_table1obj = new freeMotif_table(even_ascent_mm_table);
+        // freemotif_table1obj = new freeMotif_table(fanfare_table);
+
+        // freemotif_table2obj = new freeMotif_table(simpleforms_1_table);
+        // freemotif_table2obj = new freeMotif_table(simpleforms_2_table);
+        // freemotif_table2obj = new freeMotif_table(arch1_mm_table);
+        freemotif_table2obj = new freeMotif_table(even_arch_mm_table);
+        // freemotif_table2obj = new freeMotif_table(even_ascent_mm_table);
+        // freemotif_table2obj = new freeMotif_table(fanfare_table);
+
+        freemotif_table1obj.motif_name="motif 1";
+        //freemotif_table1obj.tonal_retrograde=0;
+        // freemotif_table1obj.scale_time=.5;
+        // freemotif_table1obj.scale_dur=.5;
+        // freemotif_table1obj.frag_numnotes=4;
+        //freemotif_table1obj.render_properties();
+        freemotif_table1obj.renderfreemotif();
+
+        freemotif_table2obj.motif_name="motif 2";
+        freemotif_table2obj.scale_time=.5f;
+        freemotif_table2obj.scale_dur=.5f;
+        freemotif_table2obj.inst_index=1;
+        freemotif_table2obj.render_properties();
+        freemotif_table2obj.pos_time=2;
+        freemotif_table2obj.renderfreemotif();
+
+        freemotif_table1obj.motif_name="motif 2 onto-> 1";
+        freemotif_table1obj.scale_time=2;
+        freemotif_table1obj.scale_dur=2;
+        freemotif_table1obj.inst_index=2;
+        freemotif_table1obj.pos_time=4;
+        freemotif_table1obj.render_properties();
+        freemotif_table1obj.subdivmap_mm(freemotif_table2obj.notearray_table);
+        freemotif_table1obj.renderfreemotif();
+
+
+        freemotif_table1obj.motif_name="iter again";
+        freemotif_table1obj.scale_time=2;
+        freemotif_table1obj.scale_dur=2;
+        freemotif_table1obj.inst_index=3;
+        freemotif_table1obj.pos_time=8;
+        freemotif_table1obj.render_properties();
+        freemotif_table1obj.subdivmap_mm(freemotif_table2obj.notearray_table);
+        //freemotif_table1obj.subdivmap_mm(freemotif_table2obj.notearray_table);
+        freemotif_table1obj.renderfreemotif();
+        // //
+        freemotif_table1obj.pos_time=16;
+        freemotif_table1obj.scale_time=1;
+        freemotif_table1obj.scale_dur=1;
+        freemotif_table1obj.inst_index=2;
+        freemotif_table1obj.subdivmap_mm(freemotif_table2obj.notearray_table);
+        freemotif_table1obj.renderfreemotif();
+
+        // freemotif_table1obj.motif_name="motif 2 onto-> 1";
+        // freemotif_table1obj.scale_time=8;
+        // freemotif_table1obj.scale_dur=8;
+        // freemotif_table1obj.inst_index=3;
+        // freemotif_table1obj.pos_time=8;
+        // freemotif_table1obj.render_properties();
+        // freemotif_table1obj.subdivmap_mm(freemotif_table2obj.notearray_table);
+        // freemotif_table1obj.subdivmap_mm(freemotif_table2obj.notearray_table);
+        // freemotif_table1obj.renderfreemotif();
+
+
+        // freemotif_table1obj.motif_name="again (with scale)";
+        // freemotif_table1obj.inst_index=3;
+        // freemotif_table1obj.pos_time=48;
+        // freemotif_table1obj.scale_dur=1;
+        // freemotif_table1obj.render_properties();
+        // // freemotif_table1obj.renderfreemotif();
+        // freemotif_table1obj.subdivmap_mm(freemotif_table2obj.notearray_table);
+        // freemotif_table1obj.renderfreemotif();
+
+}
+
+public void mapping_examples_a(){
+        //retrograde function tester
+        //0. Dry
+        //1. Tonal retrograde
+        //2. Rhythmic retrograde
+        //3. Full retrograde
+        scoreTitle("Mapping Examples");
+
+        score.addCallback(zoom_stoptime+1, 1);
 
         // freemotif_table1obj = new freeMotif_table(simpleforms_1_table);
         // freemotif_table1obj = new freeMotif_table(simpleforms_2_table);
@@ -1363,14 +1459,14 @@ public void mapping_examples(){
         freemotif_table1obj = new freeMotif_table(even_ascent_mm_table);
         // freemotif_table1obj = new freeMotif_table(fanfare_table);
 
-        freemotif_table2obj = new freeMotif_table(simpleforms_1_table);
+        // freemotif_table2obj = new freeMotif_table(simpleforms_1_table);
         // freemotif_table2obj = new freeMotif_table(simpleforms_2_table);
-        // freemotif_table2obj = new freeMotif_table(arch1_mm_table);
+        freemotif_table2obj = new freeMotif_table(arch1_mm_table);
         // freemotif_table2obj = new freeMotif_table(even_ascent_mm_table);
         // freemotif_table2obj = new freeMotif_table(fanfare_table);
 
         freemotif_table1obj.motif_name="motif 1";
-        freemotif_table1obj.tonal_retrograde=1;
+        freemotif_table1obj.tonal_retrograde=0;
         freemotif_table1obj.scale_time=.5f;
         freemotif_table1obj.scale_dur=.5f;
         freemotif_table1obj.render_properties();
@@ -1395,8 +1491,8 @@ public void mapping_examples(){
 
 
         freemotif_table1obj.motif_name="iter again";
-        freemotif_table1obj.scale_time=4;
-        freemotif_table1obj.scale_dur=4;
+        freemotif_table1obj.scale_time=2;
+        freemotif_table1obj.scale_dur=2;
         freemotif_table1obj.inst_index=3;
         freemotif_table1obj.pos_time=8;
         freemotif_table1obj.render_properties();
@@ -1404,9 +1500,253 @@ public void mapping_examples(){
         //freemotif_table1obj.subdivmap_mm(freemotif_table2obj.notearray_table);
         freemotif_table1obj.renderfreemotif();
 
-        freemotif_table1obj.pos_time=40;
+        freemotif_table1obj.pos_time=16;
+        freemotif_table1obj.scale_time=4;
+        freemotif_table1obj.scale_dur=4;
+        freemotif_table1obj.inst_index=2;
         freemotif_table1obj.subdivmap_mm(freemotif_table2obj.notearray_table);
         freemotif_table1obj.renderfreemotif();
+
+        // freemotif_table1obj.motif_name="motif 2 onto-> 1";
+        // freemotif_table1obj.scale_time=8;
+        // freemotif_table1obj.scale_dur=8;
+        // freemotif_table1obj.inst_index=3;
+        // freemotif_table1obj.pos_time=8;
+        // freemotif_table1obj.render_properties();
+        // freemotif_table1obj.subdivmap_mm(freemotif_table2obj.notearray_table);
+        // freemotif_table1obj.subdivmap_mm(freemotif_table2obj.notearray_table);
+        // freemotif_table1obj.renderfreemotif();
+
+
+        // freemotif_table1obj.motif_name="again (with scale)";
+        // freemotif_table1obj.inst_index=3;
+        // freemotif_table1obj.pos_time=48;
+        // freemotif_table1obj.scale_dur=1;
+        // freemotif_table1obj.render_properties();
+        // // freemotif_table1obj.renderfreemotif();
+        // freemotif_table1obj.subdivmap_mm(freemotif_table2obj.notearray_table);
+        // freemotif_table1obj.renderfreemotif();
+
+}
+
+public void fractal_motif(){
+        //retrograde function tester
+        //0. Dry
+        //1. Tonal retrograde
+        //2. Rhythmic retrograde
+        //3. Full retrograde
+        scoreTitle("Mapping Examples");
+
+        score.addCallback(zoom_stoptime+1, 1);
+
+        setcurrentkey(1);
+
+        freemotif_table1obj = new freeMotif_table(simpleforms_1_table);
+
+        freemotif_table2obj = new freeMotif_table(simpleforms_1_table);
+
+        //Voice 1
+        freemotif_table1obj.motif_name="motif 1";
+        freemotif_table1obj.tonal_retrograde=0;
+        freemotif_table1obj.scale_time=.5f;
+        freemotif_table1obj.scale_dur=.5f;
+        freemotif_table1obj.render_properties();
+        freemotif_table1obj.renderfreemotif();
+        freemotif_table1obj.pos_time=16;
+        freemotif_table1obj.renderfreemotif();
+
+        freemotif_table1obj.pos_time=1;
+        freemotif_table1obj.diatonic_offset=3;
+        freemotif_table1obj.renderfreemotif();
+        freemotif_table1obj.pos_time=17;
+        freemotif_table1obj.renderfreemotif();
+
+        freemotif_table1obj.pos_time=2;
+        freemotif_table1obj.diatonic_offset=-1;
+        freemotif_table1obj.renderfreemotif();
+        freemotif_table1obj.pos_time=18;
+        freemotif_table1obj.renderfreemotif();
+
+        freemotif_table1obj.pos_time=3;
+        freemotif_table1obj.diatonic_offset=3;
+        freemotif_table1obj.renderfreemotif();
+        freemotif_table1obj.pos_time=19;
+        freemotif_table1obj.renderfreemotif();
+
+        //Voice 2
+        for(int i=0; i<freemotif_table2obj.notearray_table.getRowCount(); i++){
+                freemotif_table2obj.notearray_table.setFloat(i,"duration",0.66f);
+                freemotif_table2obj.notearray_table.setFloat(i,"time_pos",0.66f*i);
+        }
+        // freemotif_table2obj.pos_time=4;
+        // freemotif_table2obj.renderfreemotif();
+
+        freemotif_table1obj.pos_time=4;
+        freemotif_table1obj.frag_numnotes=3;
+        // freemotif_table1obj.scale_time=2;
+        // freemotif_table1obj.scale_dur=2;
+        freemotif_table1obj.inst_index=1;
+        freemotif_table1obj.diatonic_offset=0;
+        freemotif_table1obj.render_frag();
+        freemotif_table1obj.render_properties();
+
+        freemotif_table1obj.subdivmap_mm(freemotif_table2obj.notearray_table);
+        freemotif_table1obj.renderfreemotif();
+        freemotif_table1obj.pos_time=16;
+        freemotif_table1obj.renderfreemotif();
+
+        freemotif_table1obj.diatonic_offset=3;
+        freemotif_table1obj.pos_time=5;
+        freemotif_table1obj.renderfreemotif();
+        freemotif_table1obj.pos_time=17;
+        freemotif_table1obj.renderfreemotif();
+
+        freemotif_table1obj.diatonic_offset=0;
+        freemotif_table1obj.pos_time=6;
+        freemotif_table1obj.renderfreemotif();
+        freemotif_table1obj.pos_time=18;
+        freemotif_table1obj.renderfreemotif();
+
+        freemotif_table1obj.diatonic_offset=-1;
+        freemotif_table1obj.pos_time=7;
+        freemotif_table1obj.renderfreemotif();
+        freemotif_table1obj.pos_time=19;
+        freemotif_table1obj.renderfreemotif();
+
+        //voice 3
+        freemotif_table1obj = new freeMotif_table(simpleforms_1_table);
+        freemotif_table1obj.pos_time=8;
+        freemotif_table1obj.motif_name="motif 1 reset";
+        freemotif_table1obj.tonal_retrograde=0;
+        freemotif_table1obj.scale_time=1;
+        freemotif_table1obj.scale_dur=1;
+        freemotif_table1obj.inst_index=2;
+        freemotif_table1obj.diatonic_offset=-7;
+        freemotif_table1obj.render_properties();
+        freemotif_table1obj.renderfreemotif();
+        freemotif_table1obj.pos_time=16;
+        freemotif_table1obj.renderfreemotif();
+        freemotif_table1obj.pos_time=10;
+        freemotif_table1obj.renderfreemotif();
+        freemotif_table1obj.pos_time=18;
+        freemotif_table1obj.renderfreemotif();
+
+        freemotif_table1obj.pos_time=8;
+        freemotif_table1obj.scale_time=2;
+        freemotif_table1obj.scale_dur=2;
+        freemotif_table1obj.inst_index=3;
+        freemotif_table1obj.diatonic_offset=14;
+        freemotif_table1obj.render_properties();
+        freemotif_table1obj.renderfreemotif();
+        freemotif_table1obj.pos_time=16;
+        freemotif_table1obj.renderfreemotif();
+
+
+        freemotif_table1obj.inst_index=4;
+        freemotif_table1obj.scale_time=.5f;
+        freemotif_table1obj.scale_dur=.5f;
+        freemotif_table1obj.scale_diatonic=-1;
+        freemotif_table1obj.diatonic_offset=14;
+        freemotif_table1obj.pos_time=12;
+        freemotif_table1obj.renderfreemotif();
+        freemotif_table1obj.pos_time=14;
+        freemotif_table1obj.renderfreemotif();
+        freemotif_table1obj.pos_time=16;
+        freemotif_table1obj.renderfreemotif();
+        freemotif_table1obj.pos_time=18;
+        freemotif_table1obj.renderfreemotif();
+}
+
+public void ascent_mapping_examples(){
+        //retrograde function tester
+        //0. Dry
+        //1. Tonal retrograde
+        //2. Rhythmic retrograde
+        //3. Full retrograde
+        scoreTitle("Mapping Examples");
+
+        setcurrentkey(0);
+
+        score.addCallback(zoom_stoptime+1, 1);
+
+        // freemotif_table1obj = new freeMotif_table(simpleforms_1_table);
+        // freemotif_table1obj = new freeMotif_table(simpleforms_2_table);
+        //freemotif_table1obj = new freeMotif_table(arch1_mm_table);
+        // freemotif_table1obj = new freeMotif_table(even_arch_mm_table);
+        freemotif_table1obj = new freeMotif_table(even_ascent_mm_table);
+        // freemotif_table1obj = new freeMotif_table(fanfare_table);
+
+        // freemotif_table2obj = new freeMotif_table(simpleforms_1_table);
+        // freemotif_table2obj = new freeMotif_table(simpleforms_2_table);
+        // freemotif_table2obj = new freeMotif_table(arch1_mm_table);
+        //freemotif_table2obj = new freeMotif_table(even_arch_mm_table);
+        freemotif_table2obj = new freeMotif_table(even_ascent_mm_table);
+        // freemotif_table2obj = new freeMotif_table(fanfare_table);
+
+        freemotif_table1obj.motif_name="motif 1";
+        //freemotif_table1obj.tonal_retrograde=0;
+        // freemotif_table1obj.scale_time=.5;
+        // freemotif_table1obj.scale_dur=.5;
+        // freemotif_table1obj.frag_numnotes=4;
+        //freemotif_table1obj.render_properties();
+        freemotif_table1obj.renderfreemotif();
+
+        freemotif_table2obj.motif_name="motif 2";
+        freemotif_table1obj.auto_retrograde(0);
+        freemotif_table2obj.scale_time=.5f;
+        freemotif_table2obj.scale_dur=.5f;
+        freemotif_table2obj.inst_index=1;
+        freemotif_table2obj.render_properties();
+        freemotif_table2obj.pos_time=freemotif_table1obj.pos_time+2;
+        freemotif_table2obj.renderfreemotif();
+
+        freemotif_table1obj.motif_name="motif 2 onto-> 1";
+        freemotif_table1obj.scale_time=1;
+        freemotif_table1obj.scale_dur=1;
+        freemotif_table1obj.inst_index=2;
+        freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+2;
+        freemotif_table1obj.render_properties();
+        freemotif_table1obj.subdivmap_mm(freemotif_table2obj.notearray_table);
+        freemotif_table1obj.renderfreemotif();
+
+
+        freemotif_table1obj.motif_name="iter again";
+        freemotif_table1obj.scale_time=8;
+
+        freemotif_table1obj.scale_dur=8;
+        freemotif_table1obj.inst_index=3;
+        freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+        freemotif_table1obj.render_properties();
+        freemotif_table2obj.frag_numnotes=2;
+        freemotif_table2obj.scale_diatonic=2;
+        freemotif_table2obj.render_properties();
+        freemotif_table1obj.subdivmap_mm(freemotif_table2obj.notearray_table);
+        //freemotif_table1obj.subdivmap_mm(freemotif_table2obj.notearray_table);
+        freemotif_table1obj.frag_numnotes=15;
+        freemotif_table1obj.renderfreemotif();
+
+        freemotif_table1obj.auto_retrograde(1);
+        freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+        freemotif_table1obj.renderfreemotif();
+
+        freemotif_table1obj.auto_retrograde(1);
+        freemotif_table1obj.diatonic_offset=2;
+        freemotif_table1obj.frag_numnotes=8;
+        freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+        freemotif_table1obj.renderfreemotif();
+
+        freemotif_table1obj.diatonic_offset=1;
+        freemotif_table1obj.frag_numnotes=8;
+        freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+2;
+        freemotif_table1obj.renderfreemotif();
+
+        // //
+        // freemotif_table1obj.pos_time=16;
+        // freemotif_table1obj.scale_time=2;
+        // freemotif_table1obj.scale_dur=2;
+        // freemotif_table1obj.inst_index=2;
+        // freemotif_table1obj.subdivmap_mm(freemotif_table2obj.notearray_table);
+        // freemotif_table1obj.renderfreemotif();
 
         // freemotif_table1obj.motif_name="motif 2 onto-> 1";
         // freemotif_table1obj.scale_time=8;

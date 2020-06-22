@@ -17,7 +17,7 @@ freeMotif_table freemotif_table4obj;
 // score length in measures
 int score_length=16;
 // score bpm
-int score_bpm=100;
+int score_bpm=30;
 
 int global_time_render_offset=0;
 
