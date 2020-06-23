@@ -6,7 +6,7 @@ void basics_examples(){
         //3. Full retrograde
         scoreTitle("Basics Examples");
 
-        score.addCallback(32, 1);
+        score.addCallback(23, 1);
 
         freemotif_table1obj = new freeMotif_table(simpleforms_1_table);
         freemotif_table1obj = new freeMotif_table(simpleforms_2_table);
@@ -50,6 +50,60 @@ void basics_examples(){
         freemotif_table1obj.pos_tonic=freemotif_table1obj.pos_tonic-12;
         freemotif_table1obj.motif_name="-> chrom -12";
         freemotif_table1obj.renderfreemotif();
+}
+
+void basics_examples2(){
+        //retrograde function tester
+        //0. Dry
+        //1. Tonal retrograde
+        //2. Rhythmic retrograde
+        //3. Full retrograde
+        scoreTitle("Basics Examples");
+
+        score.addCallback(23, 1);
+
+        freemotif_table1obj = new freeMotif_table(simpleforms_1_table);
+        freemotif_table2obj = new freeMotif_table(simpleforms_2_table);
+        freemotif_table3obj = new freeMotif_table(arch1_mm_table);
+        freemotif_table4obj = new freeMotif_table(even_ascent_mm_table);
+        // freemotif_table1obj = new freeMotif_table(fanfare_table);
+
+        freemotif_table1obj.duration_retrograde=0;
+        freemotif_table1obj.position_retrograde=0;
+        freemotif_table1obj.motif_name="original";
+        freemotif_table1obj.renderfreemotif();
+
+        freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+        freemotif_table1obj.set_length(4);
+        freemotif_table1obj.motif_name="set_length(4)";
+        freemotif_table1obj.renderfreemotif();
+
+        freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+        freemotif_table1obj.set_length(8);
+        freemotif_table1obj.motif_name="set_length(8)";
+        freemotif_table1obj.renderfreemotif();
+        //
+        // freemotif_table1obj.scale_time=freemotif_table1obj.scale_time*2;
+        // freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+        // freemotif_table1obj.motif_name="-> timescale *2";
+        // freemotif_table1obj.renderfreemotif();
+        //
+        // freemotif_table1obj.scale_time=freemotif_table1obj.scale_time/2;
+        // freemotif_table1obj.scale_diatonic=2;
+        // freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+8;
+        // freemotif_table1obj.motif_name="-> scale diatonically *2";
+        // freemotif_table1obj.renderfreemotif();
+        //
+        // freemotif_table1obj.pos_tonic=freemotif_table1obj.pos_tonic+24;
+        // freemotif_table1obj.scale_diatonic=freemotif_table1obj.scale_diatonic* -1;
+        // freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+        // freemotif_table1obj.motif_name="-> chrom +24 / Inv";
+        // freemotif_table1obj.renderfreemotif();
+        //
+        // freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+        // freemotif_table1obj.pos_tonic=freemotif_table1obj.pos_tonic-12;
+        // freemotif_table1obj.motif_name="-> chrom -12";
+        // freemotif_table1obj.renderfreemotif();
 }
 
 void fugue_examples(){
@@ -466,7 +520,7 @@ void mapping_examples_a(){
         //1. Tonal retrograde
         //2. Rhythmic retrograde
         //3. Full retrograde
-        scoreTitle("Mapping Examples");
+        scoreTitle("Mapping Examples 2");
 
         score.addCallback(zoom_stoptime+1, 1);
 
@@ -552,7 +606,7 @@ void fractal_motif(){
         //1. Tonal retrograde
         //2. Rhythmic retrograde
         //3. Full retrograde
-        scoreTitle("Mapping Examples");
+        scoreTitle("Fractal Motif Composition");
 
         score.addCallback(zoom_stoptime+1, 1);
 
@@ -658,7 +712,6 @@ void fractal_motif(){
         freemotif_table1obj.pos_time=16;
         freemotif_table1obj.renderfreemotif();
 
-
         freemotif_table1obj.inst_index=4;
         freemotif_table1obj.scale_time=.5;
         freemotif_table1obj.scale_dur=.5;
@@ -680,7 +733,7 @@ void ascent_mapping_examples(){
         //1. Tonal retrograde
         //2. Rhythmic retrograde
         //3. Full retrograde
-        scoreTitle("Mapping Examples");
+        scoreTitle("Ascent Mapping Examples");
 
         setcurrentkey(0);
 

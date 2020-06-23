@@ -35,7 +35,7 @@ freeMotif_table freemotif_table4obj;
 // score length in measures
 int score_length=16;
 // score bpm
-int score_bpm=30;
+int score_bpm=60;
 
 int global_time_render_offset=0;
 
@@ -50,23 +50,43 @@ public void setup() {
   loadMetamotifs();
   globalscoresetup();
   drawBackground();
+  //
+  sc.getMidiDeviceInfo();
+
+  score.tempo(score_bpm);
+
+
   renderScore();
 
   score.addCallbackListener(this);
 
-  score.tempo(score_bpm);
-  score.repeat(5);
   score.play();
+
+  println(score.sequencer().getLoopStartPoint());
+  println(score.sequencer().getLoopEndPoint());
+
   score.writeMidiFile("/Users/charleshoneycutt/Desktop/freemotiftemp.mid");
+
 }
 
 public void draw() {
+  //println(score.sequencer().getTickPosition());
+
+  //println(score.sequencer().getTickPosition());
+
 }
 
 public void handleCallbacks(int callbackID) {
     if(callbackID==1){
       score.stop();
       score.play();
+
+      // score.sequencer().setLoopCount(100);
+      // score.sequencer().setTickPosition(4*960);
+      // score.sequencer().setLoopStartPoint(4*960);
+      // score.sequencer().setLoopEndPoint(5*960);
+
+      score.tempo(score_bpm);
     }
 }
 /*---------GUI VARIABLES------------*/
@@ -389,7 +409,7 @@ public void renderfreemotif(){
 
                 /*-------end score writing generation--------*/
                 score.addNote(output_pos,
-                              inst_index,
+                              0,
                               inst_cata[inst_index],
                               output_pitch,
                               output_vel,
@@ -400,7 +420,7 @@ public void renderfreemotif(){
 
                 //add noteOffs
                 score.addNote(output_pos+output_dur,
-                              inst_index,
+                              0,
                               inst_cata[inst_index],
                               output_pitch,
                               0,
@@ -519,13 +539,6 @@ public void generate_noterender_vals(int notescan_abspos_fcnin){
       /*-------start retrograde-------*/
 }
 
-public void auto_retrograde(int bool_switch){
-  velocity_retrograde=bool_switch;
-  position_retrograde=bool_switch;
-  duration_retrograde=bool_switch;
-  tonal_retrograde=bool_switch;
-}
-
 //called to remove all properties
 public void reset_properties(){
         // // motif position (for iterations relative to first iteration)
@@ -558,6 +571,7 @@ public void reset_properties(){
         // index of instrument
 }
 
+//renders properties distructively
 public void render_properties(){
     render_frag();
 
@@ -611,6 +625,22 @@ public void render_properties(){
 
     //reset properties
     reset_properties();
+}
+
+//adjusts timescale of motif to fit a given length
+public void set_length(float length_in){
+  //new time scale = 2
+  // mm_length*(timescale)= set_length
+  // 4 * (2) = 8
+  scale_time=length_in/motif_length;
+}
+
+//
+public void auto_retrograde(int bool_switch){
+  velocity_retrograde=bool_switch;
+  position_retrograde=bool_switch;
+  duration_retrograde=bool_switch;
+  tonal_retrograde=bool_switch;
 }
 
 //concatenates new mm to note array
@@ -971,15 +1001,16 @@ public void globalscoresetup(){
 public void renderScore(){
     //*-------function examples--------*//
     // basics_examples();
+    basics_examples2();
     // renderproperties_example();
     // retrograde_examples();
     // fragmentation_examples();
     // concat_examples();
     // fugue_examples();
     //mapping_examples();
-    //mapping_examples_a();
-    fractal_motif();
-    // ascent_mapping_examples();
+    // mapping_examples_a();
+    //fractal_motif();
+    //ascent_mapping_examples();
 }
 public void basics_examples(){
         //retrograde function tester
@@ -989,7 +1020,7 @@ public void basics_examples(){
         //3. Full retrograde
         scoreTitle("Basics Examples");
 
-        score.addCallback(32, 1);
+        score.addCallback(23, 1);
 
         freemotif_table1obj = new freeMotif_table(simpleforms_1_table);
         freemotif_table1obj = new freeMotif_table(simpleforms_2_table);
@@ -1033,6 +1064,60 @@ public void basics_examples(){
         freemotif_table1obj.pos_tonic=freemotif_table1obj.pos_tonic-12;
         freemotif_table1obj.motif_name="-> chrom -12";
         freemotif_table1obj.renderfreemotif();
+}
+
+public void basics_examples2(){
+        //retrograde function tester
+        //0. Dry
+        //1. Tonal retrograde
+        //2. Rhythmic retrograde
+        //3. Full retrograde
+        scoreTitle("Basics Examples");
+
+        score.addCallback(23, 1);
+
+        freemotif_table1obj = new freeMotif_table(simpleforms_1_table);
+        freemotif_table2obj = new freeMotif_table(simpleforms_2_table);
+        freemotif_table3obj = new freeMotif_table(arch1_mm_table);
+        freemotif_table4obj = new freeMotif_table(even_ascent_mm_table);
+        // freemotif_table1obj = new freeMotif_table(fanfare_table);
+
+        freemotif_table1obj.duration_retrograde=0;
+        freemotif_table1obj.position_retrograde=0;
+        freemotif_table1obj.motif_name="original";
+        freemotif_table1obj.renderfreemotif();
+
+        freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+        freemotif_table1obj.set_length(4);
+        freemotif_table1obj.motif_name="set_length(4)";
+        freemotif_table1obj.renderfreemotif();
+
+        freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+        freemotif_table1obj.set_length(8);
+        freemotif_table1obj.motif_name="set_length(8)";
+        freemotif_table1obj.renderfreemotif();
+        //
+        // freemotif_table1obj.scale_time=freemotif_table1obj.scale_time*2;
+        // freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+        // freemotif_table1obj.motif_name="-> timescale *2";
+        // freemotif_table1obj.renderfreemotif();
+        //
+        // freemotif_table1obj.scale_time=freemotif_table1obj.scale_time/2;
+        // freemotif_table1obj.scale_diatonic=2;
+        // freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+8;
+        // freemotif_table1obj.motif_name="-> scale diatonically *2";
+        // freemotif_table1obj.renderfreemotif();
+        //
+        // freemotif_table1obj.pos_tonic=freemotif_table1obj.pos_tonic+24;
+        // freemotif_table1obj.scale_diatonic=freemotif_table1obj.scale_diatonic* -1;
+        // freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+        // freemotif_table1obj.motif_name="-> chrom +24 / Inv";
+        // freemotif_table1obj.renderfreemotif();
+        //
+        // freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+        // freemotif_table1obj.pos_tonic=freemotif_table1obj.pos_tonic-12;
+        // freemotif_table1obj.motif_name="-> chrom -12";
+        // freemotif_table1obj.renderfreemotif();
 }
 
 public void fugue_examples(){
@@ -1449,7 +1534,7 @@ public void mapping_examples_a(){
         //1. Tonal retrograde
         //2. Rhythmic retrograde
         //3. Full retrograde
-        scoreTitle("Mapping Examples");
+        scoreTitle("Mapping Examples 2");
 
         score.addCallback(zoom_stoptime+1, 1);
 
@@ -1535,7 +1620,7 @@ public void fractal_motif(){
         //1. Tonal retrograde
         //2. Rhythmic retrograde
         //3. Full retrograde
-        scoreTitle("Mapping Examples");
+        scoreTitle("Fractal Motif Composition");
 
         score.addCallback(zoom_stoptime+1, 1);
 
@@ -1641,7 +1726,6 @@ public void fractal_motif(){
         freemotif_table1obj.pos_time=16;
         freemotif_table1obj.renderfreemotif();
 
-
         freemotif_table1obj.inst_index=4;
         freemotif_table1obj.scale_time=.5f;
         freemotif_table1obj.scale_dur=.5f;
@@ -1663,7 +1747,7 @@ public void ascent_mapping_examples(){
         //1. Tonal retrograde
         //2. Rhythmic retrograde
         //3. Full retrograde
-        scoreTitle("Mapping Examples");
+        scoreTitle("Ascent Mapping Examples");
 
         setcurrentkey(0);
 
@@ -1844,7 +1928,7 @@ public void setcurrentkey(int keyindex)
       case 3:
         for (int k = 0; k <7; k++)
         {
-          scalebuffer[k]=sc.HARMONIC_MINOR[k];
+          scalebuffer[k]=sc.PHRYGIAN[k];
         }
         break;
       default:

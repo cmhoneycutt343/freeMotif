@@ -73,7 +73,7 @@ void setcurrentkey(int keyindex)
       case 3:
         for (int k = 0; k <7; k++)
         {
-          scalebuffer[k]=sc.HARMONIC_MINOR[k];
+          scalebuffer[k]=sc.PHRYGIAN[k];
         }
         break;
       default:

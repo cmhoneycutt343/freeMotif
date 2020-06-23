@@ -153,7 +153,7 @@ void renderfreemotif(){
 
                 /*-------end score writing generation--------*/
                 score.addNote(output_pos,
-                              inst_index,
+                              0,
                               inst_cata[inst_index],
                               output_pitch,
                               output_vel,
@@ -164,7 +164,7 @@ void renderfreemotif(){
 
                 //add noteOffs
                 score.addNote(output_pos+output_dur,
-                              inst_index,
+                              0,
                               inst_cata[inst_index],
                               output_pitch,
                               0,
@@ -283,13 +283,6 @@ void generate_noterender_vals(int notescan_abspos_fcnin){
       /*-------start retrograde-------*/
 }
 
-void auto_retrograde(int bool_switch){
-  velocity_retrograde=bool_switch;
-  position_retrograde=bool_switch;
-  duration_retrograde=bool_switch;
-  tonal_retrograde=bool_switch;
-}
-
 //called to remove all properties
 void reset_properties(){
         // // motif position (for iterations relative to first iteration)
@@ -322,6 +315,7 @@ void reset_properties(){
         // index of instrument
 }
 
+//renders properties distructively
 void render_properties(){
     render_frag();
 
@@ -375,6 +369,22 @@ void render_properties(){
 
     //reset properties
     reset_properties();
+}
+
+//adjusts timescale of motif to fit a given length
+void set_length(float length_in){
+  //new time scale = 2
+  // mm_length*(timescale)= set_length
+  // 4 * (2) = 8
+  scale_time=length_in/motif_length;
+}
+
+//
+void auto_retrograde(int bool_switch){
+  velocity_retrograde=bool_switch;
+  position_retrograde=bool_switch;
+  duration_retrograde=bool_switch;
+  tonal_retrograde=bool_switch;
 }
 
 //concatenates new mm to note array

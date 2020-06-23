@@ -17,7 +17,7 @@ freeMotif_table freemotif_table4obj;
 // score length in measures
 int score_length=16;
 // score bpm
-int score_bpm=30;
+int score_bpm=60;
 
 int global_time_render_offset=0;
 
@@ -32,22 +32,42 @@ void setup() {
   loadMetamotifs();
   globalscoresetup();
   drawBackground();
+  //
+  sc.getMidiDeviceInfo();
+
+  score.tempo(score_bpm);
+
+
   renderScore();
 
   score.addCallbackListener(this);
 
-  score.tempo(score_bpm);
-  score.repeat(5);
   score.play();
+
+  println(score.sequencer().getLoopStartPoint());
+  println(score.sequencer().getLoopEndPoint());
+
   score.writeMidiFile("/Users/charleshoneycutt/Desktop/freemotiftemp.mid");
+
 }
 
 void draw() {
+  //println(score.sequencer().getTickPosition());
+
+  //println(score.sequencer().getTickPosition());
+
 }
 
 public void handleCallbacks(int callbackID) {
     if(callbackID==1){
       score.stop();
       score.play();
+
+      // score.sequencer().setLoopCount(100);
+      // score.sequencer().setTickPosition(4*960);
+      // score.sequencer().setLoopStartPoint(4*960);
+      // score.sequencer().setLoopEndPoint(5*960);
+
+      score.tempo(score_bpm);
     }
 }

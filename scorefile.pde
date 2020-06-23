@@ -17,13 +17,14 @@ void globalscoresetup(){
 void renderScore(){
     //*-------function examples--------*//
     // basics_examples();
+    basics_examples2();
     // renderproperties_example();
     // retrograde_examples();
     // fragmentation_examples();
     // concat_examples();
     // fugue_examples();
     //mapping_examples();
-    //mapping_examples_a();
-    fractal_motif();
-    // ascent_mapping_examples();
+    // mapping_examples_a();
+    //fractal_motif();
+    //ascent_mapping_examples();
 }
