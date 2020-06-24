@@ -18,7 +18,7 @@ void renderScore(){
     //*-------function examples--------*//
     // basics_examples();
     basics_examples2();
-    // renderproperties_example();
+    //renderproperties_example();
     // retrograde_examples();
     // fragmentation_examples();
     // concat_examples();

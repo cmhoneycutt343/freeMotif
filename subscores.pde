@@ -74,15 +74,23 @@ void basics_examples2(){
         freemotif_table1obj.renderfreemotif();
 
         freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
-        freemotif_table1obj.set_length(4);
-        freemotif_table1obj.motif_name="set_length(4)";
+        freemotif_table1obj.fit_length(4);
+        freemotif_table1obj.motif_name="fit_length(4)";
         freemotif_table1obj.renderfreemotif();
 
         freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
-        freemotif_table1obj.set_length(8);
-        freemotif_table1obj.motif_name="set_length(8)";
+        freemotif_table1obj.fit_length(8);
+        freemotif_table1obj.motif_name="fit_length(8)";
         freemotif_table1obj.renderfreemotif();
-        //
+
+        freemotif_table1obj.pos_time=16;
+        //freemotif_table1obj.notearray_table.setFloat(2,"duration",2);
+        freemotif_table1obj.render_properties();
+        freemotif_table1obj.auto_legato=1;
+        freemotif_table1obj.motif_name="auto_legato";
+        freemotif_table1obj.renderfreemotif();
+
+
         // freemotif_table1obj.scale_time=freemotif_table1obj.scale_time*2;
         // freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
         // freemotif_table1obj.motif_name="-> timescale *2";
@@ -283,6 +291,7 @@ void retrograde_examples(){
 
         freemotif_table1obj.duration_retrograde=0;
         freemotif_table1obj.position_retrograde=0;
+        freemotif_table1obj.inst_index=0;
         freemotif_table1obj.motif_name="original";
         freemotif_table1obj.renderfreemotif();
 
@@ -323,6 +332,11 @@ void retrograde_examples(){
         freemotif_table1obj.motif_name="pitch+vel+dur";
         freemotif_table1obj.renderfreemotif();
 
+        freemotif_table1obj.reset_properties();
+        freemotif_table1obj.auto_retrograde(1);
+        freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
+        freemotif_table1obj.motif_name="auto_retrograde(1)";
+        freemotif_table1obj.renderfreemotif();
 }
 
 void fragmentation_examples(){
@@ -422,7 +436,6 @@ void concat_examples(){
         freemotif_table1obj.renderfreemotif();
 }
 
-
 void mapping_examples(){
         //retrograde function tester
         //0. Dry
@@ -511,7 +524,6 @@ void mapping_examples(){
         // // freemotif_table1obj.renderfreemotif();
         // freemotif_table1obj.subdivmap_mm(freemotif_table2obj.notearray_table);
         // freemotif_table1obj.renderfreemotif();
-
 }
 
 void mapping_examples_a(){
@@ -597,7 +609,6 @@ void mapping_examples_a(){
         // // freemotif_table1obj.renderfreemotif();
         // freemotif_table1obj.subdivmap_mm(freemotif_table2obj.notearray_table);
         // freemotif_table1obj.renderfreemotif();
-
 }
 
 void fractal_motif(){
@@ -837,5 +848,4 @@ void ascent_mapping_examples(){
         // // freemotif_table1obj.renderfreemotif();
         // freemotif_table1obj.subdivmap_mm(freemotif_table2obj.notearray_table);
         // freemotif_table1obj.renderfreemotif();
-
 }
