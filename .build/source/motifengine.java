@@ -1136,11 +1136,20 @@ public void basics_examples2(){
         freemotif_table1obj.pos_time=freemotif_table1obj.pos_time+4;
         freemotif_table1obj.fit_length(8);
         freemotif_table1obj.motif_name="fit_length(8)";
+        freemotif_table1obj.render_properties();
         freemotif_table1obj.renderfreemotif();
 
+        for(TableRow row:freemotif_table1obj.notearray_table.rows()){
+            row.setFloat("duration",0.25f);
+        }
         freemotif_table1obj.pos_time=16;
         //freemotif_table1obj.notearray_table.setFloat(2,"duration",2);
-        freemotif_table1obj.render_properties();
+        // freemotif_table1obj.auto_legato=1;
+        freemotif_table1obj.motif_name="set all dur";
+        freemotif_table1obj.renderfreemotif();
+
+        freemotif_table1obj.pos_time=24;
+        //freemotif_table1obj.notearray_table.setFloat(2,"duration",2);
         freemotif_table1obj.auto_legato=1;
         freemotif_table1obj.motif_name="auto_legato";
         freemotif_table1obj.renderfreemotif();
